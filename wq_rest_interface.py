@@ -13,7 +13,9 @@ FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.jso
 SC_MB_PREDICTIONS_FILE=''
 SC_MB_ADVISORIES_FILE=''
 
-logger = None
+if not app.debug:
+  logger = None
+
 if app.debug:
   logger = logging.config.fileConfig(LOGCONFFILE)
   logger.info("Log file opened")

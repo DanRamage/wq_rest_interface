@@ -1,1 +1,1 @@
-from wq_test_interface import app as application
+from wq_rest_interface import app as application

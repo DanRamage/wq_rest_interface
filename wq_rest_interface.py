@@ -42,7 +42,7 @@ def get_sarasora_current_results():
   if logger:
     logger.debug("get_sarasora_current_results Finished.")
 
-  return results
+  return (results, 200, {'Content-Type': 'Application-JSON'})
 
 if __name__ == '__main__':
   app.run()

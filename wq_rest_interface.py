@@ -70,7 +70,7 @@ def get_sarasora_current_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-@app.route('/sarasota/sample_data/', methods=['POST'])
+@app.route('/sarasota/sample_data/', methods=['GET'])
 def get_sarasota_station_sample_data():
   ret_code = 404
   results = {}

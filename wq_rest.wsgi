@@ -1,0 +1,1 @@
+from wq_test_interface import app as application

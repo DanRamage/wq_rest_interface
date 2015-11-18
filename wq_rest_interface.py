@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import logging.config
 import simplejson
 
@@ -69,6 +69,26 @@ def get_sarasora_current_sample_data():
     logger.debug("get_sarasora_current_sample_data Finished.")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+@app.route('/sarasota/sample_data/', methods=['POST'])
+def get_sarasota_station_sample_data():
+  ret_code = 404
+  results = {}
+
+  if logger:
+    logger.debug("get_sarasota_station_sample_data Started")
+
+  station = request.form['station']
+  start_date = request.form['startdate']
+  if logger:
+    logger.debug("Station: %s Start Date: %s" % (station, start_date))
+
+  if logger:
+    logger.debug("get_sarasota_station_sample_data Finished")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+  return
 
 if __name__ == '__main__':
   app.run()

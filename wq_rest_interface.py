@@ -16,6 +16,7 @@ SC_MB_ADVISORIES_FILE=''
 logger = None
 if app.debug:
   logger = logging.config.fileConfig(LOGCONFFILE)
+  logger.info("Log file opened")
 
 @app.route('/')
 def hello_world():

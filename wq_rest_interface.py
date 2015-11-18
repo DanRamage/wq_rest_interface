@@ -80,10 +80,10 @@ def get_sarasota_station_sample_data():
 
   if logger:
     logger.debug("%s" % (request.args))
-  station = request.form['station']
-  start_date = request.form['startdate']
-  if logger:
-    logger.debug("Station: %s Start Date: %s" % (station, start_date))
+  #station = request.form['station']
+  #start_date = request.form['startdate']
+  #if logger:
+  #  logger.debug("Station: %s Start Date: %s" % (station, start_date))
 
   if logger:
     logger.debug("get_sarasota_station_sample_data Finished")

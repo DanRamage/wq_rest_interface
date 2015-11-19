@@ -11,7 +11,86 @@ FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
 
 SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
-SC_SARASOTA_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
+SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
+
+@app.route('/myrtlebeach/predictions/current_results')
+def get_mb_current_results():
+  if logger:
+    logger.debug("get_mb_current_results Started.")
+
+  results = {'status': {'http_code': 404}}
+  ret_code = 404
+  try:
+    with open(SC_SARASOTA_PREDICTIONS_FILE, 'r') as data_file:
+      results = data_file.read()
+      ret_code = 200
+  except IOError,e:
+    if logger:
+      logger.exception(e)
+
+  if logger:
+    logger.debug("get_mb_current_results Finished.")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+@app.route('/myrtlebeach/sample_data/current_results')
+def get_mb_current_sample_data():
+  if logger:
+    logger.debug("get_mb_current_sample_data Started.")
+
+  results = {'status': {'http_code': 404}}
+  ret_code = 404
+  try:
+    with open(SC_MB_ADVISORIES_FILE, 'r') as data_file:
+      results = data_file.read()
+  except IOError,e:
+    if logger:
+      logger.exception(e)
+
+  if logger:
+    logger.debug("get_mb_current_sample_data Finished.")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+
+@app.route('/sarasota/predictions/current_results')
+def get_sarasora_current_results():
+  if logger:
+    logger.debug("get_sarasora_current_results Started.")
+
+  results = {'status': {'http_code': 404}}
+  ret_code = 404
+  try:
+    with open(FL_SARASOTA_PREDICTIONS_FILE, 'r') as data_file:
+      results = data_file.read()
+      ret_code = 200
+  except IOError,e:
+    if logger:
+      logger.exception(e)
+
+  if logger:
+    logger.debug("get_sarasora_current_results Finished.")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+@app.route('/sarasota/sample_data/current_results')
+def get_sarasora_current_sample_data():
+  if logger:
+    logger.debug("get_sarasora_current_sample_data Started.")
+
+  results = {'status': {'http_code': 404}}
+  ret_code = 404
+  try:
+    with open(FL_SARASOTA_ADVISORIES_FILE, 'r') as data_file:
+      results = data_file.read()
+  except IOError,e:
+    if logger:
+      logger.exception(e)
+
+  if logger:
+    logger.debug("get_sarasora_current_sample_data Finished.")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 def get_requested_station_data(request, station_directory):
   if logger:
@@ -81,51 +160,6 @@ def get_requested_station_data(request, station_directory):
 
   return jsonData
 
-
-@app.route('/sarasota/current_results')
-def get_sarasora_results():
-  return 'You asked for Sarasota results.'
-
-
-@app.route('/sarasota/predictions/current_results')
-def get_sarasora_current_results():
-  if logger:
-    logger.debug("get_sarasora_current_results Started.")
-
-  results = {'status': {'http_code': 404}}
-  ret_code = 404
-  try:
-    with open(FL_SARASOTA_PREDICTIONS_FILE, 'r') as data_file:
-      results = data_file.read()
-      ret_code = 200
-  except IOError,e:
-    if logger:
-      logger.exception(e)
-
-  if logger:
-    logger.debug("get_sarasora_current_results Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
-
-@app.route('/sarasota/sample_data/current_results')
-def get_sarasora_current_sample_data():
-  if logger:
-    logger.debug("get_sarasora_current_sample_data Started.")
-
-  results = {'status': {'http_code': 404}}
-  ret_code = 404
-  try:
-    with open(FL_SARASOTA_ADVISORIES_FILE, 'r') as data_file:
-      results = data_file.read()
-  except IOError,e:
-    if logger:
-      logger.exception(e)
-
-  if logger:
-    logger.debug("get_sarasora_current_sample_data Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
-
 @app.route('/sarasota/station_data', methods=['GET'])
 def get_sarasota_station_sample_data():
   ret_code = 404
@@ -156,7 +190,7 @@ def get_mb_station_sample_data():
   if logger:
     logger.debug("Request args: %s" % (request.args))
 
-    results = get_requested_station_data(request, SC_SARASOTA_STATIONS_DATA_DIR)
+    results = get_requested_station_data(request, SC_MB_STATIONS_DATA_DIR)
     ret_code = 200
 
   if logger:

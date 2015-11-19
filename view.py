@@ -31,7 +31,11 @@ def get_requested_station_data(station, start_date, end_date, station_directory)
       start_date_obj = datetime.strptime(start_date, "%Y-%m-%d")
       advisoryList = stationJson['properties']['test']['beachadvisories']
       for ndx in range(len(advisoryList)):
-        tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
+        try:
+          tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
+        except ValueError, e:
+          tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d %H:%M:%S")
+
         if tst_date_obj >= start_date_obj:
           resultList = advisoryList[ndx:]
           break

@@ -113,5 +113,4 @@ def get_sarasota_station_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-  return
 

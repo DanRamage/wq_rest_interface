@@ -44,7 +44,11 @@ def get_requested_station_data(station, start_date, end_date, station_directory)
       feature = geojson.Feature(id=station)
 
     jsonData = geojson.dumps(feature, separators=(',', ':'))
+  except Exception, e:
+    if logger:
+      logger.exception(e)
 
+  return jsonData
 
 
 @app.route('/sarasota/current_results')

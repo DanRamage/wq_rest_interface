@@ -1,31 +1,38 @@
+import os
 from app import app, logger
 from flask import request
 from datetime import datetime
+import geojson
 #import simplejson
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
+FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
 
 SC_MB_PREDICTIONS_FILE=''
 SC_MB_ADVISORIES_FILE=''
 
 def get_requested_station_data(station, start_date, end_date, station_directory):
+  if logger:
+    logger.debug("get_requested_station_data: Started Station: %s start_date: %s station_directory: %s" % (station, start_date, station_directory))
+
   feature = None
   try:
+    filepath = os.path.join(station_directory, '%s.json' % (station))
+    if logger:
+      logger.debug("Opening station file: %s" % (filepath))
 
-    filepath = "%s/%s.json" % (station_directory, station)
-    with open(filepath, "r") as jsonDataFile:
-      jsonDataFile = open(filepath, "r")
-      stationJson = geojson.load(jsonDataFile)
+    with open(filepath, "r") as json_data_file:
+      stationJson = geojson.load(json_data_file)
 
     resultList = []
     #If the client passed in a startdate parameter, we return only the test dates >= to it.
     if start_date:
-      startDate = datetime.strptime(start_date, "%Y-%m-%d")
+      start_date_obj = datetime.strptime(start_date, "%Y-%m-%d")
       advisoryList = stationJson['properties']['test']['beachadvisories']
       for ndx in range(len(advisoryList)):
-        tstDate = datetime.datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
-        if tstDate >= startDate:
+        tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
+        if tst_date_obj >= start_date_obj:
           resultList = advisoryList[ndx:]
           break
     else:
@@ -54,6 +61,9 @@ def get_requested_station_data(station, start_date, end_date, station_directory)
   except Exception, e:
     if logger:
       logger.exception(e)
+
+  if logger:
+    logger.debug("get_requested_station_data Finished")
 
   return jsonData
 
@@ -118,6 +128,8 @@ def get_sarasota_station_sample_data():
     start_date = request.args['startdate']
     if logger:
       logger.debug("Station: %s Start Date: %s" % (station, start_date))
+
+    get_requested_station_data(station, start_date, None, FL_SARASOTA_STATIONS_DATA_DIR)
 
   if logger:
     logger.debug("get_sarasota_station_sample_data Finished")

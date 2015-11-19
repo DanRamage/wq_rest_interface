@@ -133,7 +133,8 @@ def get_sarasota_station_sample_data():
     if logger:
       logger.debug("Station: %s Start Date: %s" % (station, start_date))
 
-    get_requested_station_data(station, start_date, None, FL_SARASOTA_STATIONS_DATA_DIR)
+    results = get_requested_station_data(station, start_date, None, FL_SARASOTA_STATIONS_DATA_DIR)
+    ret_code = 200
 
   if logger:
     logger.debug("get_sarasota_station_sample_data Finished")

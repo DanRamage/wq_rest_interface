@@ -1,6 +1,8 @@
-from flask import Flask, request
+from flask import Flask
 import logging.config
 import simplejson
+
+from view import *
 
 app = Flask(__name__)
 app.debug = True

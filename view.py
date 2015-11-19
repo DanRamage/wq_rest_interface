@@ -13,9 +13,18 @@ SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
 SC_SARASOTA_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
-def get_requested_station_data(station, start_date, end_date, station_directory):
+def get_requested_station_data(request, station_directory):
   if logger:
     logger.debug("get_requested_station_data: Started Station: %s start_date: %s station_directory: %s" % (station, start_date, station_directory))
+
+  station = None
+  start_date = None
+  if 'station' in request.args:
+    station = request.args['station']
+  if 'startdate' in request.args:
+    start_date = request.args['startdate']
+  if logger:
+    logger.debug("Station: %s Start Date: %s" % (station, start_date))
 
   feature = None
   try:
@@ -128,16 +137,7 @@ def get_sarasota_station_sample_data():
   if logger:
     logger.debug("Request args: %s" % (request.args))
 
-  station = None
-  start_date = None
-  if 'station' in request.args:
-    station = request.args['station']
-  if 'startdate' in request.args:
-    start_date = request.args['startdate']
-  if logger:
-    logger.debug("Station: %s Start Date: %s" % (station, start_date))
-
-    results = get_requested_station_data(station, start_date, None, FL_SARASOTA_STATIONS_DATA_DIR)
+    results = get_requested_station_data(request, FL_SARASOTA_STATIONS_DATA_DIR)
     ret_code = 200
 
   if logger:
@@ -156,16 +156,7 @@ def get_mb_station_sample_data():
   if logger:
     logger.debug("Request args: %s" % (request.args))
 
-  station = None
-  start_date = None
-  if 'station' in request.args:
-    station = request.args['station']
-  if 'startdate' in request.args:
-    start_date = request.args['startdate']
-  if logger:
-    logger.debug("Station: %s Start Date: %s" % (station, start_date))
-
-    results = get_requested_station_data(station, start_date, None, SC_SARASOTA_STATIONS_DATA_DIR)
+    results = get_requested_station_data(request, SC_SARASOTA_STATIONS_DATA_DIR)
     ret_code = 200
 
   if logger:

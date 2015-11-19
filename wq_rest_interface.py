@@ -22,9 +22,50 @@ if app.debug:
   logger = logging.getLogger('wq_rest_logger')
   logger.info("Log file opened")
 
-@app.route('/')
-def hello_world():
-  return 'Hello World!'
+def get_requested_station_data(station, start_date, end_date, station_directory):
+    feature = None
+    try:
+
+      filepath = "%s/%s.json" % (station_directory, station)
+      with open(filepath, "r") as jsonDataFile:
+        jsonDataFile = open(filepath, "r")
+        stationJson = geojson.load(jsonDataFile)
+
+      resultList = []
+      #If the client passed in a startdate parameter, we return only the test dates >= to it.
+      if(startDate):
+        startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d")
+        advisoryList = stationJson['properties']['test']['beachadvisories']
+        for ndx in range(len(advisoryList)):
+          tstDate = datetime.datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
+          if(tstDate >= startDate):
+            resultList = advisoryList[ndx:]
+            break
+      else:
+        resultList = stationJson['properties']['test']['beachadvisories'][-1]
+
+      properties = {}
+      properties['desc'] = stationJson['properties']['desc']
+      properties['station'] = stationJson['properties']['station']
+      properties['test'] = {'beachadvisories' : resultList}
+
+      feature = geojson.Feature(id=station, geometry=stationJson['geometry'], properties=properties)
+    except IOError, e:
+      if(logger):
+        logger.exception(e)
+    except ValueError, e:
+      if(logger):
+        logger.exception(e)
+    except Exception, e:
+      if(logger):
+        logger.exception(e)
+    try:
+      if(feature is None):
+        feature = geojson.Feature(id=station)
+
+      jsonData = geojson.dumps(feature, separators=(',', ':'))
+
+
 
 @app.route('/sarasota/current_results')
 def get_sarasora_results():

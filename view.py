@@ -142,4 +142,28 @@ def get_sarasota_station_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
+@app.route('/myrtlebeach/station_data', methods=['GET'])
+def get_mb_station_sample_data():
+  ret_code = 404
+  results = {}
+
+  if logger:
+    logger.debug("get_mb_station_sample_data Started")
+
+  if logger:
+    logger.debug("Request args: %s" % (request.args))
+
+  if 'station' in request.args and 'startdate' in request.args:
+    station = request.args['station']
+    start_date = request.args['startdate']
+    if logger:
+      logger.debug("Station: %s Start Date: %s" % (station, start_date))
+
+    results = get_requested_station_data(station, start_date, None, SC_SARASOTA_STATIONS_DATA_DIR)
+    ret_code = 200
+
+  if logger:
+    logger.debug("get_mb_station_sample_data Finished")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
 

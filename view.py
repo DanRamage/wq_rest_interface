@@ -115,5 +115,3 @@ def get_sarasota_station_sample_data():
 
   return
 
-if __name__ == '__main__':
-  app.run()

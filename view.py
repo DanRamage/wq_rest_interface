@@ -156,11 +156,14 @@ def get_mb_station_sample_data():
   if logger:
     logger.debug("Request args: %s" % (request.args))
 
-  if 'station' in request.args and 'startdate' in request.args:
+  station = None
+  start_date = None
+  if 'station' in request.args:
     station = request.args['station']
+  if 'startdate' in request.args:
     start_date = request.args['startdate']
-    if logger:
-      logger.debug("Station: %s Start Date: %s" % (station, start_date))
+  if logger:
+    logger.debug("Station: %s Start Date: %s" % (station, start_date))
 
     results = get_requested_station_data(station, start_date, None, SC_SARASOTA_STATIONS_DATA_DIR)
     ret_code = 200

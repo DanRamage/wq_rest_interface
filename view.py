@@ -15,7 +15,7 @@ SC_SARASOTA_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
 def get_requested_station_data(request, station_directory):
   if logger:
-    logger.debug("get_requested_station_data: Started Station: %s start_date: %s station_directory: %s" % (station, start_date, station_directory))
+    logger.debug("get_requested_station_data Started")
 
   station = None
   start_date = None

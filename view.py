@@ -1,4 +1,4 @@
-from app import app
+from app import app, logger
 from flask import request
 from datetime import datetime
 #import simplejson

@@ -9,8 +9,9 @@ FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
 FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
 
-SC_MB_PREDICTIONS_FILE=''
-SC_MB_ADVISORIES_FILE=''
+SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
+SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
+SC_SARASOTA_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
 def get_requested_station_data(station, start_date, end_date, station_directory):
   if logger:

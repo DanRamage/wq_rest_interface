@@ -1,6 +1,13 @@
 from app import app
 from flask import request
+from datetime import datetime
 #import simplejson
+
+FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
+FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
+
+SC_MB_PREDICTIONS_FILE=''
+SC_MB_ADVISORIES_FILE=''
 
 def get_requested_station_data(station, start_date, end_date, station_directory):
   feature = None
@@ -13,12 +20,12 @@ def get_requested_station_data(station, start_date, end_date, station_directory)
 
     resultList = []
     #If the client passed in a startdate parameter, we return only the test dates >= to it.
-    if(startDate):
-      startDate = datetime.datetime.strptime(startDate, "%Y-%m-%d")
+    if start_date:
+      startDate = datetime.strptime(start_date, "%Y-%m-%d")
       advisoryList = stationJson['properties']['test']['beachadvisories']
       for ndx in range(len(advisoryList)):
         tstDate = datetime.datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
-        if(tstDate >= startDate):
+        if tstDate >= startDate:
           resultList = advisoryList[ndx:]
           break
     else:
@@ -31,16 +38,16 @@ def get_requested_station_data(station, start_date, end_date, station_directory)
 
     feature = geojson.Feature(id=station, geometry=stationJson['geometry'], properties=properties)
   except IOError, e:
-    if(logger):
+    if logger:
       logger.exception(e)
   except ValueError, e:
-    if(logger):
+    if logger:
       logger.exception(e)
   except Exception, e:
-    if(logger):
+    if logger:
       logger.exception(e)
   try:
-    if(feature is None):
+    if feature is None:
       feature = geojson.Feature(id=station)
 
     jsonData = geojson.dumps(feature, separators=(',', ':'))

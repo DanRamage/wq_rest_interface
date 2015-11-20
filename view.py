@@ -21,7 +21,7 @@ def get_mb_current_results():
   results = {'status': {'http_code': 404}}
   ret_code = 404
   try:
-    with open(SC_SARASOTA_PREDICTIONS_FILE, 'r') as data_file:
+    with open(SC_MB_PREDICTIONS_FILE, 'r') as data_file:
       results = data_file.read()
       ret_code = 200
   except IOError,e:
@@ -43,6 +43,7 @@ def get_mb_current_sample_data():
   try:
     with open(SC_MB_ADVISORIES_FILE, 'r') as data_file:
       results = data_file.read()
+      ret_code = 200
   except IOError,e:
     if logger:
       logger.exception(e)
@@ -83,6 +84,7 @@ def get_sarasora_current_sample_data():
   try:
     with open(FL_SARASOTA_ADVISORIES_FILE, 'r') as data_file:
       results = data_file.read()
+      ret_code = 200
   except IOError,e:
     if logger:
       logger.exception(e)

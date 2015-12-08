@@ -15,7 +15,7 @@ SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
 @app.route('/')
 def root():
-  return app.send_static_file('/var/www/howsthebeach/index.html')
+  return app.send_from_directory('/var/www/howsthebeach/', 'index.html')
 
 @app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():

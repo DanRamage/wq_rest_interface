@@ -17,7 +17,7 @@ SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 def root():
   if logger:
     logger.debug("root Started.")
-  return app.send_from_directory('/var/www/howsthebeach/', 'index.html')
+  return send_from_directory('/var/www/howsthebeach/', 'index.html')
 
 @app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():

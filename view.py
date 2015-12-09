@@ -73,6 +73,7 @@ def get_data_file(filename):
   results = {'status': {'http_code': 404},
              'contents': {}}
   ret_code = 404
+
   try:
     with open(filename, 'r') as data_file:
       results['status']['http_code'] = 200

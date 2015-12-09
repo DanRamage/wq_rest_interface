@@ -3,7 +3,7 @@ from app import app, logger
 from flask import request, send_from_directory
 from datetime import datetime
 import geojson
-#import simplejson
+import simplejson
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
@@ -77,7 +77,7 @@ def get_data_file(filename):
   try:
     with open(filename, 'r') as data_file:
       results['status']['http_code'] = 200
-      results['contents'] = data_file.read()
+      results['contents'] = simplejson.load(data_file.read())
       ret_code = 200
   except (Exception, IOError) as e:
     if logger:
@@ -86,7 +86,7 @@ def get_data_file(filename):
   if logger:
     logger.debug("get_data_file Finished.")
 
-  return results,ret_code
+  return simplejson.dump(results),ret_code
 @app.route('/sarasota/predictions/current_results')
 def get_sarasora_current_results():
   if logger:

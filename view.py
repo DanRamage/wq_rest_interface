@@ -77,7 +77,7 @@ def get_data_file(filename):
   try:
     with open(filename, 'r') as data_file:
       results['status']['http_code'] = 200
-      results['contents'] = simplejson.load(data_file.read())
+      results['contents'] = simplejson.load(data_file)
       ret_code = 200
   except (Exception, IOError) as e:
     if logger:

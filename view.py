@@ -13,11 +13,11 @@ SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
 SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
-@app.route('/')
-def root():
-  if logger:
-    logger.debug("root Started.")
-  return send_from_directory('/var/www/howsthebeach/', 'index.html')
+#@app.route('/')
+#def root():
+#  if logger:
+#    logger.debug("root Started.")
+#  return send_from_directory('/var/www/howsthebeach/', 'index.html')
 
 @app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():

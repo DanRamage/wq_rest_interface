@@ -104,7 +104,11 @@ def get_sarasora_current_sample_data():
   if logger:
     logger.debug("get_sarasora_current_sample_data Started.")
 
+
   results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+  json_ret = {'status' : {'http_code': ret_code},
+              'contents': simplejson.loads(results)}
+  results = simplejson.dumps(json_ret)
   """
   results = {'status': {'http_code': 404}}
   try:

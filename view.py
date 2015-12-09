@@ -78,7 +78,7 @@ def get_data_file(filename):
     with open(filename, 'r') as data_file:
       #results['status']['http_code'] = 200
       #results['contents'] = simplejson.load(data_file)
-      results = simplejson.load(data_file)
+      results = data_file
       ret_code = 200
 
   except (Exception, IOError) as e:
@@ -88,7 +88,7 @@ def get_data_file(filename):
   if logger:
     logger.debug("get_data_file Finished.")
 
-  return simplejson.dumps(results),ret_code
+  return results,ret_code
 
 @app.route('/sarasota/predictions/current_results')
 def get_sarasora_current_results():

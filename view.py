@@ -78,7 +78,7 @@ def get_data_file(filename):
       results['status']['http_code'] = 200
       results['contents'] = data_file.read()
       ret_code = 200
-  except IOError,e:
+  except (Exception, IOError) as e:
     if logger:
       logger.exception(e)
 

@@ -86,7 +86,7 @@ def get_data_file(filename):
   if logger:
     logger.debug("get_data_file Finished.")
 
-  return simplejson.dump(results),ret_code
+  return simplejson.dumps(results),ret_code
 @app.route('/sarasota/predictions/current_results')
 def get_sarasora_current_results():
   if logger:

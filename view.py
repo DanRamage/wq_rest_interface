@@ -24,6 +24,9 @@ def get_mb_current_results():
   if logger:
     logger.debug("get_mb_current_results Started.")
 
+  results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
+
+  """
   results = {'status': {'http_code': 404}}
   ret_code = 404
   try:
@@ -33,7 +36,7 @@ def get_mb_current_results():
   except IOError,e:
     if logger:
       logger.exception(e)
-
+  """
   if logger:
     logger.debug("get_mb_current_results Finished.")
 
@@ -44,6 +47,9 @@ def get_mb_current_sample_data():
   if logger:
     logger.debug("get_mb_current_sample_data Started.")
 
+  results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
+
+  """
   results = {'status': {'http_code': 404}}
   ret_code = 404
   try:
@@ -53,30 +59,39 @@ def get_mb_current_sample_data():
   except IOError,e:
     if logger:
       logger.exception(e)
-
+  """
   if logger:
     logger.debug("get_mb_current_sample_data Finished.")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 
-@app.route('/sarasota/predictions/current_results')
-def get_sarasora_current_results():
+def get_data_file(filename):
   if logger:
-    logger.debug("get_sarasora_current_results Started.")
+    logger.debug("get_data_file Started.")
 
-  results = {'status': {'http_code': 404}}
+  results = {'status': {'http_code': 404},
+             'contents': {}}
   ret_code = 404
   try:
-    with open(FL_SARASOTA_PREDICTIONS_FILE, 'r') as data_file:
-      results = data_file.read()
+    with open(filename, 'r') as data_file:
+      results['status']['http_code'] = 200
+      results['contents'] = data_file.read()
       ret_code = 200
   except IOError,e:
     if logger:
       logger.exception(e)
 
   if logger:
-    logger.debug("get_sarasora_current_results Finished.")
+    logger.debug("get_data_file Finished.")
+
+  return results,ret_code
+@app.route('/sarasota/predictions/current_results')
+def get_sarasora_current_results():
+  if logger:
+    logger.debug("get_sarasora_current_results Started.")
+
+  results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
@@ -85,8 +100,9 @@ def get_sarasora_current_sample_data():
   if logger:
     logger.debug("get_sarasora_current_sample_data Started.")
 
+  results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+  """
   results = {'status': {'http_code': 404}}
-  ret_code = 404
   try:
     with open(FL_SARASOTA_ADVISORIES_FILE, 'r') as data_file:
       results = data_file.read()
@@ -94,7 +110,7 @@ def get_sarasora_current_sample_data():
   except IOError,e:
     if logger:
       logger.exception(e)
-
+  """
   if logger:
     logger.debug("get_sarasora_current_sample_data Finished.")
 

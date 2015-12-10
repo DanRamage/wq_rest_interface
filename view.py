@@ -48,18 +48,11 @@ def get_mb_current_sample_data():
     logger.debug("get_mb_current_sample_data Started.")
 
   results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
+  #Wrap the results in the status and contents keys. The app expects this format.
+  json_ret = {'status' : {'http_code': ret_code},
+              'contents': simplejson.loads(results)}
+  results = simplejson.dumps(json_ret)
 
-  """
-  results = {'status': {'http_code': 404}}
-  ret_code = 404
-  try:
-    with open(SC_MB_ADVISORIES_FILE, 'r') as data_file:
-      results = data_file.read()
-      ret_code = 200
-  except IOError,e:
-    if logger:
-      logger.exception(e)
-  """
   if logger:
     logger.debug("get_mb_current_sample_data Finished.")
 
@@ -106,6 +99,7 @@ def get_sarasora_current_sample_data():
 
 
   results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+  #Wrap the results in the status and contents keys. The app expects this format.
   json_ret = {'status' : {'http_code': ret_code},
               'contents': simplejson.loads(results)}
   results = simplejson.dumps(json_ret)
@@ -127,6 +121,9 @@ def get_sarasora_current_sample_data():
 def get_requested_station_data(request, station_directory):
   if logger:
     logger.debug("get_requested_station_data Started")
+
+  json_data = {'status': {'http_code': 404},
+             'contents': {}}
 
   station = None
   start_date = None
@@ -182,7 +179,9 @@ def get_requested_station_data(request, station_directory):
     if feature is None:
       feature = geojson.Feature(id=station)
 
-    jsonData = geojson.dumps(feature, separators=(',', ':'))
+    json_data = {'status': {'http_code': 202},
+                'contents': feature
+                }
   except Exception, e:
     if logger:
       logger.exception(e)
@@ -190,7 +189,8 @@ def get_requested_station_data(request, station_directory):
   if logger:
     logger.debug("get_requested_station_data Finished")
 
-  return jsonData
+  results = geojson.dumps(json_data, separators=(',', ':'))
+  return results
 
 @app.route('/sarasota/station_data', methods=['GET'])
 def get_sarasota_station_sample_data():

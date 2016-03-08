@@ -19,44 +19,6 @@ SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 #    logger.debug("root Started.")
 #  return send_from_directory('/var/www/howsthebeach/', 'index.html')
 
-@app.route('/myrtlebeach/predictions/current_results')
-def get_mb_current_results():
-  if logger:
-    logger.debug("get_mb_current_results Started.")
-
-  results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
-
-  """
-  results = {'status': {'http_code': 404}}
-  ret_code = 404
-  try:
-    with open(SC_MB_PREDICTIONS_FILE, 'r') as data_file:
-      results = data_file.read()
-      ret_code = 200
-  except IOError,e:
-    if logger:
-      logger.exception(e)
-  """
-  if logger:
-    logger.debug("get_mb_current_results Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
-
-@app.route('/myrtlebeach/sample_data/current_results')
-def get_mb_current_sample_data():
-  if logger:
-    logger.debug("get_mb_current_sample_data Started.")
-
-  results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
-  #Wrap the results in the status and contents keys. The app expects this format.
-  json_ret = {'status' : {'http_code': ret_code},
-              'contents': simplejson.loads(results)}
-  results = simplejson.dumps(json_ret)
-
-  if logger:
-    logger.debug("get_mb_current_sample_data Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 
 def get_data_file(filename):
@@ -82,6 +44,33 @@ def get_data_file(filename):
     logger.debug("get_data_file Finished.")
 
   return results,ret_code
+
+@app.route('/myrtlebeach/predictions/current_results')
+def get_mb_current_results():
+  if logger:
+    logger.debug("get_mb_current_results Started.")
+
+  results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
+  if logger:
+    logger.debug("get_mb_current_results Finished.")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+@app.route('/myrtlebeach/sample_data/current_results')
+def get_mb_current_sample_data():
+  if logger:
+    logger.debug("get_mb_current_sample_data Started.")
+
+  results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
+  #Wrap the results in the status and contents keys. The app expects this format.
+  json_ret = {'status' : {'http_code': ret_code},
+              'contents': simplejson.loads(results)}
+  results = simplejson.dumps(json_ret)
+
+  if logger:
+    logger.debug("get_mb_current_sample_data Finished.")
+
+  return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 @app.route('/sarasota/predictions/current_results')
 def get_sarasora_current_results():

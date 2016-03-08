@@ -230,3 +230,10 @@ def get_mb_station_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
+@app.route('/myrtlebeach/info.html')
+def mb_info_page():
+  return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
+
+@app.route('/sarasota/info.html')
+def mb_info_page():
+  return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')

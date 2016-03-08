@@ -51,6 +51,12 @@ def get_mb_current_results():
     logger.debug("get_mb_current_results Started.")
 
   results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
+
+  #Wrap the results in the status and contents keys. The app expects this format.
+  json_ret = {'status' : {'http_code': ret_code},
+              'contents': simplejson.loads(results)}
+  results = simplejson.dumps(json_ret)
+
   if logger:
     logger.debug("get_mb_current_results Finished.")
 

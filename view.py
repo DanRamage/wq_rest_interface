@@ -1,6 +1,7 @@
 import os
 from app import app, logger
-from flask import request, send_from_directory
+#from flask import request, send_from_directory, render_template
+from flask import Flask
 from datetime import datetime
 import geojson
 import simplejson
@@ -12,6 +13,10 @@ FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
 SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
 SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
+
+SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
+SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
+SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
 #@app.route('/')
 #def root():
@@ -232,3 +237,14 @@ def mb_info_page():
 @app.route('/sarasota/info.html')
 def sarasora_info_page():
   return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
+
+
+@app.route('/sarasota')
+def sarasora_index_page():
+  site_message = None
+  return render_template('index_template.html', site_message=site_message)
+
+@app.route('/myrtlebeach')
+def sarasora_index_page():
+  site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+  return render_template('index_template.html', site_message=site_message)

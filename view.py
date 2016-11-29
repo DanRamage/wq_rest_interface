@@ -50,6 +50,16 @@ def get_data_file(filename):
 
   return results,ret_code
 
+@app.route('/sarasota')
+def sarasora_index_page():
+  site_message = None
+  return render_template('index_template.html', site_message=site_message)
+
+@app.route('/myrtlebeach')
+def myrtlebeach_index_page():
+  site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+  return render_template('index_template.html', site_message=site_message)
+
 @app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():
   if logger:
@@ -239,12 +249,3 @@ def sarasora_info_page():
   return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
 
 
-@app.route('/sarasota')
-def sarasora_index_page():
-  site_message = None
-  return render_template('index_template.html', site_message=site_message)
-
-@app.route('/myrtlebeach')
-def myrtlebeach_index_page():
-  site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
-  return render_template('index_template.html', site_message=site_message)

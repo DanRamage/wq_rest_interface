@@ -60,6 +60,7 @@ def myrtlebeach_index_page():
   site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
   return render_template('index_template.html', site_message=site_message)
 
+
 @app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():
   if logger:

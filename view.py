@@ -32,7 +32,7 @@ def index_page(sitename):
     site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
     return render_template('index_template.html', site_message=site_message)
   elif sitename == 'sarasota':
-    site_message = None
+    site_message = "test"
     return render_template('index_template.html', site_message=site_message)
 
 """

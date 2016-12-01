@@ -173,7 +173,7 @@ if(site === null)
 */
 //Build the URL we use to get the site specific data.
 //site_base_url = "http://" + site + '.' + base_rest_url + site +'/';
-site_base_url = base_rest_url + '/rest/' + site +'/';
+site_base_url = base_rest_url  + site + '/rest/';
 
 
 //Function for changing the marker types on the main map when user clicks one of the buttons at bottom right of map

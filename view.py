@@ -50,7 +50,6 @@ def get_data_file(filename):
 
   return results,ret_code
 
-"""
 @app.route('/sarasota')
 def sarasora_index_page():
   site_message = None
@@ -60,10 +59,38 @@ def sarasora_index_page():
 def myrtlebeach_index_page():
   site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
   return render_template('index_template.html', site_message=site_message)
-"""
 
 
-@app.route('/myrtlebeach/predictions/current_results')
+@app.route('/<string:sitename>/predictions/current_results')
+def get_current_results(sitename):
+  if logger:
+    logger.debug("get_current_results for site: %s" % (sitename))
+  if sitename == "myrtlebeach":
+    return get_mb_current_results()
+  elif sitename == 'sarasota':
+    return get_sarasora_current_results()
+
+
+@app.route('/<string:sitename>/sample_data/current_results')
+def get_current_sample_data(sitename):
+  if logger:
+    logger.debug("get_current_sample_data for site: %s" % (sitename))
+  if sitename == "myrtlebeach":
+    return get_mb_current_sample_data()
+  elif sitename == 'sarasota':
+    return get_sarasora_current_sample_data()
+
+@app.route('/<string:sitename>/station_data', methods=['GET'])
+def get_station_sample_data(sitename):
+  if logger:
+    logger.debug("get_station_sample_data for site: %s" % (sitename))
+  if sitename == "myrtlebeach":
+    return get_mb_station_sample_data()
+  elif sitename == 'sarasota':
+    return get_sarasota_station_sample_data()
+
+
+#@app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():
   if logger:
     logger.debug("get_mb_current_results Started.")
@@ -80,7 +107,7 @@ def get_mb_current_results():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-@app.route('/myrtlebeach/sample_data/current_results')
+#@app.route('/myrtlebeach/sample_data/current_results')
 def get_mb_current_sample_data():
   if logger:
     logger.debug("get_mb_current_sample_data Started.")
@@ -96,7 +123,7 @@ def get_mb_current_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-@app.route('/sarasota/predictions/current_results')
+#@app.route('/sarasota/predictions/current_results')
 def get_sarasora_current_results():
   if logger:
     logger.debug("get_sarasora_current_results Started.")
@@ -105,7 +132,7 @@ def get_sarasora_current_results():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-@app.route('/sarasota/sample_data/current_results')
+#@app.route('/sarasota/sample_data/current_results')
 def get_sarasora_current_sample_data():
   if logger:
     logger.debug("get_sarasora_current_sample_data Started.")
@@ -205,7 +232,7 @@ def get_requested_station_data(request, station_directory):
   results = geojson.dumps(json_data, separators=(',', ':'))
   return results
 
-@app.route('/sarasota/station_data', methods=['GET'])
+#@app.route('/sarasota/station_data', methods=['GET'])
 def get_sarasota_station_sample_data():
   ret_code = 404
   results = {}
@@ -224,7 +251,7 @@ def get_sarasota_station_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-@app.route('/myrtlebeach/station_data', methods=['GET'])
+#@app.route('/myrtlebeach/station_data', methods=['GET'])
 def get_mb_station_sample_data():
   ret_code = 404
   results = {}
@@ -243,6 +270,7 @@ def get_mb_station_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
+"""
 @app.route('/myrtlebeach/info.html')
 def mb_info_page():
   return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
@@ -250,4 +278,5 @@ def mb_info_page():
 @app.route('/sarasota/info.html')
 def sarasora_info_page():
   return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
+"""
 

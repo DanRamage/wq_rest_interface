@@ -1,7 +1,6 @@
 import os
 from app import app, logger
-from flask import request, send_from_directory, render_template
-from flask import Flask
+from flask import Flask, request, send_from_directory, render_template
 from datetime import datetime
 import geojson
 import simplejson

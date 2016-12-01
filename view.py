@@ -67,7 +67,7 @@ def myrtlebeach_index_page():
   return render_template('index_template.html', site_message=site_message)
 
 
-@app.route('/<string:sitename>/predictions/current_results')
+@app.route('/<string:sitename>/rest/predictions/current_results')
 def get_current_results(sitename):
   if logger:
     logger.debug("get_current_results for site: %s" % (sitename))
@@ -77,7 +77,7 @@ def get_current_results(sitename):
     return get_sarasora_current_results()
 
 
-@app.route('/<string:sitename>/sample_data/current_results')
+@app.route('/<string:sitename>/rest/sample_data/current_results')
 def get_current_sample_data(sitename):
   if logger:
     logger.debug("get_current_sample_data for site: %s" % (sitename))
@@ -86,7 +86,7 @@ def get_current_sample_data(sitename):
   elif sitename == 'sarasota':
     return get_sarasora_current_sample_data()
 
-@app.route('/<string:sitename>/station_data', methods=['GET'])
+@app.route('/<string:sitename>/rest/station_data', methods=['GET'])
 def get_station_sample_data(sitename):
   if logger:
     logger.debug("get_station_sample_data for site: %s" % (sitename))

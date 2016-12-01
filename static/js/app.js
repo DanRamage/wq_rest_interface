@@ -161,8 +161,6 @@ var site = null; //Site the app will be displaying.
 var base_rest_url = "http://dev.howsthebeach.org/";
 //Site specific base url.
 var site_base_url = null;
-var show_site_message_on_load = false;
-var site_message = '';
 
 site = GetSiteFromURL(window.location.pathname);
 
@@ -175,7 +173,7 @@ if(site === null)
 */
 //Build the URL we use to get the site specific data.
 //site_base_url = "http://" + site + '.' + base_rest_url + site +'/';
-site_base_url = base_rest_url + site +'/';
+site_base_url = base_rest_url + '/rest/' + site +'/';
 
 
 //Function for changing the marker types on the main map when user clicks one of the buttons at bottom right of map
@@ -381,18 +379,6 @@ $.ajax({
           "lng" : beach.geometry.coordinates[0] };
       });
 
-      //Site message gets a <p> in the header so if we have a message, let's
-      //add that item.
-      //if ('site_message' in data.contents)
-      if(true)
-      {
-        //if(data.contents.site_message.message.length) {
-          show_site_message_on_load = true;
-          //site_message = contents.site_message;
-          //site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
-          //$('#site_message_text').append('<p><h3><bold>' + site_message + '</p></h3></bold>');
-        //}
-      }
       console.log('PD:'+predictionData);
     },
     error: function (xhr, ajaxOptions, thrownError) {
@@ -704,19 +690,6 @@ if(onlineStatus != 'off'){
   $('#mapPage').bind('pageshow', function(event) {
 
     var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight*2)+2;
-    if(show_site_message_on_load) {
-      msg_hgt = $('#message_area').height();
-      mapHeight += msg_hgt;
-      $("#message_area").show();
-      /*
-      $("#site_message").popup("open", {
-        positionTo: '#message_area'
-      });
-      */
-    }
-    else {
-      $("#message_area").hide();
-    }
 
     $('#map_canvas').css( "height", mapHeight );
 
@@ -749,14 +722,6 @@ if(onlineStatus != 'off'){
     //if(popupMessage != '') alert(popupMessage);
   });
 
-  /*
-  $('#mapPage').bind('pageload', function(event){
-    if(show_site_message_on_load) {
-      $.mobile.changePage('#site_message', {transition: 'pop', role: 'dialog'});
-      show_site_message_on_load = false;
-    }
-  });
-  */
 
   $('#map_canvas').gmap().bind('init', function(event, map) {
     initialZoom = $('#map_canvas').gmap('getZoom');

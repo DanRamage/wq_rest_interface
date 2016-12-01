@@ -49,7 +49,7 @@ def get_data_file(filename):
     logger.debug("get_data_file Finished.")
 
   return results,ret_code
-
+"""
 @app.route('/<sitename>')
 def index_page(sitename):
   if logger:
@@ -60,13 +60,13 @@ def index_page(sitename):
   elif sitename == 'sarasota':
     site_message = None
     return render_template('index_template.html', site_message=site_message)
-
 """
+
 @app.route('/myrtlebeach')
 def myrtlebeach_index_page():
   site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
   return render_template('index_template.html', site_message=site_message)
-"""
+
 
 @app.route('/<string:sitename>/predictions/current_results')
 def get_current_results(sitename):

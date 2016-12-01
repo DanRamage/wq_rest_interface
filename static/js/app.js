@@ -157,7 +157,8 @@ var markerType = 'forecast'; //Initial markers set to show forecast results
 var site = null; //Site the app will be displaying.
 //The base REST url to pull data.
 //var base_rest_url = "http://howsthebeach.org/rest/";
-var base_rest_url = "http://dev.howsthebeach.org/rest/";
+//var base_rest_url = "http://dev.howsthebeach.org/rest/";
+var base_rest_url = "http://dev.howsthebeach.org/";
 //Site specific base url.
 var site_base_url = null;
 var show_site_message_on_load = false;

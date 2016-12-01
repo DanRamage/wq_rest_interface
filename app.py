@@ -6,7 +6,7 @@ import logging.config
 app = Flask(__name__)
 app.debug = True
 
-LOGCONFFILE = '/var/www/wq_rest_interface/wq_rest.conf'
+LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
 #LOGCONFFILE = '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface/wq_rest_debug.conf'
 
 

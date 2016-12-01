@@ -50,7 +50,7 @@ def get_data_file(filename):
 
   return results,ret_code
 
-@app.route('/<string:sitename>')
+@app.route('/<sitename>')
 def index_page(sitename):
   if logger:
     logger.debug("index_page for site: %s" % (sitename))

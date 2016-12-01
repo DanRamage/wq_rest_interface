@@ -17,12 +17,30 @@ SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
 SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
 SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
-#@app.route('/')
-#def root():
-#  if logger:
-#    logger.debug("root Started.")
-#  return send_from_directory('/var/www/howsthebeach/', 'index.html')
+@app.route('/')
+def root():
+  if logger:
+    logger.debug("root Started.")
+  return render_template("intro_page.html")
 
+
+@app.route('/<sitename>')
+def index_page(sitename):
+  if logger:
+    logger.debug("index_page for site: %s" % (sitename))
+  if sitename == "myrtlebeach":
+    site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+    return render_template('index_template.html', site_message=site_message)
+  elif sitename == 'sarasota':
+    site_message = None
+    return render_template('index_template.html', site_message=site_message)
+
+"""
+@app.route('/myrtlebeach')
+def myrtlebeach_index_page():
+  site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+  return render_template('index_template.html', site_message=site_message)
+"""
 
 
 def get_data_file(filename):
@@ -48,24 +66,6 @@ def get_data_file(filename):
     logger.debug("get_data_file Finished.")
 
   return results,ret_code
-"""
-@app.route('/<sitename>')
-def index_page(sitename):
-  if logger:
-    logger.debug("index_page for site: %s" % (sitename))
-  if sitename == "myrtlebeach":
-    site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
-    return render_template('index_template.html', site_message=site_message)
-  elif sitename == 'sarasota':
-    site_message = None
-    return render_template('index_template.html', site_message=site_message)
-"""
-
-@app.route('/myrtlebeach')
-def myrtlebeach_index_page():
-  site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
-  return render_template('index_template.html', site_message=site_message)
-
 
 @app.route('/<string:sitename>/rest/predictions/current_results')
 def get_current_results(sitename):

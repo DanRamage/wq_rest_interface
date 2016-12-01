@@ -211,7 +211,7 @@ var markerMapped;
 
 function mapUserMarker(){
   var clientPosition = new google.maps.LatLng(userLat, userLng);
-  $('#map_canvas').gmap('addMarker', {'position': clientPosition, 'icon': 'images/blue_dot_circle.png', 'bounds': false});
+  $('#map_canvas').gmap('addMarker', {'position': clientPosition, 'icon': 'static/images/blue_dot_circle.png', 'bounds': false});
   markerMapped = 1;
 
   if((userLat > 33.501 && userLat < 33.880) && (userLng > -79.067 && userLng < -78.511)){ //Check if user is in the area and if so, zoom in to their location
@@ -239,7 +239,7 @@ function onSuccessDetail(position) {
   userLng = position.coords.longitude;
 
   var clientPosition = new google.maps.LatLng(userLat, userLng);
-  $('#detail_map_canvas').gmap('addMarker', {'position': clientPosition, 'icon': 'images/blue_dot_circle.png', 'bounds': false});
+  $('#detail_map_canvas').gmap('addMarker', {'position': clientPosition, 'icon': 'static/images/blue_dot_circle.png', 'bounds': false});
 }
 
 
@@ -389,8 +389,8 @@ $.ajax({
         //if(data.contents.site_message.message.length) {
           show_site_message_on_load = true;
           //site_message = contents.site_message;
-          site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
-          $('#site_message_text').append('<p><h3><bold>' + site_message + '</p></h3></bold>');
+          //site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+          //$('#site_message_text').append('<p><h3><bold>' + site_message + '</p></h3></bold>');
         //}
       }
       console.log('PD:'+predictionData);
@@ -658,7 +658,7 @@ if(onlineStatus != 'off'){
 
           $('#map_canvas').gmap('addMarker', {
             'position': new google.maps.LatLng(station.lat, station.lng),
-            'icon': 'images/' + markerRating.toLowerCase() + '_marker.png',
+            'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
             'bounds': bounds
           }).click(function () {
             var popup_label_class = 'popup_label_none';
@@ -1101,7 +1101,7 @@ if(onlineStatus != 'off'){
 
     $('#detail_map_canvas').gmap('addMarker', {
       'position': new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng),
-      'icon': 'images/'+forecast.toLowerCase()+'_marker.png',
+      'icon': 'static/images/'+forecast.toLowerCase()+'_marker.png',
       'bounds': false
 
     });
@@ -1109,7 +1109,7 @@ if(onlineStatus != 'off'){
 
     if(typeof userLat !== 'undefined'){
       var clientPosition = new google.maps.LatLng(userLat, userLng);
-      $('#detail_map_canvas').gmap('addMarker', {'position': clientPosition, 'icon': 'images/blue_dot_circle.png', 'bounds': false});
+      $('#detail_map_canvas').gmap('addMarker', {'position': clientPosition, 'icon': 'static/images/blue_dot_circle.png', 'bounds': false});
     }
     else{
       initializeGeoDetail();

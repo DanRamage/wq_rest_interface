@@ -101,6 +101,8 @@ def get_station_sample_data(sitename):
 
 @app.route('/sites/<string:sitename>/info.html')
 def info_page(sitename):
+  if logger:
+    logger.debug("info_page for site: %s" % (sitename))
   if sitename == 'myrtlebeach':
     return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
   elif sitename == 'sarasota':

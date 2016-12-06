@@ -99,7 +99,7 @@ def get_station_sample_data(sitename):
   elif sitename == 'sarasota':
     return get_sarasota_station_sample_data()
 
-@app.route('/<string:sitename>/info.html')
+@app.route('/sites/<string:sitename>/info.html')
 def info_page(sitename):
   if sitename == 'myrtlebeach':
     return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')

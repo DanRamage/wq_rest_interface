@@ -99,6 +99,12 @@ def get_station_sample_data(sitename):
   elif sitename == 'sarasota':
     return get_sarasota_station_sample_data()
 
+@app.route('/<string:sitename>/info.html')
+def info_page(sitename):
+  if sitename == 'myrtlebeach':
+    return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
+  elif sitename == 'sarasota':
+    return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
 
 #@app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():
@@ -281,13 +287,11 @@ def get_mb_station_sample_data():
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-"""
-@app.route('/myrtlebeach/info.html')
-def mb_info_page():
-  return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
+#@app.route('/myrtlebeach/info.html')
+#def mb_info_page():
+#  return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
 
-@app.route('/sarasota/info.html')
-def sarasora_info_page():
-  return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
-"""
+#@app.route('/sarasota/info.html')
+#def sarasora_info_page():
+#  return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
 

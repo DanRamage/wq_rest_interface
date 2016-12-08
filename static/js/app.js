@@ -680,7 +680,8 @@ if(onlineStatus != 'off'){
     $('#map_canvas').gmap('addControl', homeButton.div, google.maps.ControlPosition.TOP_LEFT);
     $('#markerTypeSelector').trigger('create'); //Applies JQM styling to the markerTypeSelector radio buttons
     //Load in site specific info page.
-    var site_info_url = '/sites/' + site + '/info';
+    //var site_info_url = '/sites/' + site + '/info';
+    var site_info_url = site + '/info';
     $( "#moreInformation" ).load(site_info_url);
 
   });

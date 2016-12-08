@@ -28,15 +28,6 @@ def root():
   return render_template("intro_page.html")
 
 
-@app.route('/rest/help', methods = ['GET'])
-def help():
-    """Print available functions."""
-    func_list = {}
-    for rule in app.url_map.iter_rules():
-        if rule.endpoint != 'static':
-            func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
-    return jsonify(func_list)
-
 @app.route('/<sitename>')
 def index_page(sitename):
   if logger:
@@ -307,3 +298,13 @@ def get_mb_station_sample_data():
 #def sarasora_info_page():
 #  return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
 
+@app.route('/rest/help', methods = ['GET'])
+def help():
+  if logger:
+    logger.debug("help started")
+  """Print available functions."""
+  func_list = {}
+  for rule in app.url_map.iter_rules():
+      if rule.endpoint != 'static':
+          func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
+  return jsonify(func_list)

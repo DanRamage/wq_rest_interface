@@ -39,6 +39,14 @@ def index_page(sitename):
     site_message = None
     return render_template('index_template.html', site_message=site_message)
 
+@app.route('/<sitename>/rest/info')
+def info_page(sitename):
+  if logger:
+    logger.debug("info_page for site: %s" % (sitename))
+  if sitename == 'myrtlebeach':
+    return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
+  elif sitename == 'sarasota':
+    return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
 """
 @app.route('/myrtlebeach')
 def myrtlebeach_index_page():
@@ -98,15 +106,6 @@ def get_station_sample_data(sitename):
     return get_mb_station_sample_data()
   elif sitename == 'sarasota':
     return get_sarasota_station_sample_data()
-
-@app.route('/<sitename>/rest/info')
-def info_page(sitename):
-  if logger:
-    logger.debug("info_page for site: %s" % (sitename))
-  if sitename == 'myrtlebeach':
-    return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
-  elif sitename == 'sarasota':
-    return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
 
 #@app.route('/myrtlebeach/predictions/current_results')
 def get_mb_current_results():

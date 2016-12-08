@@ -1,6 +1,6 @@
 import os
 from app import app, logger
-from flask import Flask, request, send_from_directory, render_template
+from flask import Flask, request, send_from_directory, render_template, jsonify
 from datetime import datetime
 import geojson
 import simplejson
@@ -27,6 +27,15 @@ def root():
     logger.debug("root Started.")
   return render_template("intro_page.html")
 
+
+@app.route('/rest/help', methods = ['GET'])
+def help():
+    """Print available functions."""
+    func_list = {}
+    for rule in app.url_map.iter_rules():
+        if rule.endpoint != 'static':
+            func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
+    return jsonify(func_list)
 
 @app.route('/<sitename>')
 def index_page(sitename):

@@ -99,7 +99,7 @@ def get_station_sample_data(sitename):
   elif sitename == 'sarasota':
     return get_sarasota_station_sample_data()
 
-@app.route('/<string:sitename>/info')
+@app.route('/<string:sitename>/info', methods=['GET')
 def info_page(sitename):
   if logger:
     logger.debug("info_page for site: %s" % (sitename))

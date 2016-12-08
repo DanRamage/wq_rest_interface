@@ -45,9 +45,9 @@ def info_page(sitename):
     logger.debug("info_page for site: %s" % (sitename))
 
   if sitename == 'myrtlebeach':
-    return send_from_directory('sites', 'info.html')
+    return send_from_directory('/var/www/flaskhowsthebeach/sites/myrtlebeach', 'info.html')
   elif sitename == 'sarasota':
-    return send_from_directory('sites', 'info.html')
+    return send_from_directory('/var/www/flaskhowsthebeach/sites/sarasota', 'info.html')
 
 """
 @app.route('/myrtlebeach')

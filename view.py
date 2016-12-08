@@ -38,7 +38,7 @@ def index_page(sitename):
   elif sitename == 'sarasota':
     site_message = None
     return render_template('index_template.html', site_message=site_message)
-
+  return ""
 @app.route('/<sitename>/rest/info')
 def info_page(sitename):
   if logger:

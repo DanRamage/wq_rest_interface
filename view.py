@@ -43,12 +43,12 @@ def index_page(sitename):
 def info_page(sitename):
   if logger:
     logger.debug("info_page for site: %s" % (sitename))
-  """
+
   if sitename == 'myrtlebeach':
     return send_from_directory('/var/www/howsthebeach/sites/myrtlebeach', 'info.html')
   elif sitename == 'sarasota':
     return send_from_directory('/var/www/howsthebeach/sites/sarasota', 'info.html')
-  """
+
 """
 @app.route('/myrtlebeach')
 def myrtlebeach_index_page():

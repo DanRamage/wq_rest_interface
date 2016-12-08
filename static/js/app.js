@@ -682,7 +682,11 @@ if(onlineStatus != 'off'){
     //Load in site specific info page.
     //var site_info_url = '/sites/' + site + '/info';
     var site_info_url = site + '/rest/info';
-    $( "#moreInformation" ).load(site_info_url);
+    //$( "#moreInformation" ).load(site_info_url);
+    $.get( site_info_url, function( info_page )
+    {
+      $( "#moreInformation" ).html( info_page );
+    });
 
   });
 

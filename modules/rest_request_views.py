@@ -7,6 +7,7 @@ from flask import Flask, request, Blueprint
 from datetime import datetime
 import geojson
 import simplejson
+import logging.config
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
@@ -27,6 +28,7 @@ SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 rest_requests = Blueprint('rest_requests', __name__,
                         template_folder='templates')
 
+logger = logging.getLogger('wq_rest_logger')
 def get_data_file(filename):
   if logger:
     logger.debug("get_data_file Started.")

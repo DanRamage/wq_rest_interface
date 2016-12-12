@@ -1,12 +1,14 @@
 #import sys
 #sys.path.insert(0, '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface')
 
-from main import logger
+#from main import logger
+import logging.config
 from flask import Flask, Blueprint, render_template
 
 pages_view = Blueprint('pages_view', __name__,
                         template_folder='templates')
 
+logger = logging.getLogger('wq_rest_logger')
 @pages_view.route('/')
 def root():
   if logger:

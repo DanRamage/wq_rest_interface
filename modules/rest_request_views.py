@@ -2,7 +2,7 @@
 #sys.path.insert(0, '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface')
 
 import os
-from flask import Flask, request, Blueprint
+from flask import Flask, request, Blueprint, current_app
 from datetime import datetime
 import geojson
 import simplejson
@@ -29,8 +29,7 @@ rest_requests = Blueprint('rest_requests', __name__,
 
 logger = logging.getLogger('wq_rest_logger')
 def get_data_file(filename):
-  if logger:
-    logger.debug("get_data_file Started.")
+  current_app.logger.debug("get_data_file Started.")
 
   results = {'status': {'http_code': 404},
              'contents': {}}
@@ -44,18 +43,15 @@ def get_data_file(filename):
       ret_code = 200
 
   except (Exception, IOError) as e:
-    if logger:
-      logger.exception(e)
+    current_app.logger.exception(e)
 
-  if logger:
-    logger.debug("get_data_file Finished.")
+  current_app.logger.debug("get_data_file Finished.")
 
   return results,ret_code
 
 @rest_requests.route('/<string:sitename>/rest/predictions/current_results')
 def get_current_results(sitename):
-  if logger:
-    logger.debug("get_current_results for site: %s" % (sitename))
+  current_app.logger.debug("get_current_results for site: %s" % (sitename))
   if sitename == "myrtlebeach":
     return get_mb_current_results()
   elif sitename == 'sarasota':
@@ -64,8 +60,7 @@ def get_current_results(sitename):
 
 @rest_requests.route('/<string:sitename>/rest/sample_data/current_results')
 def get_current_sample_data(sitename):
-  if logger:
-    logger.debug("get_current_sample_data for site: %s" % (sitename))
+  current_app.logger.debug("get_current_sample_data for site: %s" % (sitename))
   if sitename == "myrtlebeach":
     return get_mb_current_sample_data()
   elif sitename == 'sarasota':
@@ -73,16 +68,14 @@ def get_current_sample_data(sitename):
 
 @rest_requests.route('/<string:sitename>/rest/station_data', methods=['GET'])
 def get_station_sample_data(sitename):
-  if logger:
-    logger.debug("get_station_sample_data for site: %s" % (sitename))
+  current_app.logger.debug("get_station_sample_data for site: %s" % (sitename))
   if sitename == "myrtlebeach":
     return get_mb_station_sample_data()
   elif sitename == 'sarasota':
     return get_sarasota_station_sample_data()
 
 def get_mb_current_results():
-  if logger:
-    logger.debug("get_mb_current_results Started.")
+  current_app.logger.debug("get_mb_current_results Started.")
 
   results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
 
@@ -92,14 +85,12 @@ def get_mb_current_results():
   #            'contents': simplejson.loads(results)}
   #results = simplejson.dumps(json_ret)
 
-  if logger:
-    logger.debug("get_mb_current_results Finished.")
+  current_app.logger.debug("get_mb_current_results Finished.")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 def get_mb_current_sample_data():
-  if logger:
-    logger.debug("get_mb_current_sample_data Started.")
+  current_app.logger.debug("get_mb_current_sample_data Started.")
 
   results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
   #Wrap the results in the status and contents keys. The app expects this format.
@@ -107,22 +98,19 @@ def get_mb_current_sample_data():
               'contents': simplejson.loads(results)}
   results = simplejson.dumps(json_ret)
 
-  if logger:
-    logger.debug("get_mb_current_sample_data Finished.")
+  current_app.logger.debug("get_mb_current_sample_data Finished.")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 def get_sarasora_current_results():
-  if logger:
-    logger.debug("get_sarasora_current_results Started.")
+  current_app.logger.debug("get_sarasora_current_results Started.")
 
   results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 def get_sarasora_current_sample_data():
-  if logger:
-    logger.debug("get_sarasora_current_sample_data Started.")
+  current_app.logger.debug("get_sarasora_current_sample_data Started.")
 
 
   results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
@@ -130,14 +118,12 @@ def get_sarasora_current_sample_data():
   json_ret = {'status' : {'http_code': ret_code},
               'contents': simplejson.loads(results)}
   results = simplejson.dumps(json_ret)
-  if logger:
-    logger.debug("get_sarasora_current_sample_data Finished.")
+  current_app.logger.debug("get_sarasora_current_sample_data Finished.")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 def get_requested_station_data(request, station_directory):
-  if logger:
-    logger.debug("get_requested_station_data Started")
+  current_app.logger.debug("get_requested_station_data Started")
 
   json_data = {'status': {'http_code': 404},
              'contents': {}}
@@ -148,14 +134,12 @@ def get_requested_station_data(request, station_directory):
     station = request.args['station']
   if 'startdate' in request.args:
     start_date = request.args['startdate']
-  if logger:
-    logger.debug("Station: %s Start Date: %s" % (station, start_date))
+  current_app.logger.debug("Station: %s Start Date: %s" % (station, start_date))
 
   feature = None
   try:
     filepath = os.path.join(station_directory, '%s.json' % (station))
-    if logger:
-      logger.debug("Opening station file: %s" % (filepath))
+    current_app.logger.debug("Opening station file: %s" % (filepath))
 
     with open(filepath, "r") as json_data_file:
       stationJson = geojson.load(json_data_file)
@@ -183,15 +167,8 @@ def get_requested_station_data(request, station_directory):
     properties['test'] = {'beachadvisories' : resultList}
 
     feature = geojson.Feature(id=station, geometry=stationJson['geometry'], properties=properties)
-  except IOError, e:
-    if logger:
-      logger.exception(e)
-  except ValueError, e:
-    if logger:
-      logger.exception(e)
-  except Exception, e:
-    if logger:
-      logger.exception(e)
+  except (ValueError, IOError, Exception) as e:
+    current_app.logger.exception(e)
   try:
     if feature is None:
       feature = geojson.Feature(id=station)
@@ -200,11 +177,9 @@ def get_requested_station_data(request, station_directory):
                 'contents': feature
                 }
   except Exception, e:
-    if logger:
-      logger.exception(e)
+    current_app.logger.exception(e)
 
-  if logger:
-    logger.debug("get_requested_station_data Finished")
+  current_app.logger.debug("get_requested_station_data Finished")
 
   results = geojson.dumps(json_data, separators=(',', ':'))
   return results
@@ -213,17 +188,14 @@ def get_sarasota_station_sample_data():
   ret_code = 404
   results = {}
 
-  if logger:
-    logger.debug("get_sarasota_station_sample_data Started")
+  current_app.logger.debug("get_sarasota_station_sample_data Started")
 
-  if logger:
-    logger.debug("Request args: %s" % (request.args))
+  current_app.logger.debug("Request args: %s" % (request.args))
 
-    results = get_requested_station_data(request, FL_SARASOTA_STATIONS_DATA_DIR)
-    ret_code = 200
+  results = get_requested_station_data(request, FL_SARASOTA_STATIONS_DATA_DIR)
+  ret_code = 200
 
-  if logger:
-    logger.debug("get_sarasota_station_sample_data Finished")
+  current_app.logger.debug("get_sarasota_station_sample_data Finished")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
@@ -231,17 +203,14 @@ def get_mb_station_sample_data():
   ret_code = 404
   results = {}
 
-  if logger:
-    logger.debug("get_mb_station_sample_data Started")
+  current_app.logger.debug("get_mb_station_sample_data Started")
 
-  if logger:
-    logger.debug("Request args: %s" % (request.args))
+  current_app.logger.debug("Request args: %s" % (request.args))
 
-    results = get_requested_station_data(request, SC_MB_STATIONS_DATA_DIR)
-    ret_code = 200
+  results = get_requested_station_data(request, SC_MB_STATIONS_DATA_DIR)
+  ret_code = 200
 
-  if logger:
-    logger.debug("get_mb_station_sample_data Finished")
+  current_app.logger.debug("get_mb_station_sample_data Finished")
 
   return (results, ret_code, {'Content-Type': 'Application-JSON'})
 

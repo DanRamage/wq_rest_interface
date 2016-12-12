@@ -4,6 +4,8 @@
 #from main import logger
 from flask import Flask
 import logging.config
+from logging.handlers import RotatingFileHandler
+from logging import Formatter
 
 from modules.pages_view import pages_view as pages_view_bp
 from modules.rest_request_views import rest_requests as rest_requests_bp
@@ -28,8 +30,22 @@ LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
 
 
 if __name__ == '__main__':
-  logging.config.fileConfig(LOGCONFFILE)
-  logger = logging.getLogger('wq_rest_logger')
-  logger.info("Log file opened")
-  app.logger = logging.getLogger('wq_rest_logger')
+  file_handler = RotatingFileHandler()
+  file_handler.setLevel(logging.WARNING)
+  file_handler.setFormatter(Formatter('''
+  Message type:       %(levelname)s
+  Location:           %(pathname)s:%(lineno)d
+  Module:             %(module)s
+  Function:           %(funcName)s
+  Time:               %(asctime)s
+
+  Message:
+
+  %(message)s
+  '''))
+  app.logger.addHandler(file_handler)
+  #logging.config.fileConfig(LOGCONFFILE)
+  #logger = logging.getLogger('wq_rest_logger')
+  #logger.info("Log file opened")
+  #app.logger = logging.getLogger('wq_rest_logger')
   app.run(debug=True)

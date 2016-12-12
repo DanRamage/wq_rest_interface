@@ -2,7 +2,6 @@
 #sys.path.insert(0, '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface')
 
 import os
-from main import logger
 from flask import Flask, request, Blueprint
 from datetime import datetime
 import geojson

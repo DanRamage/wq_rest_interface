@@ -1,7 +1,7 @@
 #import sys
 #sys.path.insert(0, '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface')
 
-from main import logger
+#from main import logger
 from flask import Flask
 import logging.config
 
@@ -11,6 +11,8 @@ from modules.rest_request_views import rest_requests as rest_requests_bp
 #from flask_admin import Admin
 
 app = Flask(__name__)
+
+app.debug = True
 
 app.register_blueprint(pages_view_bp)
 app.register_blueprint(rest_requests_bp)
@@ -26,3 +28,7 @@ if app.debug:
   logging.config.fileConfig(LOGCONFFILE)
   logger = logging.getLogger('wq_rest_logger')
   logger.info("Log file opened")
+
+
+if __name__ == '__main__':
+  app.run()

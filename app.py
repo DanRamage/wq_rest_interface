@@ -31,4 +31,5 @@ if __name__ == '__main__':
   logging.config.fileConfig(LOGCONFFILE)
   logger = logging.getLogger('wq_rest_logger')
   logger.info("Log file opened")
+  app.logger = logging.getLogger('wq_rest_logger')
   app.run(debug=True)

@@ -11,15 +11,17 @@ pages_view = Blueprint('pages_view', __name__,
 logger = logging.getLogger('wq_rest_logger')
 @pages_view.route('/')
 def root():
-  if logger:
-    logger.debug("root Started.")
+  app = Flask.current_app
+  #if logger:
+  app.logger.debug("root Started.")
   return render_template("intro_page.html")
 
 
 @pages_view.route('/<sitename>')
 def index_page(sitename):
-  if logger:
-    logger.debug("index_page for site: %s" % (sitename))
+  app = Flask.current_app
+  #if logger:
+  app.logger.debug("index_page for site: %s" % (sitename))
   if sitename == "myrtlebeach":
     site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
     return render_template('index_template.html', site_message=site_message)

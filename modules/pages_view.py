@@ -13,7 +13,7 @@ logger = logging.getLogger('wq_rest_logger')
 def root():
   app = current_app
   #if logger:
-  app.logger.debug("root Started.")
+  app.logger.info("root Started.")
   return render_template("intro_page.html")
 
 
@@ -21,7 +21,7 @@ def root():
 def index_page(sitename):
   app = current_app
   #if logger:
-  app.logger.debug("index_page for site: %s" % (sitename))
+  app.logger.info("index_page for site: %s" % (sitename))
   if sitename == "myrtlebeach":
     site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
     return render_template('index_template.html', site_message=site_message)

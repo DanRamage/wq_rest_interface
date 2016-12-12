@@ -19,7 +19,8 @@ app.debug = True
 app.register_blueprint(pages_view_bp)
 app.register_blueprint(rest_requests_bp)
 
-LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
+LOGFILE = '/var/log/wq_rest/flask_bp_site.log'
+# LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
 #LOGCONFFILE = '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface/wq_rest_debug.conf'
 
 #admin = Admin(app, name='wqapp', template_mode='bootstrap3')
@@ -30,8 +31,8 @@ LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
 
 
 if __name__ == '__main__':
-  file_handler = RotatingFileHandler()
-  file_handler.setLevel(logging.WARNING)
+  file_handler = RotatingFileHandler(filename = LOGFILE)
+  file_handler.setLevel(logging.DEBUG)
   file_handler.setFormatter(Formatter('''
   Message type:       %(levelname)s
   Location:           %(pathname)s:%(lineno)d

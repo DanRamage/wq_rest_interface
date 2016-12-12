@@ -24,11 +24,11 @@ LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
 
 
 
-if app.debug:
-  logging.config.fileConfig(LOGCONFFILE)
-  logger = logging.getLogger('wq_rest_logger')
-  logger.info("Log file opened")
+#if app.debug:
 
 
 if __name__ == '__main__':
+  logging.config.fileConfig(LOGCONFFILE)
+  logger = logging.getLogger('wq_rest_logger')
+  logger.info("Log file opened")
   app.run()

@@ -15,8 +15,8 @@ app = Flask(__name__)
 app.register_blueprint(pages_view_bp)
 app.register_blueprint(rest_requests_bp)
 
-#LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
-LOGCONFFILE = '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface/wq_rest_debug.conf'
+LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
+#LOGCONFFILE = '/Users/danramage/Documents/workspace/WaterQuality/wq_rest_interface/wq_rest_debug.conf'
 
 #admin = Admin(app, name='wqapp', template_mode='bootstrap3')
 

@@ -360,7 +360,7 @@ $.ajax({
     //url: "http://howsthebeach.org/ba-simple-proxy.php?url=http://129.252.139.124/mapping/xenia/feeds/florida_wq/Predictions.json",
     //url: "http://dev.howsthebeach.org/rest/sarasota/predictions/current_results",
     //url: site_base_url + "predictions/current_results",
-    url: base_rest_url + "predictions/current_results/" + site,
+    url: base_rest_url + "/rest/predictions/current_results/" + site,
     dataType: "json",
     success: function(data) {
       $.each( data, function(i, contents) {

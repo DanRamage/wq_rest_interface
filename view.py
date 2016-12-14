@@ -1,5 +1,4 @@
 import os
-from app import logger
 from flask import Flask, request, send_from_directory, render_template, jsonify, current_app
 from flask.views import View
 from datetime import datetime
@@ -21,6 +20,8 @@ SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
 SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
 SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
+
+logger = current_app.logger
 
 class ShowIntroPage(View):
   def dispatch_request(self):

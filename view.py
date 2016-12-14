@@ -53,7 +53,7 @@ class SarasotaPage(SitePage):
 
 class PredictionsAPI(MethodView):
   def get(self, sitename=None):
-    current_app.logger.debug('PredictionsAPI get for site: %s' % (site))
+    current_app.logger.debug('PredictionsAPI get for site: %s' % (sitename))
     results = {}
     ret_code = 404
     if sitename == 'myrtlebeach':

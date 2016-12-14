@@ -59,6 +59,7 @@ def get_data_file(filename):
   ret_code = 404
 
   try:
+    current_app.logger.debug("Opening file: %s" % (filename))
     with open(filename, 'r') as data_file:
       #results['status']['http_code'] = 200
       #results['contents'] = simplejson.load(data_file)

@@ -11,6 +11,7 @@ LOGCONFFILE = '/var/www/flaskdevhowsthebeach/wq_rest.conf'
 
 
 
+
 if not app.debug:
   logger = None
 

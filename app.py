@@ -1,9 +1,6 @@
 from flask import Flask
 import logging.config
 from view import *
-from datetime import datetime
-import geojson
-import simplejson
 
 
 app = Flask(__name__)
@@ -23,9 +20,14 @@ if app.debug:
   logger = logging.getLogger('wq_rest_logger')
   logger.info("Log file opened")
 
+#Page rules
 app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
 app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
 app.add_url_rule('/sarasota', view_func=MyrtleBeachPage.as_view('sarasota'))
+
+#REST rules
+app.add_url_rule('/rest/predictions/current_results/<string:sitename>', view_func=PredictionsAPI, methods=['GET'])
+
 
 @app.route('/<sitename>/rest/info')
 def info_page(sitename):
@@ -69,6 +71,7 @@ def get_data_file(filename):
 
   return results,ret_code
 
+"""
 @app.route('/<string:sitename>/rest/predictions/current_results')
 def get_current_results(sitename):
   if logger:
@@ -77,7 +80,7 @@ def get_current_results(sitename):
     return get_mb_current_results()
   elif sitename == 'sarasota':
     return get_sarasora_current_results()
-
+"""
 
 @app.route('/<string:sitename>/rest/sample_data/current_results')
 def get_current_sample_data(sitename):

@@ -1109,7 +1109,7 @@ if(onlineStatus != 'off'){
       async: false,
       crossDomain: false,
       timeout: 5000,
-      url: base_rest_url + "station_data" + site + $.mobile.pageData.id,
+      url: base_rest_url + "station_data/" + site + '/' + $.mobile.pageData.id,
       data: get_data,
       dataType: "json",
       success: function(testData) {

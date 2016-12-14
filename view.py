@@ -143,7 +143,7 @@ class StationDataAPI(MethodView):
     if 'startdate' in request.args:
       start_date = request.args['startdate']
 
-    current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_data))
+:Q!:q!    current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_data))
     results = {}
     ret_code = 404
 

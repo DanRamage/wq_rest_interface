@@ -26,7 +26,7 @@ app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'
 app.add_url_rule('/sarasota', view_func=MyrtleBeachPage.as_view('sarasota'))
 
 #REST rules
-app.add_url_rule('/rest/predictions/current_results/<string:sitename>', view_func=PredictionsAPI, methods=['GET'])
+app.add_url_rule('/rest/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])
 
 
 @app.route('/<sitename>/rest/info')

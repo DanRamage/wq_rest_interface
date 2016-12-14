@@ -56,9 +56,9 @@ class PredictionsAPI(MethodView):
     current_app.logger.debug('PredictionsAPI get for site: %s' % (site))
     results = {}
     ret_code = 404
-    if site == 'myrtlebeach':
+    if sitename == 'myrtlebeach':
       results, ret_code = self.get_data_file(SC_MB_PREDICTIONS_FILE)
-    elif site == 'sarasota':
+    elif sitename == 'sarasota':
       results, ret_code = self.get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})

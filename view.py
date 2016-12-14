@@ -158,8 +158,8 @@ class StationDataAPI(MethodView):
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
   def get_requested_station_data(self, request, station_directory):
-    if logger:
-      logger.debug("get_requested_station_data Started")
+
+    current_app.logger.debug("get_requested_station_data Started")
 
     json_data = {'status': {'http_code': 404},
                'contents': {}}
@@ -170,14 +170,12 @@ class StationDataAPI(MethodView):
       station = request.args['station']
     if 'startdate' in request.args:
       start_date = request.args['startdate']
-    if logger:
-      logger.debug("Station: %s Start Date: %s" % (station, start_date))
+    current_app.logger.debug("Station: %s Start Date: %s" % (station, start_date))
 
     feature = None
     try:
       filepath = os.path.join(station_directory, '%s.json' % (station))
-      if logger:
-        logger.debug("Opening station file: %s" % (filepath))
+      current_app.logger.debug("Opening station file: %s" % (filepath))
 
       with open(filepath, "r") as json_data_file:
         stationJson = geojson.load(json_data_file)
@@ -206,14 +204,11 @@ class StationDataAPI(MethodView):
 
       feature = geojson.Feature(id=station, geometry=stationJson['geometry'], properties=properties)
     except IOError, e:
-      if logger:
-        logger.exception(e)
+      current_app.logger.exception(e)
     except ValueError, e:
-      if logger:
-        logger.exception(e)
+      current_app.logger.exception(e)
     except Exception, e:
-      if logger:
-        logger.exception(e)
+      current_app.logger.exception(e)
     try:
       if feature is None:
         feature = geojson.Feature(id=station)
@@ -222,11 +217,9 @@ class StationDataAPI(MethodView):
                   'contents': feature
                   }
     except Exception, e:
-      if logger:
-        logger.exception(e)
+      current_app.logger.exception(e)
 
-    if logger:
-      logger.debug("get_requested_station_data Finished")
+    current_app.logger.debug("get_requested_station_data Finished")
 
     results = geojson.dumps(json_data, separators=(',', ':'))
     return results

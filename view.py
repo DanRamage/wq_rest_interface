@@ -1,6 +1,7 @@
 import os
 from app import app, logger
-from flask import Flask, request, send_from_directory, render_template, jsonify
+from flask import Flask, request, send_from_directory, render_template, jsonify, current_app
+from flask.views import View
 from datetime import datetime
 import geojson
 import simplejson
@@ -21,13 +22,41 @@ SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
 SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
 SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
+class ShowIntroPage(View):
+  def dispatch_request(self):
+    current_app.logger.debug('intro_page rendered')
+    return render_template("intro_page.html")
+
+class SitePage(View):
+  def __init__(self, site_name):
+    self.site_name = site_name
+    self.site_message = None
+
+  def dispatch_request(self):
+    current_app.logger.debug('Site: %s rendered' % (self.site_name))
+    return render_template('index_template.html', site_message=self.site_message)
+
+
+class MyrtleBeachPage(SitePage):
+  def __init__(self, site_name):
+    SitePage.__init__(self, 'myrtlebeach')
+  def get_site_message(self):
+    self.site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+
+class SarasotaPage(SitePage):
+  def __init__(self, site_name):
+    SitePage.__init__(self, 'sarasota')
+  def get_site_message(self):
+    self.site_message = None
+"""
 @app.route('/')
 def root():
   if logger:
     logger.debug("root Started.")
   return render_template("intro_page.html")
+"""
 
-
+"""
 @app.route('/<sitename>')
 def index_page(sitename):
   if logger:
@@ -39,6 +68,7 @@ def index_page(sitename):
     site_message = None
     return render_template('index_template.html', site_message=site_message)
   return ""
+"""
 @app.route('/<sitename>/rest/info')
 def info_page(sitename):
   if logger:

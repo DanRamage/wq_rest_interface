@@ -1,6 +1,6 @@
 from flask import Flask
 import logging.config
-
+from view import *
 
 
 app = Flask(__name__)
@@ -18,3 +18,7 @@ if app.debug:
   logging.config.fileConfig(LOGCONFFILE)
   logger = logging.getLogger('wq_rest_logger')
   logger.info("Log file opened")
+
+app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
+app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
+app.add_url_rule('/sarasota', view_func=MyrtleBeachPage.as_view('sarasota'))

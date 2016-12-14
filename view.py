@@ -139,7 +139,11 @@ class BacteriaDataAPI(MethodView):
 
 class StationDataAPI(MethodView):
   def get(self, sitename=None, station_name=None):
-    current_app.logger.debug('StationDataAPI get for site: %s station: %s' % (sitename, station_name))
+    start_data = ''
+    if 'startdate' in request.args:
+      start_date = request.args['startdate']
+
+    current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_data))
     results = {}
     ret_code = 404
 

@@ -1109,9 +1109,7 @@ if(onlineStatus != 'off'){
       async: false,
       crossDomain: false,
       timeout: 5000,
-      //url: "http://howsthebeach.org/ba-simple-proxy.php?url=http://129.252.139.124/projects/mobile/dhec/waterQualityAppHandler.py%2Fhandler%3Fstation%3D"+$.mobile.pageData.id+"%26startdate%3D"+ISODateString(date_by_subtracting_days(current_date, 365)),
-      //url: "http://dev.howsthebeach.org/rest/sarasota/station_data",
-      url: site_base_url + "station_data",
+      url: base_rest_url + "station_data" + site + $.mobile.pageData.id,
       data: get_data,
       dataType: "json",
       success: function(testData) {

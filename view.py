@@ -1,10 +1,6 @@
 import os
 from flask import Flask, request, send_from_directory, render_template, jsonify, current_app
 from flask.views import View
-from datetime import datetime
-import geojson
-import simplejson
-from app import app
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'

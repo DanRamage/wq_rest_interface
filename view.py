@@ -27,6 +27,7 @@ class ShowIntroPage(View):
 
 class SitePage(View):
   def __init__(self, site_name):
+    current_app.logger.debug('SitePage __init__')
     self.site_name = site_name
     self.site_message = None
 
@@ -37,12 +38,14 @@ class SitePage(View):
 
 class MyrtleBeachPage(SitePage):
   def __init__(self, site_name):
+    current_app.logger.debug('MyrtleBeachPage __init__')
     SitePage.__init__(self, 'myrtlebeach')
   def get_site_message(self):
     self.site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
 
 class SarasotaPage(SitePage):
   def __init__(self, site_name):
+    current_app.logger.debug('SarasotaPage __init__')
     SitePage.__init__(self, 'sarasota')
   def get_site_message(self):
     self.site_message = None

@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, send_from_directory, render_template, jsonify, current_app
 from flask.views import View, MethodView
 import simplejson
+import geojson
+from datetime import datetime
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
@@ -134,6 +136,97 @@ class BacteriaDataAPI(MethodView):
       logger.debug("get_data_file Finished.")
 
     return results,ret_code
+
+class StationDataAPI(MethodView):
+  def get(self, sitename=None, station_name=None):
+    current_app.logger.debug('StationDataAPI get for site: %s station: %s' % (sitename, station_name))
+    results = {}
+    ret_code = 404
+
+    if sitename == 'myrtlebeach':
+      results = self.get_requested_station_data(request, SC_MB_STATIONS_DATA_DIR)
+      ret_code = 200
+
+    elif sitename == 'sarasota':
+      results = self.get_requested_station_data(request, FL_SARASOTA_STATIONS_DATA_DIR)
+      ret_code = 200
+
+    return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+  def get_requested_station_data(self, request, station_directory):
+    if logger:
+      logger.debug("get_requested_station_data Started")
+
+    json_data = {'status': {'http_code': 404},
+               'contents': {}}
+
+    station = None
+    start_date = None
+    if 'station' in request.args:
+      station = request.args['station']
+    if 'startdate' in request.args:
+      start_date = request.args['startdate']
+    if logger:
+      logger.debug("Station: %s Start Date: %s" % (station, start_date))
+
+    feature = None
+    try:
+      filepath = os.path.join(station_directory, '%s.json' % (station))
+      if logger:
+        logger.debug("Opening station file: %s" % (filepath))
+
+      with open(filepath, "r") as json_data_file:
+        stationJson = geojson.load(json_data_file)
+
+      resultList = []
+      #If the client passed in a startdate parameter, we return only the test dates >= to it.
+      if start_date:
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d")
+        advisoryList = stationJson['properties']['test']['beachadvisories']
+        for ndx in range(len(advisoryList)):
+          try:
+            tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
+          except ValueError, e:
+            tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d %H:%M:%S")
+
+          if tst_date_obj >= start_date_obj:
+            resultList = advisoryList[ndx:]
+            break
+      else:
+        resultList = stationJson['properties']['test']['beachadvisories'][-1]
+
+      properties = {}
+      properties['desc'] = stationJson['properties']['desc']
+      properties['station'] = stationJson['properties']['station']
+      properties['test'] = {'beachadvisories' : resultList}
+
+      feature = geojson.Feature(id=station, geometry=stationJson['geometry'], properties=properties)
+    except IOError, e:
+      if logger:
+        logger.exception(e)
+    except ValueError, e:
+      if logger:
+        logger.exception(e)
+    except Exception, e:
+      if logger:
+        logger.exception(e)
+    try:
+      if feature is None:
+        feature = geojson.Feature(id=station)
+
+      json_data = {'status': {'http_code': 202},
+                  'contents': feature
+                  }
+    except Exception, e:
+      if logger:
+        logger.exception(e)
+
+    if logger:
+      logger.debug("get_requested_station_data Finished")
+
+    results = geojson.dumps(json_data, separators=(',', ':'))
+    return results
+
 
 """
 @app.route('/')

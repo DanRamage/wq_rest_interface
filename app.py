@@ -28,6 +28,7 @@ app.add_url_rule('/sarasota', view_func=MyrtleBeachPage.as_view('sarasota'))
 #REST rules
 app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])
 app.add_url_rule('/sample_data/current_results/<string:sitename>', view_func=BacteriaDataAPI.as_view('sample_data_view'), methods=['GET'])
+app.add_url_rule('/station_data/<string:sitename>/<string:station_name>', view_func=StationDataAPI.as_view('station_data_view'), methods=['GET'])
 
 @app.route('/<sitename>/rest/info')
 def info_page(sitename):
@@ -47,30 +48,7 @@ def myrtlebeach_index_page():
 """
 
 
-def get_data_file(filename):
-  if logger:
-    logger.debug("get_data_file Started.")
-
-  results = {'status': {'http_code': 404},
-             'contents': {}}
-  ret_code = 404
-
-  try:
-    with open(filename, 'r') as data_file:
-      #results['status']['http_code'] = 200
-      #results['contents'] = simplejson.load(data_file)
-      results = data_file.read()
-      ret_code = 200
-
-  except (Exception, IOError) as e:
-    if logger:
-      logger.exception(e)
-
-  if logger:
-    logger.debug("get_data_file Finished.")
-
-  return results,ret_code
-
+"""
 
 @app.route('/<string:sitename>/rest/station_data', methods=['GET'])
 def get_station_sample_data(sitename):
@@ -154,7 +132,7 @@ def get_requested_station_data(request, station_directory):
 
   results = geojson.dumps(json_data, separators=(',', ':'))
   return results
-
+"""
 #@app.route('/sarasota/station_data', methods=['GET'])
 def get_sarasota_station_sample_data():
   ret_code = 404

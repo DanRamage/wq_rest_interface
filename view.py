@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, send_from_directory, render_template, jsonify, current_app
 from flask.views import View, MethodView
+import simplejson
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
@@ -90,8 +91,49 @@ class PredictionsAPI(MethodView):
 
 
 class BacteriaDataAPI(MethodView):
-  def get(self):
-    return
+  def get(self, sitename=None):
+    current_app.logger.debug('BacteriaDataAPI get for site: %s' % (sitename))
+    results = {}
+    ret_code = 404
+    if sitename == 'myrtlebeach':
+      results, ret_code = self.get_data_file(SC_MB_ADVISORIES_FILE)
+      #Wrap the results in the status and contents keys. The app expects this format.
+      json_ret = {'status': {'http_code': ret_code},
+                  'contents': simplejson.loads(results)}
+      results = simplejson.dumps(json_ret)
+
+    elif sitename == 'sarasota':
+      results,ret_code = self.get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+      #Wrap the results in the status and contents keys. The app expects this format.
+      json_ret = {'status' : {'http_code': ret_code},
+                  'contents': simplejson.loads(results)}
+      results = simplejson.dumps(json_ret)
+
+    return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+  def get_data_file(self, filename):
+    if logger:
+      logger.debug("get_data_file Started.")
+
+    results = {'status': {'http_code': 404},
+               'contents': {}}
+    ret_code = 404
+
+    try:
+      with open(filename, 'r') as data_file:
+        #results['status']['http_code'] = 200
+        #results['contents'] = simplejson.load(data_file)
+        results = data_file.read()
+        ret_code = 200
+
+    except (Exception, IOError) as e:
+      if logger:
+        logger.exception(e)
+
+    if logger:
+      logger.debug("get_data_file Finished.")
+
+    return results,ret_code
 
 """
 @app.route('/')

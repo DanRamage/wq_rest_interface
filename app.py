@@ -27,7 +27,7 @@ app.add_url_rule('/sarasota', view_func=MyrtleBeachPage.as_view('sarasota'))
 
 #REST rules
 app.add_url_rule('/rest/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])
-
+app.add_url_rule('/rest/sample_data/current_results/<string:sitename>', view_func=BacteriaDataAPI.as_view('predictions_view'), methods=['GET'])
 
 @app.route('/<sitename>/rest/info')
 def info_page(sitename):
@@ -71,25 +71,6 @@ def get_data_file(filename):
 
   return results,ret_code
 
-"""
-@app.route('/<string:sitename>/rest/predictions/current_results')
-def get_current_results(sitename):
-  if logger:
-    logger.debug("get_current_results for site: %s" % (sitename))
-  if sitename == "myrtlebeach":
-    return get_mb_current_results()
-  elif sitename == 'sarasota':
-    return get_sarasora_current_results()
-"""
-
-@app.route('/<string:sitename>/rest/sample_data/current_results')
-def get_current_sample_data(sitename):
-  if logger:
-    logger.debug("get_current_sample_data for site: %s" % (sitename))
-  if sitename == "myrtlebeach":
-    return get_mb_current_sample_data()
-  elif sitename == 'sarasota':
-    return get_sarasora_current_sample_data()
 
 @app.route('/<string:sitename>/rest/station_data', methods=['GET'])
 def get_station_sample_data(sitename):
@@ -99,75 +80,6 @@ def get_station_sample_data(sitename):
     return get_mb_station_sample_data()
   elif sitename == 'sarasota':
     return get_sarasota_station_sample_data()
-
-#@app.route('/myrtlebeach/predictions/current_results')
-def get_mb_current_results():
-  if logger:
-    logger.debug("get_mb_current_results Started.")
-
-  results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
-
-
-  #Wrap the results in the status and contents keys. The app expects this format.
-  #json_ret = {'status' : {'http_code': ret_code},
-  #            'contents': simplejson.loads(results)}
-  #results = simplejson.dumps(json_ret)
-
-  if logger:
-    logger.debug("get_mb_current_results Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
-
-#@app.route('/myrtlebeach/sample_data/current_results')
-def get_mb_current_sample_data():
-  if logger:
-    logger.debug("get_mb_current_sample_data Started.")
-
-  results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
-  #Wrap the results in the status and contents keys. The app expects this format.
-  json_ret = {'status' : {'http_code': ret_code},
-              'contents': simplejson.loads(results)}
-  results = simplejson.dumps(json_ret)
-
-  if logger:
-    logger.debug("get_mb_current_sample_data Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
-
-#@app.route('/sarasota/predictions/current_results')
-def get_sarasora_current_results():
-  if logger:
-    logger.debug("get_sarasora_current_results Started.")
-
-  results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
-
-#@app.route('/sarasota/sample_data/current_results')
-def get_sarasora_current_sample_data():
-  if logger:
-    logger.debug("get_sarasora_current_sample_data Started.")
-
-
-  results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
-  #Wrap the results in the status and contents keys. The app expects this format.
-  json_ret = {'status' : {'http_code': ret_code},
-              'contents': simplejson.loads(results)}
-  results = simplejson.dumps(json_ret)
-  """
-  results = {'status': {'http_code': 404}}
-  try:
-    with open(FL_SARASOTA_ADVISORIES_FILE, 'r') as data_file:
-      results = data_file.read()
-      ret_code = 200
-  except IOError,e:
-    if logger:
-      logger.exception(e)
-  """
-  if logger:
-    logger.debug("get_sarasora_current_sample_data Finished.")
-
-  return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 def get_requested_station_data(request, station_directory):
   if logger:

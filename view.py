@@ -1,5 +1,5 @@
 import os
-from app import app, logger
+from app import logger
 from flask import Flask, request, send_from_directory, render_template, jsonify, current_app
 from flask.views import View
 from datetime import datetime

@@ -11,7 +11,7 @@ FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
 
 SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
 SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
-SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
+SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 #SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'

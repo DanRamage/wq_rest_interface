@@ -6,7 +6,6 @@ from flask_admin import helpers, expose
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import form, fields, validators
 
-from app import db, app
 from models import User
 
 admin_view = Blueprint('admin_view', __name__,
@@ -43,16 +42,6 @@ class RegistrationForm(form.Form):
         if db.session.query(User).filter_by(login=self.login.data).count() > 0:
             raise validators.ValidationError('Duplicate username')
 
-
-# Initialize flask-login
-def init_login():
-    login_manager = login.LoginManager()
-    login_manager.init_app(app)
-
-    # Create user loader function
-    @login_manager.user_loader
-    def load_user(user_id):
-        return db.session.query(User).get(user_id)
 
 # Create customized model view class
 class MyModelView(sqla.ModelView):

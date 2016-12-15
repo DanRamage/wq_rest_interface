@@ -30,11 +30,14 @@ class SitePage(View):
   def __init__(self, site_name):
     current_app.logger.debug('SitePage __init__')
     self.site_name = site_name
-    self.site_message = None
+
+  def get_site_message(self):
+    return None
 
   def dispatch_request(self):
-    current_app.logger.debug('Site: %s rendered' % (self.site_name))
-    return render_template('index_template.html', site_message=self.site_message)
+    site_message = self.get_site_message()
+    current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, self.site_message))
+    return render_template('index_template.html', site_message=site_message)
 
 
 class MyrtleBeachPage(SitePage):
@@ -42,14 +45,14 @@ class MyrtleBeachPage(SitePage):
     current_app.logger.debug('MyrtleBeachPage __init__')
     SitePage.__init__(self, 'myrtlebeach')
   def get_site_message(self):
-    self.site_message = "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+    return "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
 
 class SarasotaPage(SitePage):
   def __init__(self):
     current_app.logger.debug('SarasotaPage __init__')
     SitePage.__init__(self, 'sarasota')
   def get_site_message(self):
-    self.site_message = None
+    return None
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
@@ -71,6 +74,12 @@ def get_data_file(filename):
   current_app.logger.debug("get_data_file Finished.")
 
   return results,ret_code
+
+class SiteBaseAPI(MethodView):
+  def __init__(self):
+    self.site_name = None
+    return
+
 
 class PredictionsAPI(MethodView):
   def get(self, sitename=None):

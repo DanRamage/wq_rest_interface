@@ -54,15 +54,14 @@ class SarasotaPage(SitePage):
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
 
-  results = {'status': {'http_code': 404},
-             'contents': {}}
   ret_code = 404
+  results = {'status': {'http_code': ret_code},
+                'contents': None
+                }
 
   try:
     current_app.logger.debug("Opening file: %s" % (filename))
     with open(filename, 'r') as data_file:
-      #results['status']['http_code'] = 200
-      #results['contents'] = simplejson.load(data_file)
       results = data_file.read()
       ret_code = 200
 
@@ -76,8 +75,10 @@ def get_data_file(filename):
 class PredictionsAPI(MethodView):
   def get(self, sitename=None):
     current_app.logger.debug('PredictionsAPI get for site: %s' % (sitename))
-    results = {}
     ret_code = 404
+    results = {'status': {'http_code': ret_code},
+                  'contents': None
+                  }
     if sitename == 'myrtlebeach':
       results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
     elif sitename == 'sarasota':
@@ -89,8 +90,10 @@ class PredictionsAPI(MethodView):
 class BacteriaDataAPI(MethodView):
   def get(self, sitename=None):
     current_app.logger.debug('BacteriaDataAPI get for site: %s' % (sitename))
-    results = {}
     ret_code = 404
+    results = {'status': {'http_code': ret_code},
+                  'contents': None
+                  }
     if sitename == 'myrtlebeach':
       results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
       #Wrap the results in the status and contents keys. The app expects this format.
@@ -115,8 +118,10 @@ class StationDataAPI(MethodView):
       start_date = request.args['startdate']
 
     current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_date))
-    results = {}
     ret_code = 404
+    results = {'status': {'http_code': ret_code},
+                  'contents': None
+                  }
 
     if sitename == 'myrtlebeach':
       results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)

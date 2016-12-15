@@ -128,17 +128,14 @@ class StationDataAPI(MethodView):
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
-  def get_requested_station_data(self, request, station_directory):
-
+  def get_requested_station_data(self, station, request, station_directory):
+    ret_code = 404
     current_app.logger.debug("get_requested_station_data Started")
 
     json_data = {'status': {'http_code': 404},
                'contents': {}}
 
-    station = None
     start_date = None
-    if 'station' in request.args:
-      station = request.args['station']
     if 'startdate' in request.args:
       start_date = request.args['startdate']
     current_app.logger.debug("Station: %s Start Date: %s" % (station, start_date))
@@ -174,17 +171,15 @@ class StationDataAPI(MethodView):
       properties['test'] = {'beachadvisories' : resultList}
 
       feature = geojson.Feature(id=station, geometry=stationJson['geometry'], properties=properties)
-    except IOError, e:
-      current_app.logger.exception(e)
-    except ValueError, e:
-      current_app.logger.exception(e)
-    except Exception, e:
+      ret_code = 200
+
+    except (IOError, ValueError, Exception) as e:
       current_app.logger.exception(e)
     try:
       if feature is None:
         feature = geojson.Feature(id=station)
 
-      json_data = {'status': {'http_code': 202},
+      json_data = {'status': {'http_code': ret_code},
                   'contents': feature
                   }
     except Exception, e:

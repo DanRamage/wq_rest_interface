@@ -76,13 +76,16 @@ class PredictionsAPI(MethodView):
   def get(self, sitename=None):
     current_app.logger.debug('PredictionsAPI get for site: %s' % (sitename))
     ret_code = 404
-    results = {'status': {'http_code': ret_code},
-                  'contents': None
-                  }
+    results = None
+
     if sitename == 'myrtlebeach':
       results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
     elif sitename == 'sarasota':
       results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
+    else:
+      results = simplejson.dumps({'status': {'http_code': ret_code},
+                    'contents': None
+                    })
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
@@ -91,9 +94,8 @@ class BacteriaDataAPI(MethodView):
   def get(self, sitename=None):
     current_app.logger.debug('BacteriaDataAPI get for site: %s' % (sitename))
     ret_code = 404
-    results = {'status': {'http_code': ret_code},
-                  'contents': None
-                  }
+    results = None
+
     if sitename == 'myrtlebeach':
       results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
       #Wrap the results in the status and contents keys. The app expects this format.
@@ -107,6 +109,10 @@ class BacteriaDataAPI(MethodView):
       json_ret = {'status' : {'http_code': ret_code},
                   'contents': simplejson.loads(results)}
       results = simplejson.dumps(json_ret)
+    else:
+      results = simplejson.dumps({'status': {'http_code': ret_code},
+                    'contents': None
+                    })
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 

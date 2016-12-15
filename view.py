@@ -45,7 +45,7 @@ class MyrtleBeachPage(SitePage):
     current_app.logger.debug('MyrtleBeachPage __init__')
     SitePage.__init__(self, 'myrtlebeach')
   def get_site_message(self):
-    return "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for the forecasts are currently unavailable."
+    return "ATTENTION: Due to Hurricane Matthew's damage of Springmaid Pier, data sources required for some of the forecasts are currently unavailable."
 
 class SarasotaPage(SitePage):
   def __init__(self):

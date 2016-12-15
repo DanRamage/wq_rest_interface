@@ -119,11 +119,11 @@ class StationDataAPI(MethodView):
     ret_code = 404
 
     if sitename == 'myrtlebeach':
-      results = self.get_requested_station_data(request, SC_MB_STATIONS_DATA_DIR)
+      results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
       ret_code = 200
 
     elif sitename == 'sarasota':
-      results = self.get_requested_station_data(request, FL_SARASOTA_STATIONS_DATA_DIR)
+      results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
       ret_code = 200
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})

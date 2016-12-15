@@ -119,9 +119,6 @@ class StationDataAPI(MethodView):
 
     current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_date))
     ret_code = 404
-    results = {'status': {'http_code': ret_code},
-                  'contents': None
-                  }
 
     if sitename == 'myrtlebeach':
       results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
@@ -130,6 +127,10 @@ class StationDataAPI(MethodView):
     elif sitename == 'sarasota':
       results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
       ret_code = 200
+    else:
+      results = simplejson.dumps({'status': {'http_code': ret_code},
+                    'contents': None
+                    })
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 

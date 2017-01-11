@@ -56,6 +56,7 @@ def install_secret_key(app, filename):
   then exit.
 
   """
+  """
   if not FLASK_DEBUG:
     filename = os.path.join(app.instance_path, filename)
     try:
@@ -68,7 +69,8 @@ def install_secret_key(app, filename):
         sys.exit(1)
   else:
     app.config['SECRET_KEY'] = SECRET_KEY
-
+  """
+  app.config['SECRET_KEY'] = SECRET_KEY
 # Initialize flask-login
 def init_login():
   login_manager = login.LoginManager()

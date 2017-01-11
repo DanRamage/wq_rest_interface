@@ -29,7 +29,7 @@ def init_logging():
   #logger = logging.getLogger('wq_rest_logger')
   #logger.info("Log file opened")
   #wq_app.logger = logging.getLogger('wq_rest_logger')
-  current_app.logger.debug("Logging initialized")
+  app.logger.debug("Logging initialized")
 
   return
 
@@ -43,7 +43,7 @@ if __name__ == '__main__':
   (options, args) = parser.parse_args()
 
 
-  init_logging()
+  #init_logging()
   if(options.user is not None):
     if(options.password is not None):
       build_init_db(options.user, options.password)

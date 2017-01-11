@@ -123,7 +123,10 @@ def info_page(sitename):
   elif sitename == 'sarasota':
     return send_from_directory('/var/www/flaskhowsthebeach/sites/sarasota', 'info.html')
 
-
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.exception(exception)
+    return render_template('500.html'), 500
 """
 @app.route('/rest/help', methods = ['GET'])
 def help():

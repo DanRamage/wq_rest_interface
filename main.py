@@ -1,11 +1,14 @@
-from app import app
-from view import *
+from app import app, build_init_db, install_secret_key
+import optparse
 
 import logging.config
 from logging.handlers import RotatingFileHandler
 from logging import Formatter
 
-LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'
+from config import *
+
+#LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'
+LOGFILE='/Users/danramage/tmp/log/flask_plug_view_site.log'
 
 def init_logging():
   file_handler = RotatingFileHandler(filename = LOGFILE)
@@ -29,5 +32,20 @@ def init_logging():
   return
 
 if __name__ == '__main__':
+  parser = optparse.OptionParser()
+
+  parser.add_option("-u", "--User", dest="user",
+                    help="User to add", default=None)
+  parser.add_option("-p", "--Password", dest="password",
+                    help="Stations file to import.", default=None )
+  (options, args) = parser.parse_args()
+
   init_logging()
-  app.run(debug=True)
+  if(options.user is not None):
+    if(options.password is not None):
+      build_init_db(options.user, options.password)
+    else:
+      print("Must provide password")
+  else:
+    install_secret_key(app, SECRET_KEY_FILE)
+    app.run(debug=FLASK_DEBUG)

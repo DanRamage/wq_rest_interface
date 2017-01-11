@@ -43,7 +43,7 @@ if __name__ == '__main__':
   (options, args) = parser.parse_args()
 
 
-  #init_logging()
+  init_logging()
   if(options.user is not None):
     if(options.password is not None):
       build_init_db(options.user, options.password)
@@ -51,6 +51,5 @@ if __name__ == '__main__':
       print("Must provide password")
   else:
     install_secret_key(app, SECRET_KEY_FILE)
-    app.logger.setLevel(logging.DEBUG)
     app.run(debug=FLASK_DEBUG)
     app.logger.debug("App started")

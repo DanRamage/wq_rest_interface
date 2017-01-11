@@ -81,7 +81,6 @@ def init_login():
   def load_user(user_id):
     return db.session.query(User).get(user_id)
 
-  current_app.logger.debug('init_login finished')
 
 
 def build_init_db(user, password):

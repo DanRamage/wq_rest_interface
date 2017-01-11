@@ -51,5 +51,5 @@ if __name__ == '__main__':
       print("Must provide password")
   else:
     install_secret_key(app, SECRET_KEY_FILE)
-    current_app.logger.debug("Starting app")
     app.run(debug=FLASK_DEBUG)
+    current_app.logger.debug("App started")

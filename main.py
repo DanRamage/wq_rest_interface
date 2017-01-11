@@ -33,7 +33,6 @@ def init_logging():
 
   return
 
-init_logging()
 if __name__ == '__main__':
   parser = optparse.OptionParser()
 
@@ -44,6 +43,7 @@ if __name__ == '__main__':
   (options, args) = parser.parse_args()
 
 
+  init_logging()
   if(options.user is not None):
     if(options.password is not None):
       build_init_db(options.user, options.password)

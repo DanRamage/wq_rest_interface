@@ -32,6 +32,12 @@ def init_logging():
 
   return
 
+def run_app():
+  init_logging()
+  install_secret_key(app, SECRET_KEY_FILE)
+  app.logger.debug("Starting app")
+  app.run(debug=FLASK_DEBUG)
+
 if __name__ == '__main__':
   parser = optparse.OptionParser()
 
@@ -40,6 +46,7 @@ if __name__ == '__main__':
   parser.add_option("-p", "--Password", dest="password",
                     help="Stations file to import.", default=None )
   (options, args) = parser.parse_args()
+
 
   init_logging()
   if(options.user is not None):

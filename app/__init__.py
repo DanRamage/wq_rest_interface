@@ -73,6 +73,7 @@ def install_secret_key(app, filename):
   app.config['SECRET_KEY'] = SECRET_KEY
 # Initialize flask-login
 def init_login():
+  current_app.logger.debug('init_login started')
   login_manager = login.LoginManager()
   login_manager.init_app(app)
 
@@ -80,6 +81,9 @@ def init_login():
   @login_manager.user_loader
   def load_user(user_id):
     return db.session.query(User).get(user_id)
+
+  current_app.logger.debug('init_login finished')
+
 
 def build_init_db(user, password):
 

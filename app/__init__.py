@@ -1,8 +1,6 @@
 import sys
 from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
-import flask_login as login
-from werkzeug.security import generate_password_hash
 from config import *
 
 app = Flask(__name__)

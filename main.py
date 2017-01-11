@@ -1,3 +1,4 @@
+from flask import current_app
 from app import app, build_init_db, install_secret_key
 import optparse
 
@@ -28,15 +29,9 @@ def init_logging():
   #logger = logging.getLogger('wq_rest_logger')
   #logger.info("Log file opened")
   #wq_app.logger = logging.getLogger('wq_rest_logger')
-  app.logger.debug("Logging initialized")
+  current_app.logger.debug("Logging initialized")
 
   return
-
-def run_app():
-  init_logging()
-  install_secret_key(app, SECRET_KEY_FILE)
-  app.logger.debug("Starting app")
-  app.run(debug=FLASK_DEBUG)
 
 init_logging()
 if __name__ == '__main__':
@@ -56,5 +51,5 @@ if __name__ == '__main__':
       print("Must provide password")
   else:
     install_secret_key(app, SECRET_KEY_FILE)
-    app.logger.debug("Starting app")
+    current_app.logger.debug("Starting app")
     app.run(debug=FLASK_DEBUG)

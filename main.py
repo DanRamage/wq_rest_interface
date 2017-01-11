@@ -7,8 +7,7 @@ from logging import Formatter
 
 from config import *
 
-#LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'
-LOGFILE='/Users/danramage/tmp/log/flask_plug_view_site.log'
+
 
 def init_logging():
   file_handler = RotatingFileHandler(filename = LOGFILE)

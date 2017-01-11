@@ -7,3 +7,6 @@ SECRET_KEY_FILE = 'secret_key'
 DATABASE_FILE = 'wq_db.sqlite'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
 SQLALCHEMY_ECHO = True
+
+#LOGFILE='/Users/danramage/tmp/log/flask_plug_view_site.log'
+LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'

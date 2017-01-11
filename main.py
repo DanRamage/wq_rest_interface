@@ -28,6 +28,8 @@ def init_logging():
   #logger = logging.getLogger('wq_rest_logger')
   #logger.info("Log file opened")
   #wq_app.logger = logging.getLogger('wq_rest_logger')
+  app.logger.debug("Logging initialized")
+
   return
 
 if __name__ == '__main__':
@@ -47,4 +49,5 @@ if __name__ == '__main__':
       print("Must provide password")
   else:
     install_secret_key(app, SECRET_KEY_FILE)
+    app.logger.debug("Starting app")
     app.run(debug=FLASK_DEBUG)

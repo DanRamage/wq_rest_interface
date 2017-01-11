@@ -270,16 +270,16 @@ class MyAdminIndexView(admin.AdminIndexView):
 
     @expose('/')
     def index(self):
-        app.logger.debug("Admin index page")
+        #app.logger.debug("Admin index page")
         if not login.current_user.is_authenticated:
-          app.logger.debug("User: %s is not authenticated" % (login.current_user.login))
+          #app.logger.debug("User: %s is not authenticated" % (login.current_user.login))
           return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
         # handle user login
-        app.logger.debug("Login  page")
+        #app.logger.debug("Login  page")
         form = LoginForm(request.form)
         if helpers.validate_form_on_submit(form):
             user = form.get_user()
@@ -316,7 +316,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     """
     @expose('/logout/')
     def logout_view(self):
-        app.logger.debug("Logout  page")
+        #app.logger.debug("Logout  page")
         login.logout_user()
         return redirect(url_for('.index'))
 

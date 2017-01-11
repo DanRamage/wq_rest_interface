@@ -94,7 +94,7 @@ def build_init_db(user, password):
 
 
 from view import *
-"""
+
 init_login()
 # Create admin
 admin = admin.Admin(app, 'Water Quality Administation', index_view=MyAdminIndexView(), base_template='my_master.html')
@@ -103,7 +103,7 @@ admin = admin.Admin(app, 'Water Quality Administation', index_view=MyAdminIndexV
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(wq_area_page(WQ_Area, db.session, name="Area"))
 admin.add_view(wq_site_message_page(WQ_Site_Message, db.session, name="Area Message"))
-"""
+
 
 #Page rules
 app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))

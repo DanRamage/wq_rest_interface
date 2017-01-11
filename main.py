@@ -13,6 +13,8 @@ from config import *
 def init_logging():
   file_handler = RotatingFileHandler(filename = LOGFILE)
   file_handler.setLevel(logging.DEBUG)
+  file_handler.setFormatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s')
+  """
   file_handler.setFormatter(Formatter('''
   Message type:       %(levelname)s
   Location:           %(pathname)s:%(lineno)d
@@ -24,6 +26,7 @@ def init_logging():
 
   %(message)s
   '''))
+  """
   app.logger.addHandler(file_handler)
   #logging.config.fileConfig(LOGCONFFILE)
   #logger = logging.getLogger('wq_rest_logger')

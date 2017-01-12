@@ -16,7 +16,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 #from admin_models import User
 
-from app import app, db
+from app import db
 from admin_models import User
 from wq_models import WQ_Area, WQ_Site_Message
 

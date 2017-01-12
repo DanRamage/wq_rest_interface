@@ -1,27 +1,9 @@
-from flask import Flask
-from app import app, build_init_db, install_secret_key
+from app import create_app, build_init_db, install_secret_key
 import optparse
 from config import *
 
 
-
-
-"""
-def create_app(config_file):
-  app = Flask(__name__)
-
-  from app import db
-  db.app = app
-  db.init_app(app)
-
-  # Create in-memory database
-  app.config['DATABASE_FILE'] = DATABASE_FILE
-  app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-  app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
-
-"""
-
-
+app = create_app(None)
 
 if __name__ == '__main__':
   parser = optparse.OptionParser()
@@ -39,6 +21,6 @@ if __name__ == '__main__':
     else:
       print("Must provide password")
   else:
-    install_secret_key(app, SECRET_KEY_FILE)
+    #install_secret_key(app, SECRET_KEY_FILE)
     app.run(debug=FLASK_DEBUG)
     app.logger.debug("App started")

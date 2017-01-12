@@ -10,6 +10,10 @@ Math.roundTo = function(val, dec) {
 };
 
 
+function initialize_app() {
+
+}
+
 function days_between(date1, date2) {
 
     // The number of milliseconds in one day
@@ -360,7 +364,7 @@ $.ajax({
     //url: "http://howsthebeach.org/ba-simple-proxy.php?url=http://129.252.139.124/mapping/xenia/feeds/florida_wq/Predictions.json",
     //url: "http://dev.howsthebeach.org/rest/sarasota/predictions/current_results",
     //url: site_base_url + "predictions/current_results",
-    url: base_rest_url + "predictions/current_results/" + site,
+    url: "/predictions/current_results/" + site,
     dataType: "json",
     success: function(data) {
       $.each( data, function(i, contents) {
@@ -402,7 +406,7 @@ if(onlineStatus != 'off'){
       crossDomain: false,
       timeout: 5000,
       //url: site_base_url + "sample_data/current_results",
-      url: base_rest_url + "sample_data/current_results/" + site,
+      url: "/sample_data/current_results/" + site,
       dataType: "json",
       success: function(currentData) {
         $.each(currentData.contents.features, function(s,stations){
@@ -1109,7 +1113,7 @@ if(onlineStatus != 'off'){
       async: false,
       crossDomain: false,
       timeout: 5000,
-      url: base_rest_url + "station_data/" + site + '/' + $.mobile.pageData.id,
+      url: "/station_data/" + site + '/' + $.mobile.pageData.id,
       data: get_data,
       dataType: "json",
       success: function(testData) {

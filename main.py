@@ -1,40 +1,27 @@
-from flask import current_app
+from flask import Flask
 from app import app, build_init_db, install_secret_key
 import optparse
-
-import logging.config
-from logging.handlers import RotatingFileHandler
-from logging import Formatter
-
 from config import *
 
 
 
-def init_logging():
-  file_handler = RotatingFileHandler(filename = LOGFILE)
-  file_handler.setLevel(logging.DEBUG)
-  file_handler.setFormatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s')
-  """
-  file_handler.setFormatter(Formatter('''
-  Message type:       %(levelname)s
-  Location:           %(pathname)s:%(lineno)d
-  Module:             %(module)s
-  Function:           %(funcName)s
-  Time:               %(asctime)s
 
-  Message:
+"""
+def create_app(config_file):
+  app = Flask(__name__)
 
-  %(message)s
-  '''))
-  """
-  app.logger.addHandler(file_handler)
-  #logging.config.fileConfig(LOGCONFFILE)
-  #logger = logging.getLogger('wq_rest_logger')
-  #logger.info("Log file opened")
-  #wq_app.logger = logging.getLogger('wq_rest_logger')
-  app.logger.debug("Logging initialized")
+  from app import db
+  db.app = app
+  db.init_app(app)
 
-  return
+  # Create in-memory database
+  app.config['DATABASE_FILE'] = DATABASE_FILE
+  app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+  app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
+
+"""
+
+
 
 if __name__ == '__main__':
   parser = optparse.OptionParser()
@@ -46,7 +33,6 @@ if __name__ == '__main__':
   (options, args) = parser.parse_args()
 
 
-  init_logging()
   if(options.user is not None):
     if(options.password is not None):
       build_init_db(options.user, options.password)

@@ -6,44 +6,48 @@ from config import *
 app = Flask(__name__)
 
 db = SQLAlchemy(app)
+#db = SQLAlchemy()
 
 # Create in-memory database
+
 app.config['DATABASE_FILE'] = DATABASE_FILE
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
 
 
-"""
-# Create user model.
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100))
-    last_name = db.Column(db.String(100))
-    login = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120))
-    password = db.Column(db.String(64))
-
-    # Flask-Login integration
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.id
-
-    # Required for administrative interface
-    def __unicode__(self):
-      return self.username
-"""
-
 from admin_models import User
 from wq_models import *
 
+
+
+def init_logging():
+  import logging.config
+  from logging.handlers import RotatingFileHandler
+
+  file_handler = RotatingFileHandler(filename = LOGFILE)
+  file_handler.setLevel(logging.DEBUG)
+  file_handler.setFormatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s')
+  """
+  file_handler.setFormatter(Formatter('''
+  Message type:       %(levelname)s
+  Location:           %(pathname)s:%(lineno)d
+  Module:             %(module)s
+  Function:           %(funcName)s
+  Time:               %(asctime)s
+
+  Message:
+
+  %(message)s
+  '''))
+  """
+  app.logger.addHandler(file_handler)
+  #logging.config.fileConfig(LOGCONFFILE)
+  #logger = logging.getLogger('wq_rest_logger')
+  #logger.info("Log file opened")
+  #wq_app.logger = logging.getLogger('wq_rest_logger')
+  app.logger.debug("Logging initialized")
+
+  return
 
 def install_secret_key(app, filename):
   """Configure the SECRET_KEY from a file
@@ -92,6 +96,8 @@ def build_init_db(user, password):
   db.session.commit()
   return
 
+
+init_logging()
 
 from view import *
 

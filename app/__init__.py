@@ -33,6 +33,7 @@ def create_app(config_file):
   app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
   app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
 
+  init_logging(app)
   build_flask_admin(app)
   build_url_rules(app)
 
@@ -85,7 +86,7 @@ def build_url_rules(app):
 
   return
 
-def init_logging():
+def init_logging(app):
   import logging.config
   from logging.handlers import RotatingFileHandler
 

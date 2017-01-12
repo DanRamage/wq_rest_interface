@@ -89,10 +89,11 @@ def build_url_rules(app):
 def init_logging(app):
   import logging.config
   from logging.handlers import RotatingFileHandler
+  from logging import Formatter
 
   file_handler = RotatingFileHandler(filename = LOGFILE)
   file_handler.setLevel(logging.DEBUG)
-  file_handler.setFormatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s')
+  file_handler.setFormatter(Formatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s'))
   """
   file_handler.setFormatter(Formatter('''
   Message type:       %(levelname)s

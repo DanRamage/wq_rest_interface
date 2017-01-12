@@ -162,22 +162,17 @@ var site = null; //Site the app will be displaying.
 //The base REST url to pull data.
 //var base_rest_url = "http://howsthebeach.org/rest/";
 //var base_rest_url = "http://dev.howsthebeach.org/rest/";
-var base_rest_url = "http://dev.howsthebeach.org/";
+//var base_rest_url = "http://dev.howsthebeach.org/";
 //Site specific base url.
-var site_base_url = null;
+//var site_base_url = '/' + site + '/rest/';
 
 site = GetSiteFromURL(window.location.pathname);
 
 
-/*site = GetURLParameter('site');
-if(site === null)
-{
-  site = 'myrtlebeach';
-}
-*/
 //Build the URL we use to get the site specific data.
 //site_base_url = "http://" + site + '.' + base_rest_url + site +'/';
-site_base_url = base_rest_url  + site + '/rest/';
+//site_base_url = base_rest_url  + site + '/rest/';
+
 
 
 //Function for changing the marker types on the main map when user clicks one of the buttons at bottom right of map

@@ -272,7 +272,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     def index(self):
         current_app.logger.debug("Admin index page")
         if not login.current_user.is_authenticated:
-          current_app.logger.debug("User: %s is not authenticated" % (login.current_user.login))
+          current_app.logger.debug("User: %s is not authenticated" % (login.current_user))
           return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
 

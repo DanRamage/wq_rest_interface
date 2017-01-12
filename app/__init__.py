@@ -97,7 +97,7 @@ def build_init_db(user, password):
   return
 
 
-init_logging()
+#init_logging()
 
 from view import *
 

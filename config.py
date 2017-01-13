@@ -8,5 +8,5 @@ DATABASE_FILE = 'wq_db.sqlite'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
 SQLALCHEMY_ECHO = False
 
-LOGFILE='/Users/danramage/tmp/log/flask_plug_view_site.log'
-#LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'
+#LOGFILE='/Users/danramage/tmp/log/flask_plug_view_site.log'
+LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'

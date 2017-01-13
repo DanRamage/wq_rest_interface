@@ -55,7 +55,11 @@ class SitePage(View):
   def dispatch_request(self):
     site_message = self.get_site_message()
     current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, site_message))
-    return render_template('index_template.html', site_message=site_message, site_name=self.site_name)
+    return render_template('index_template.html',
+                           site_message=site_message,
+                           site_name=self.site_name,
+                           wq_site_bbox='',
+                           rest_url='')
 
 
 class MyrtleBeachPage(SitePage):
@@ -327,6 +331,7 @@ class wq_area_page(sqla.ModelView):
     return login.current_user.is_authenticated
 
 class wq_site_message_page(sqla.ModelView):
+  column_list = ('site', 'message')
   def is_accessible(self):
     return login.current_user.is_authenticated
 

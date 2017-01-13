@@ -8,7 +8,7 @@ class WQ_Area(db.Model):
   display_name =  db.Column(db.String(100))
   #bounding_box = db.Column(Geometry(geometry_type='POLYGON', srid=4326))
   bounding_box = db.Column(db.Text)
-  area_message = db.relationship('WQ_Site_Message', backref='wq_area', uselist=False)
+  #area_message = db.relationship('WQ_Site_Message', backref='wq_area', uselist=False)
 
   column_filters = ('area_name', 'display_name', 'bounding_box')
   #Use the __str__ for the foreign key relationships.
@@ -19,6 +19,7 @@ class WQ_Site_Message(db.Model):
   __tablename__ = 'wq_site_message'
   id = db.Column(db.Integer, primary_key=True)
   site_id = db.Column(db.Integer, db.ForeignKey('wq_area.id'))
+  site = db.relationship('WQ_Area', backref='wq_site_message')
   message = db.Column(db.String(256))
 
   def __str__(self):

@@ -314,7 +314,16 @@ $(document).bind("mobileinit", function() {
 </div>
 
 
+
 <script src="static/js/app.js"></script>
+<script>
+  var wq_site_name = '{{ site_name }}';
+  var wq_site_bbox = '{{ bounding_box }}';
+  var rest_url = '{{ rest_url }}'
+  function wq_app() {
+    var self = this;
+  }
+</script>
 
 </body>
 

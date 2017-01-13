@@ -326,6 +326,10 @@ class MyAdminIndexView(admin.AdminIndexView):
 
 
 
+class site_type_page(sqla.ModelView):
+  def is_accessible(self):
+    return login.current_user.is_authenticated
+
 class wq_area_page(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated

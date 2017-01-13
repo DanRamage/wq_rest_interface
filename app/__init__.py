@@ -3,7 +3,7 @@ from flask import Flask, send_from_directory, current_app
 from flask_sqlalchemy import SQLAlchemy
 import flask_admin as flask_admin
 import flask_login as flask_login
-
+from werkzeug.security import generate_password_hash,check_password_hash
 from config import *
 
 #app = Flask(__name__)
@@ -41,9 +41,9 @@ def create_app(config_file):
 
 def build_flask_admin(app):
 
-  from view import MyAdminIndexView, MyModelView, wq_area_page, wq_site_message_page
+  from view import MyAdminIndexView, MyModelView, wq_area_page, wq_site_message_page, site_type_page
   from admin_models import User
-  from wq_models import WQ_Area, WQ_Site_Message
+  from wq_models import WQ_Area, WQ_Site_Message, Site_Type
 
   login_manager.init_app(app)
   # Create admin
@@ -53,6 +53,7 @@ def build_flask_admin(app):
   admin.add_view(MyModelView(User, db.session))
   admin.add_view(wq_area_page(WQ_Area, db.session, name="Area"))
   admin.add_view(wq_site_message_page(WQ_Site_Message, db.session, name="Area Message"))
+  admin.add_view(site_type_page(Site_Type, db.session, name="Site Type"))
 
   return
 

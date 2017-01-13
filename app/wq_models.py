@@ -1,5 +1,12 @@
 from app import db
 
+
+class Site_Type(db.Model):
+  __tablename__ = 'site_type'
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(100))
+
+
 # Create user model.
 class WQ_Area(db.Model):
   __tablename__ = 'wq_area'
@@ -10,7 +17,10 @@ class WQ_Area(db.Model):
   bounding_box = db.Column(db.Text)
   #area_message = db.relationship('WQ_Site_Message', backref='wq_area', uselist=False)
 
-  column_filters = ('area_name', 'display_name', 'bounding_box')
+  site_type_id = db.Column(db.Integer, db.ForeignKey('site_type.id'))
+  site_type = db.relationship('Site_Type', backref='wq_area')
+
+  column_filters = ('area_name', 'display_name', 'bounding_box', 'site_type')
   #Use the __str__ for the foreign key relationships.
   def __str__(self):
     return self.area_name

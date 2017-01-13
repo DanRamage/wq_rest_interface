@@ -6,6 +6,9 @@ class Site_Type(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(100))
 
+  #Use the __str__ for the foreign key relationships.
+  def __str__(self):
+    return self.name
 
 # Create user model.
 class WQ_Area(db.Model):

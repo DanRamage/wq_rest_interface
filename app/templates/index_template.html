@@ -236,8 +236,9 @@ $(document).bind("mobileinit", function() {
 </div>
 -->
 <div id="moreInformation" data-role="page" data-title="HowstheBeach">
-
+<div>
 	<div data-role="header" data-id="mainheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
+		<!--<h1>Information</h1>-->
 			<div data-role="navbar">
 			<ul id="navItems">
 				<li><a href="#mapPage">Map</a></li><li><a href="#beachListPage">Search</a></li><li><a href="#moreInformation" class="ui-state-persist ui-btn-active">Info</a></li>
@@ -251,25 +252,36 @@ $(document).bind("mobileinit", function() {
 			<div data-role="collapsible" data-collapsed="false">
 				<h3>&nbsp;About</h3>
 				<p>How's the Beach is a joint initiative of University of South Carolina, Southeast Coastal Ocean Observing Regional Association, and the Integration and Application Network at the University of Maryland Center for Environmental Science.</p>
-                <p><strong>This product is for informational purposes only. Please consult your state and local health departments for official beach advisory information</strong></p>
+				<p>
+					<strong>What are we forecasting?</strong>
+				</p>
+				<p>
+					Enterococci</br>
+				</p>
+				<p>
+					<strong>What is Enterococci?</strong>
+				</p>
+				<p>
+					Enterococci are bacteria that normally inhabit the intestinal tract of humans and animals. The presence of these bacteria can be an indication of fecal pollution, which may come from stormwater runoff, pets and wildlife, and human sewage. If they are present in high concentrations in recreational waters, it is more likely that pathogens that cause disease, infections or rashes may also be present. These pathogens can cause harm if they are  ingested while swimming or enter the skin through a cut or sore.				</p>
+				<p><strong>This product is for informational purposes only. Please consult your state and local health departments for official beach advisory information</strong></p>
 
-					<div style="margin:30px auto"><a href="http://www.sc.edu/" target="_blank"><img src="images/sc_logo.png" alt="SC logo" /></a></div>
-					<div style="margin:30px auto"><a href="http://secoora.org/" target="_blank"><img src="images/secoora_logo.png" alt="SECOORA logo" /></a></div>
-					<div style="margin:30px auto"><a href="http://ian.umces.edu/" target="_blank"><img src="images/ian_logo.png" alt="IAN logo" /></a></div>
-					<div style="margin:30px auto"><a href="http://www.umces.edu/" target="_blank"><img src="images/umces_logo.png" alt="UMCES logo" /></a></div>
-
+					<div class="logo_container">
+						<div class="logo_category" style="margin:30px auto"><a href="http://www.sc.edu/" target="_blank"><img src="/static/images/sc_logo.png" alt="SC logo" /></a></div>
+						<div class="logo_category" style="margin:30px auto"><a href="http://secoora.org/" target="_blank"><img src="/static/images/secoora_logo.png" alt="SECOORA logo" /></a></div>
+						<div class="logo_category" style="margin:30px auto"><a href="http://www.umces.edu/" target="_blank"><img src="/static/images/umces_logo.png" alt="UMCES logo" /></a></div>
+					</div>
 			</div>
 
 			<div data-role="collapsible" id="forecast_panel">
 			<h3>&nbsp;Forecast</h3>
 				<h3>What is the forecast?</h3>
-					<p>Bacteria levels can change very rapidly between sampling dates. To fill in the gaps, we make daily predictions of bacteria conditions. <strong>These predictions do not represent swimming advisories</strong>, but provide estimates of the likelihood that bacteria conditions would warrant issuing an advisory if sampling were conducted that day.</p><p><strong>NB. These forecasts are for informational purposes only</strong></p>
+					<p>Bacteria levels can change very rapidly between sampling dates. To fill in the gaps, we make daily predictions of bacteria conditions. <strong>These predictions do not represent swimming advisories</strong>, but provide estimates of the likelihood that bacteria conditions would warrant issuing an advisory if sampling were conducted that day.</p><p><strong>These forecasts are for informational purposes only</strong></p>
 					<p>The probability that today's bacteria level will exceed the safe swimming standard based on an automated prediction system.</p>
                     <p>
-                        <img src="images/none_marker.png" /> No forecast available<br />
-                        <img src="images/low_marker.png" /> Low<br />
-                        <img src="images/medium_marker.png" /> Medium<br />
-                        <img src="images/high_marker.png" /> High<br />
+                        <img src="/static/images/none_marker.png" /> No forecast available<br />
+                        <img src="/static/images/low_marker.png" /> Low<br />
+                        <img src="/static/images/medium_marker.png" /> Medium<br />
+                        <img src="/static/images/high_marker.png" /> High<br />
                     </p>
 				    <h3>How is the forecast generated?</h3>
 					   <p>Predictions are made based on relationships between bacteria level and rainfall, salinity, wind conditions, and water temperature found in previous sampling. These relationships are used to create daily estimates of bacteria level.</p>
@@ -277,29 +289,29 @@ $(document).bind("mobileinit", function() {
 
 			<div data-role="collapsible">
 				<h3>&nbsp;Swim Advisory</h3>
-					<p>The <a href="http://www.scdhec.gov/environment/water/ow.htm" target="_blank">South Carolina Department of Health and Environmental Control (SCDHEC)</a> issues a swimming advisory if the results exceed the EPA recommended water quality standard of 104 bacteria per 100 mL of water. An advisory is not a closure, but SCDHEC does not recommend swimming where an advisory has been issued.</p>
-					<p><img src="images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
-					<img src="images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />
-					<img src="images/high_marker.png" /> Permanent: SCDHEC has issued a swimming advisory on a permanent basis. These are issued in specific locations where the bacteria water quality standard has been exceeded frequently in previous monitoring.</p>
+					<p>The <a href="http://www.scdhec.gov/HomeAndEnvironment/Pollution/DHECPollutionMonitoringServices/BeachMonitoring/" target="_blank">South Carolina Department of Health and Environmental Control (SCDHEC)</a> issues a swimming advisory if the results exceed the EPA recommended water quality standard of 104 bacteria per 100 mL of water. An advisory is not a closure, but SCDHEC does not recommend swimming where an advisory has been issued.</p>
+					<p><img src="/static/images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
+					<img src="/static/images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />
+					<img src="/static/images/high_marker.png" /> Permanent: SCDHEC has issued a swimming advisory on a permanent basis. These are issued in specific locations where the bacteria water quality standard has been exceeded frequently in previous monitoring.</p>
 			</div>
 
 			<div data-role="collapsible">
 				<h3>&nbsp;Data</h3>
           {% for program in sampling_program_info %}
             <p><h3>{{ program.sampling_program }} Sampling Program </h3>
-              The <a href="{{ program.url }}" target="_blank">program page></a>
+              {{ program.sampling_program }} <a href="{{ program.url }}" target="_blank">program page</a>
             </p>
 
 				    <h3>Indicators</h3>
             <p> {{ program.description }}</p>
           {%  endfor %}
-						<p>
-							<img src="images/none_marker.png" /> No data available in the last 30 days<br />
-                            <img src="images/low_marker.png" /> Low level (0-50 bacteria per 100 mL of water)<br />
-							<img src="images/medium_marker.png" /> Medium level (50-104 bacteria per 100 mL of water)<br />
-							<img src="images/high_marker.png" /> High level (>104 bacteria per 100 mL of water)<br />
-						</p>
-			</div>
+          <p>
+            <img src="/static/images/none_marker.png" /> No data available in the last 30 days<br />
+                          <img src="/static/images/low_marker.png" /> Low level (0-50 bacteria per 100 mL of water)<br />
+            <img src="/static/images/medium_marker.png" /> Medium level (50-104 bacteria per 100 mL of water)<br />
+            <img src="/static/images/high_marker.png" /> High level (>104 bacteria per 100 mL of water)<br />
+          </p>
+      </div>
 
 		</div>
 

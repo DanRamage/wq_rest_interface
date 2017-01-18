@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
 from admin_models import User
-from wq_models import WQ_Area, WQ_Site_Message
+from wq_models import Project_Area, Site_Message, Project_Info_Page
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
@@ -47,18 +47,34 @@ class SitePage(View):
     self.site_name = site_name
 
   def get_site_message(self):
-    rec = db.session.query(WQ_Site_Message)\
-      .join(WQ_Area, WQ_Area.id == WQ_Site_Message.site_id)\
-      .filter(WQ_Area.area_name == self.site_name).first()
+    rec = db.session.query(Site_Message)\
+      .join(Project_Area, Project_Area.id == Site_Message.site_id)\
+      .filter(Project_Area.area_name == self.site_name).first()
     return rec
+
+  def get_program_info(self):
+    program_info = []
+    recs = db.session.query(Project_Info_Page)\
+      .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
+      .filter(Project_Area.area_name == self.site_name).all()
+    for rec in recs:
+      program_info.append({
+          'sampling_program': rec.sampling_program,
+          'url': rec.url,
+          'description': rec.description
+        }
+      )
+    return program_info
 
   def dispatch_request(self):
     site_message = self.get_site_message()
+    program_info = self.get_program_info()
     current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, site_message))
     return render_template('index_template.html',
                            site_message=site_message,
                            site_name=self.site_name,
                            wq_site_bbox='',
+                           sampling_program_info=program_info,
                            rest_url='')
 
 
@@ -326,16 +342,20 @@ class MyAdminIndexView(admin.AdminIndexView):
 
 
 
-class site_type_page(sqla.ModelView):
+class project_type_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class wq_area_page(sqla.ModelView):
+class project_area_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class wq_site_message_page(sqla.ModelView):
+class site_message_view(sqla.ModelView):
   column_list = ('site', 'message')
+  def is_accessible(self):
+    return login.current_user.is_authenticated
+
+class project_info_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated
 

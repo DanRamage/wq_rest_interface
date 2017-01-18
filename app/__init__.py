@@ -41,9 +41,15 @@ def create_app(config_file):
 
 def build_flask_admin(app):
 
-  from view import MyAdminIndexView, MyModelView, wq_area_page, wq_site_message_page, site_type_page
+  from view import MyAdminIndexView, \
+    MyModelView, \
+    project_area_view, \
+    site_message_view, \
+    project_type_view, \
+    project_info_view
+
   from admin_models import User
-  from wq_models import WQ_Area, WQ_Site_Message, Site_Type
+  from wq_models import Project_Area, Site_Message, Project_Type, Project_Info_Page
 
   login_manager.init_app(app)
   # Create admin
@@ -51,9 +57,10 @@ def build_flask_admin(app):
 
   # Add view
   admin.add_view(MyModelView(User, db.session))
-  admin.add_view(wq_area_page(WQ_Area, db.session, name="Area"))
-  admin.add_view(wq_site_message_page(WQ_Site_Message, db.session, name="Area Message"))
-  admin.add_view(site_type_page(Site_Type, db.session, name="Site Type"))
+  admin.add_view(project_type_view(Project_Type, db.session, name="Site Type"))
+  admin.add_view(project_area_view(Project_Area, db.session, name="Area"))
+  admin.add_view(site_message_view(Site_Message, db.session, name="Area Message"))
+  admin.add_view(project_info_view(Project_Info_Page, db.session, name="Program Info"))
 
   return
 
@@ -70,7 +77,13 @@ def build_url_rules(app):
   app.add_url_rule('/sample_data/current_results/<string:sitename>', view_func=BacteriaDataAPI.as_view('sample_data_view'), methods=['GET'])
   app.add_url_rule('/station_data/<string:sitename>/<string:station_name>', view_func=StationDataAPI.as_view('station_data_view'), methods=['GET'])
 
+  @app.errorhandler(500)
+  def internal_error(exception):
+      current_app.logger.exception(exception)
+      #return render_template('500.html'), 500
 
+
+  """
   @app.route('/<sitename>/rest/info')
   def info_page(sitename):
     app.logger.debug("info_page for site: %s" % (sitename))
@@ -79,12 +92,7 @@ def build_url_rules(app):
       return send_from_directory('/var/www/flaskhowsthebeach/sites/myrtlebeach', 'info.html')
     elif sitename == 'sarasota':
       return send_from_directory('/var/www/flaskhowsthebeach/sites/sarasota', 'info.html')
-
-  @app.errorhandler(500)
-  def internal_error(exception):
-      current_app.logger.exception(exception)
-      #return render_template('500.html'), 500
-
+  """
   return
 
 def init_logging(app):

@@ -54,16 +54,19 @@ class SitePage(View):
 
   def get_program_info(self):
     program_info = []
-    recs = db.session.query(Project_Info_Page)\
-      .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
-      .filter(Project_Area.area_name == self.site_name).all()
-    for rec in recs:
-      program_info.append({
-          'sampling_program': rec.sampling_program,
-          'url': rec.url,
-          'description': rec.description
-        }
-      )
+    try:
+      recs = db.session.query(Project_Info_Page)\
+        .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
+        .filter(Project_Area.area_name == self.site_name).all()
+      for rec in recs:
+        program_info.append({
+            'sampling_program': rec.sampling_program,
+            'url': rec.url,
+            'description': rec.description
+          }
+        )
+    except Exception as e:
+      current_app.logger.exception(e)
     return program_info
 
   def dispatch_request(self):

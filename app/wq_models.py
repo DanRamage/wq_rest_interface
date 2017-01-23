@@ -1,6 +1,5 @@
 from app import db
 
-
 class Project_Type(db.Model):
   __tablename__ = 'project_type'
   id = db.Column(db.Integer, primary_key=True)
@@ -55,5 +54,5 @@ class Project_Info_Page(db.Model):
   sampling_program = db.Column(db.String(128))
   url = db.Column(db.String(2048))
   description = db.Column(db.Text())
-
+  swim_advisory_info = db.Column(db.Text())
   site = db.relationship('Project_Area', backref='project_info_page')

@@ -414,7 +414,7 @@ if(onlineStatus != 'off'){
               //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
               if(parseInt(j.value,10) >= 104 || permanentAdvisory === true){
                 if(permanentAdvisory === true){
-                  advisoryText = 'Permanent';
+                  advisoryText = 'Long Term';
                 }
                 else{
                   advisoryText = 'Yes';
@@ -474,7 +474,7 @@ if(onlineStatus != 'off'){
   }
 
   function calcAdvisoryRating(advisory){
-    if(advisory=='Yes' || advisory=='Permanent'){
+    if(advisory=='Yes' || advisory=='Long Term'){
       rating = 'high';
     }
     else{

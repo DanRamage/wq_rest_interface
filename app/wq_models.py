@@ -67,3 +67,5 @@ class Advisory_Limits(db.Model):
   max_limit = db.Column(db.Float)
   icon = db.String(32)
   limit_type = db.String(32)
+
+  site = db.relationship('Project_Area', backref='project_info_page')

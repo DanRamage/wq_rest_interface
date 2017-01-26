@@ -68,4 +68,4 @@ class Advisory_Limits(db.Model):
   icon = db.Column(db.String(32))
   limit_type = db.Column(db.String(32))
 
-  site = db.relationship('Project_Area', backref='project_info_page')
+  site = db.relationship('Project_Area', backref='advisory_limits')

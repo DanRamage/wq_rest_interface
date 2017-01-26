@@ -46,10 +46,11 @@ def build_flask_admin(app):
     project_area_view, \
     site_message_view, \
     project_type_view, \
-    project_info_view
+    project_info_view, \
+    advisory_limits_view
 
   from admin_models import User
-  from wq_models import Project_Area, Site_Message, Project_Type, Project_Info_Page
+  from wq_models import Project_Area, Site_Message, Project_Type, Project_Info_Page, Advisory_Limits
 
   login_manager.init_app(app)
   # Create admin
@@ -61,6 +62,7 @@ def build_flask_admin(app):
   admin.add_view(project_area_view(Project_Area, db.session, name="Area"))
   admin.add_view(site_message_view(Site_Message, db.session, name="Area Message"))
   admin.add_view(project_info_view(Project_Info_Page, db.session, name="Program Info"))
+  admin.add_view(project_info_view(Advisory_Limits, db.session, name="Advisory Limits"))
 
   return
 

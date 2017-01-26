@@ -362,6 +362,9 @@ class project_info_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
+class advisory_limits_view(sqla.ModelView):
+  def is_accessible(self):
+    return login.current_user.is_authenticated
   """
   @expose('/')
   def index(self):

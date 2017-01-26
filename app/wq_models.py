@@ -56,3 +56,14 @@ class Project_Info_Page(db.Model):
   description = db.Column(db.Text())
   swim_advisory_info = db.Column(db.Text())
   site = db.relationship('Project_Area', backref='project_info_page')
+
+class Advisory_Limits(db.Model):
+  __tablename__ = 'advisory_limits'
+  id = db.Column(db.Integer, primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
+  site_id = db.Column(db.Integer, db.ForeignKey('project_area.id'))
+  min_limit = db.Column(db.Float)
+  max_limit = db.Column(db.Float)
+  icon = db.String(32)
+  limit_type = db.String(32)

@@ -414,7 +414,7 @@ if(onlineStatus != 'off'){
               //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
               if(parseInt(j.value,10) >= 104 || permanentAdvisory === true){
                 if(permanentAdvisory === true){
-                  advisoryText = 'Long Term';
+                  advisoryText = 'Permanent';
                 }
                 else{
                   advisoryText = 'Yes';

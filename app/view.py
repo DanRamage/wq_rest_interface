@@ -59,7 +59,7 @@ class SitePage(View):
         .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
         .filter(Project_Area.area_name == self.site_name).first()
       #Get the advisroy limits
-      limit_recs = db.session.query(Project_Info_Page)\
+      limit_recs = db.session.query(Advisory_Limits)\
         .join(Project_Area, Project_Area.id == Advisory_Limits.site_id)\
         .filter(Project_Area.area_name == self.site_name)\
         .order_by(Advisory_Limits.min_limit).all()

@@ -297,19 +297,26 @@ $(document).bind("mobileinit", function() {
 
 			<div data-role="collapsible">
 				<h3>&nbsp;Data</h3>
-          {% for program in sampling_program_info %}
-            <p><h3>{{ program.sampling_program }} Sampling Program </h3>
-              {{ program.sampling_program }} <a href="{{ program.url }}" target="_blank">program page</a>
-            </p>
+          <p><h3>{{ program.sampling_program }} Sampling Program </h3>
+            {{ program.sampling_program }} <a href="{{ program.url }}" target="_blank">program page</a>
+          </p>
 
-				    <h3>Indicators</h3>
-            <p> {{ program.description }}</p>
-          {%  endfor %}
+          <h3>Indicators</h3>
+          <p> {{ program.description }}</p>
           <p>
-            <img src="/static/images/none_marker.png" /> No data available in the last 30 days<br />
-                          <img src="/static/images/low_marker.png" /> Low level (0-35 bacteria per 100 mL of water)<br />
-            <img src="/static/images/medium_marker.png" /> Medium level (36-104 bacteria per 100 mL of water)<br />
-            <img src="/static/images/high_marker.png" /> High level (>104 bacteria per 100 mL of water)<br />
+            {% for limit in sampling_program_info.advisory_limits %}
+              {% if limit.type != 'No data' %}
+                <img src="/static/images/none_marker.png" /> {{ limit.type }} level ({{ limit.min_limit }}-{{ limit.max_limit }}<br />
+              {% else %}
+                <img src="/static/images/{{ limits.icon }}" /> No data available in the last 30 days<br />
+              {%  endif %}
+              <!--
+              <img src="/static/images/none_marker.png" /> No data available in the last 30 days<br />
+              <img src="/static/images/low_marker.png" /> Low level (0-35 bacteria per 100 mL of water)<br />
+              <img src="/static/images/medium_marker.png" /> Medium level (36-104 bacteria per 100 mL of water)<br />
+              <img src="/static/images/high_marker.png" /> High level (>104 bacteria per 100 mL of water)<br />
+              -->
+            {%  endfor %}
           </p>
       </div>
 

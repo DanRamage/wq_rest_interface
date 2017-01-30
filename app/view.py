@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
 from admin_models import User
-from wq_models import Project_Area, Site_Message, Project_Info_Page
+from wq_models import Project_Area, Site_Message, Project_Info_Page, Advisory_Limits
 
 FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
 FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
@@ -55,16 +55,29 @@ class SitePage(View):
   def get_program_info(self):
     program_info = []
     try:
-      recs = db.session.query(Project_Info_Page)\
+      rec = db.session.query(Project_Info_Page)\
         .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
-        .filter(Project_Area.area_name == self.site_name).all()
-      for rec in recs:
-        program_info.append({
-            'sampling_program': rec.sampling_program,
-            'url': rec.url,
-            'description': rec.description
-          }
-        )
+        .filter(Project_Area.area_name == self.site_name).first()
+      #Get the advisroy limits
+      limit_recs = db.session.query(Project_Info_Page)\
+        .join(Project_Area, Project_Area.id == Advisory_Limits.site_id)\
+        .filter(Project_Area.area_name == self.site_name)\
+        .order_by(Advisory_Limits.min_limit).all()
+      limits = []
+      for limit in limit_recs:
+        limits.append({
+          'limit_type': limit.limit_type,
+          'min_limit': limit.min_limit,
+          'max_limit': limit.max_limit,
+          'icon': limit.icon
+        })
+      program_info.append({
+          'sampling_program': rec.sampling_program,
+          'url': rec.url,
+          'description': rec.description,
+          'advisory_limits': limits
+        }
+      )
     except Exception as e:
       current_app.logger.exception(e)
     return program_info

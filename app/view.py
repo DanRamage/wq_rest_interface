@@ -53,7 +53,7 @@ class SitePage(View):
     return rec
 
   def get_program_info(self):
-    program_info = {}
+    program_info = []
     try:
       rec = db.session.query(Project_Info_Page)\
         .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
@@ -71,13 +71,13 @@ class SitePage(View):
           'max_limit': limit.max_limit,
           'icon': limit.icon
         })
-      program_info = {
+      program_info.append({
           'sampling_program': rec.sampling_program,
           'url': rec.url,
           'description': rec.description,
           'advisory_limits': limits
         }
-
+      )
     except Exception as e:
       current_app.logger.exception(e)
     return program_info
@@ -90,7 +90,7 @@ class SitePage(View):
                            site_message=site_message,
                            site_name=self.site_name,
                            wq_site_bbox='',
-                           sampling_program_info=program_info,
+                           sampling_program_info=program_info[0],
                            rest_url='')
 
 

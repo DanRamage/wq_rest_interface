@@ -309,7 +309,7 @@ $(document).bind("mobileinit", function() {
                 {% if limit.type != 'High' %}
                   <img src="/static/images/{{ limits.icon }}" /> {{ limit.type }} level ({{ limit.min_limit }}-{{ limit.max_limit }} per 100mL of water)<br />
                 {% else %}
-                  <img src="/static/images/{{ limits.icon }}" /> {{ limit.type }} level (>{{ limit.min_limit }} per 100mL of water)<br />
+                  <img src="/static/images/{{ limits.icon }}" /> {{ limit.type }} level ({{ limit.min_limit }} per 100mL of water)<br />
                 {% endif %}
               {% else %}
                 <img src="/static/images/{{ limits.icon }}" /> No data available in the last 30 days<br />

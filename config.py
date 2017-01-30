@@ -1,4 +1,4 @@
-FLASK_DEBUG = True
+FLASK_DEBUG = False
 PYCHARM_DEBUG=False
 # Create dummy secrey key so we can use sessions
 SECRET_KEY = '123456790'

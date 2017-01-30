@@ -124,7 +124,7 @@ def init_logging(app):
   """
   flask_logger = logging.getLogger('werkzeug')
   flask_logger.addHandler(file_handler)
-  #app.logger.addHandler(file_handler)
+  app.logger.addHandler(file_handler)
 
   app.logger.debug("Logging initialized")
 

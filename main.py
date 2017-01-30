@@ -1,4 +1,4 @@
-from app import create_app, build_init_db, install_secret_key
+from app import create_app, build_init_db, init_logging
 import optparse
 from config import *
 
@@ -22,5 +22,7 @@ if __name__ == '__main__':
       print("Must provide password")
   else:
     #install_secret_key(app, SECRET_KEY_FILE)
+    init_logging(app)
+
     app.run(debug=True)
     app.logger.debug("App started")

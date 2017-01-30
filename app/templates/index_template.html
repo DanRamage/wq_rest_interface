@@ -306,7 +306,7 @@ $(document).bind("mobileinit", function() {
           <p>
             {% for limit in sampling_program_info.advisory_limits %}
               {% if limit.type != 'No data' %}
-                <img src="/static/images/none_marker.png" /> {{ limit.type }} level ({{ limit.min_limit }}-{{ limit.max_limit }}<br />
+                <img src="/static/images/none_marker.png" /> {{ limit.type }} level ({{ limit.min_limit }}-{{ limit.max_limit }} per 100mL of water)<br />
               {% else %}
                 <img src="/static/images/{{ limits.icon }}" /> No data available in the last 30 days<br />
               {%  endif %}

@@ -297,14 +297,14 @@ $(document).bind("mobileinit", function() {
 
 			<div data-role="collapsible">
 				<h3>&nbsp;Data</h3>
-          <p><h3>{{ program.sampling_program }} Sampling Program </h3>
-            {{ program.sampling_program }} <a href="{{ program.url }}" target="_blank">program page</a>
+          <p><h3>{{ program_info.sampling_program }} Sampling Program </h3>
+            {{ program_info.sampling_program }} <a href="{{ program_info.url }}" target="_blank">program page</a>
           </p>
 
           <h3>Indicators</h3>
-          <p> {{ program.description }}</p>
+          <p> {{ program_info.description }}</p>
           <p>
-            {% for limit in sampling_program_info.advisory_limits %}
+            {% for limit in program_info.advisory_limits %}
               {% if limit.type != 'No data' %}
                 <img src="/static/images/none_marker.png" /> {{ limit.type }} level ({{ limit.min_limit }}-{{ limit.max_limit }}<br />
               {% else %}

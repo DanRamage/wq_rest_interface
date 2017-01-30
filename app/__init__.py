@@ -106,8 +106,9 @@ def init_logging(app):
   handler = logging.FileHandler('access.log')
   logger.addHandler(handler)
   """
+  app.logger.setLevel(logging.DEBUG)
   file_handler = RotatingFileHandler(filename = LOGFILE)
-  file_handler.setLevel(logging.NOTSET)
+  file_handler.setLevel(logging.DEBUG)
   file_handler.setFormatter(Formatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s'))
   """
   file_handler.setFormatter(Formatter('''
@@ -122,8 +123,8 @@ def init_logging(app):
   %(message)s
   '''))
   """
-  flask_logger = logging.getLogger('werkzeug')
-  flask_logger.addHandler(file_handler)
+  #flask_logger = logging.getLogger('werkzeug')
+  #flask_logger.addHandler(file_handler)
   app.logger.addHandler(file_handler)
 
   app.logger.debug("Logging initialized")

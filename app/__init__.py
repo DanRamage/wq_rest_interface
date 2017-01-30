@@ -36,6 +36,7 @@ def create_app(config_file):
   app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
   app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
 
+  init_logging()
   build_flask_admin(app)
   build_url_rules(app)
 
@@ -99,7 +100,8 @@ def build_url_rules(app):
   """
   return
 
-def init_logging(app):
+def init_logging():
+  from flask import current_app
 
   file_handler = RotatingFileHandler(filename = LOGFILE)
   file_handler.setLevel(logging.NOTSET)
@@ -117,12 +119,12 @@ def init_logging(app):
   %(message)s
   '''))
   """
-  app.logger.addHandler(file_handler)
+  current_app.logger.addHandler(file_handler)
   #logging.config.fileConfig(LOGCONFFILE)
   #logger = logging.getLogger('wq_rest_logger')
   #logger.info("Log file opened")
   #wq_app.logger = logging.getLogger('wq_rest_logger')
-  app.logger.debug("Logging initialized")
+  current_app.logger.debug("Logging initialized")
 
   return
 

@@ -5,6 +5,9 @@ import flask_admin as flask_admin
 import flask_login as flask_login
 from werkzeug.security import generate_password_hash,check_password_hash
 from config import *
+import logging.config
+from logging.handlers import RotatingFileHandler
+from logging import Formatter
 
 #app = Flask(__name__)
 
@@ -98,12 +101,9 @@ def build_url_rules(app):
   return
 
 def init_logging(app):
-  import logging.config
-  from logging.handlers import RotatingFileHandler
-  from logging import Formatter
 
   file_handler = RotatingFileHandler(filename = LOGFILE)
-  file_handler.setLevel(logging.DEBUG)
+  file_handler.setLevel(logging.NOTSET)
   file_handler.setFormatter(Formatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s'))
   """
   file_handler.setFormatter(Formatter('''

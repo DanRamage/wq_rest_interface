@@ -84,13 +84,22 @@ class SitePage(View):
   def dispatch_request(self):
     site_message = self.get_site_message()
     program_info = self.get_program_info()
-    current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, site_message))
+    try:
+      current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, site_message))
+      return render_template('index_template.html',
+                             site_message=site_message,
+                             site_name=self.site_name,
+                             wq_site_bbox='',
+                             sampling_program_info=program_info,
+                             rest_url='')
+    except Exception as e:
+      current_app.logger.exception(e)
     return render_template('index_template.html',
-                           site_message=site_message,
-                           site_name=self.site_name,
-                           wq_site_bbox='',
-                           sampling_program_info=program_info,
-                           rest_url='')
+                             site_message='',
+                             site_name=self.site_name,
+                             wq_site_bbox='',
+                             sampling_program_info={},
+                             rest_url='')
 
 
 class MyrtleBeachPage(SitePage):

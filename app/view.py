@@ -90,7 +90,7 @@ class SitePage(View):
                            site_message=site_message,
                            site_name=self.site_name,
                            wq_site_bbox='',
-                           sampling_program_info=program_info[0],
+                           sampling_program_info=program_info,
                            rest_url='')
 
 

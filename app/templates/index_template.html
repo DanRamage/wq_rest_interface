@@ -307,9 +307,9 @@ $(document).bind("mobileinit", function() {
             {% for limit in sampling_program_info.advisory_limits %}
               {% if limit.limit_type != 'No data' %}
                 {% if limit.limit_type != 'High' %}
-                  <img src="/static/images/{{ limit.icon }}" /> {{ limit.limit_type }} level ({{ limit.min_limit }}-{{ limit.max_limit }} per 100mL of water)<br />
+                  <img src="/static/images/{{ limit.icon }}" /> {{ limit.limit_type }} level ({{ int(limit.min_limit) }}-{{ int(limit.max_limit) }} per 100mL of water)<br />
                 {% else %}
-                  <img src="/static/images/{{ limit.icon }}" /> {{ limit.limit_type }} level ({{ limit.min_limit }} per 100mL of water)<br />
+                  <img src="/static/images/{{ limit.icon }}" /> {{ limit.limit_type }} level (>{{ int(limit.min_limit) }} per 100mL of water)<br />
                 {% endif %}
               {% else %}
                 <img src="/static/images/{{ limit.icon }}" /> No data available in the last 30 days<br />

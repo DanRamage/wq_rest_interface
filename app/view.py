@@ -53,7 +53,7 @@ class SitePage(View):
     return rec
 
   def get_program_info(self):
-    program_info = None
+    program_info = {}
     try:
       rec = db.session.query(Project_Info_Page)\
         .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\

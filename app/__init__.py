@@ -101,7 +101,11 @@ def build_url_rules(app):
   return
 
 def init_logging(app):
-
+  """
+  logger = logging.getLogger('werkzeug')
+  handler = logging.FileHandler('access.log')
+  logger.addHandler(handler)
+  """
   file_handler = RotatingFileHandler(filename = LOGFILE)
   file_handler.setLevel(logging.NOTSET)
   file_handler.setFormatter(Formatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s'))
@@ -118,11 +122,10 @@ def init_logging(app):
   %(message)s
   '''))
   """
-  app.logger.addHandler(file_handler)
-  #logging.config.fileConfig(LOGCONFFILE)
-  #logger = logging.getLogger('wq_rest_logger')
-  #logger.info("Log file opened")
-  #wq_app.logger = logging.getLogger('wq_rest_logger')
+  flask_logger = logging.getLogger('werkzeug')
+  flask_logger.addHandler(file_handler)
+  #app.logger.addHandler(file_handler)
+
   app.logger.debug("Logging initialized")
 
   return

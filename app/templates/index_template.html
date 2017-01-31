@@ -289,10 +289,13 @@ $(document).bind("mobileinit", function() {
 
 			<div data-role="collapsible">
 				<h3>&nbsp;Swim Advisory</h3>
-					<p>The <a href="http://www.scdhec.gov/HomeAndEnvironment/Pollution/DHECPollutionMonitoringServices/BeachMonitoring/" target="_blank">South Carolina Department of Health and Environmental Control (SCDHEC)</a> issues a swimming advisory if the results exceed the EPA recommended water quality standard of 104 bacteria per 100 mL of water. An advisory is not a closure, but SCDHEC does not recommend swimming where an advisory has been issued.</p>
+					<p>{{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank"></br>
+            {{ sampling_program_info.swim_advisory_info }}</p>
+          <!--
 					<p><img src="/static/images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
 					<img src="/static/images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />
 					<img src="/static/images/high_marker.png" /> Permanent: SCDHEC has issued a swimming advisory on a permanent basis. These are issued in specific locations where the bacteria water quality standard has been exceeded frequently in previous monitoring.</p>
+					-->
 			</div>
 
 			<div data-role="collapsible">
@@ -314,12 +317,6 @@ $(document).bind("mobileinit", function() {
               {% else %}
                 <img src="/static/images/{{ limit.icon }}" /> No data available in the last 30 days<br />
               {% endif %}
-              <!--
-              <img src="/static/images/none_marker.png" /> No data available in the last 30 days<br />
-              <img src="/static/images/low_marker.png" /> Low level (0-35 bacteria per 100 mL of water)<br />
-              <img src="/static/images/medium_marker.png" /> Medium level (36-104 bacteria per 100 mL of water)<br />
-              <img src="/static/images/high_marker.png" /> High level (>104 bacteria per 100 mL of water)<br />
-              -->
             {%  endfor %}
           </p>
       </div>

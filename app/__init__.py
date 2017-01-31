@@ -101,30 +101,10 @@ def build_url_rules(app):
   return
 
 def init_logging(app):
-  """
-  logger = logging.getLogger('werkzeug')
-  handler = logging.FileHandler('access.log')
-  logger.addHandler(handler)
-  """
   app.logger.setLevel(logging.DEBUG)
   file_handler = RotatingFileHandler(filename = LOGFILE)
   file_handler.setLevel(logging.DEBUG)
-  file_handler.setFormatter(Formatter('%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s'))
-  """
-  file_handler.setFormatter(Formatter('''
-  Message type:       %(levelname)s
-  Location:           %(pathname)s:%(lineno)d
-  Module:             %(module)s
-  Function:           %(funcName)s
-  Time:               %(asctime)s
-
-  Message:
-
-  %(message)s
-  '''))
-  """
-  #flask_logger = logging.getLogger('werkzeug')
-  #flask_logger.addHandler(file_handler)
+  file_handler.setFormatter(Formatter('%(asctime)s,%(levelname)s,%(module)s,%(funcName)s,%(lineno)d,%(message)s'))
   app.logger.addHandler(file_handler)
 
   app.logger.debug("Logging initialized")

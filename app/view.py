@@ -75,7 +75,8 @@ class SitePage(View):
           'sampling_program': rec.sampling_program,
           'url': rec.url,
           'description': rec.description,
-          'advisory_limits': limits
+          'advisory_limits': limits,
+          'swim_advisory_info': rec.swim_advisory_info
         }
     except Exception as e:
       current_app.logger.exception(e)

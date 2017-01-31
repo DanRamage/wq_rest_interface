@@ -289,8 +289,10 @@ $(document).bind("mobileinit", function() {
 
 			<div data-role="collapsible">
 				<h3>&nbsp;Swim Advisory</h3>
-					<p>{{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank"></br>
-            {{ sampling_program_info.swim_advisory_info }}</p>
+					<p>
+            <a href="{{ sampling_program_info.url }}" target="_blank">{{ sampling_program_info.sampling_program }}</a></br>
+            {{ sampling_program_info.swim_advisory_info }}
+          </p>
           <!--
 					<p><img src="/static/images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
 					<img src="/static/images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />

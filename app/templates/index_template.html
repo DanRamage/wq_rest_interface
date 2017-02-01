@@ -294,7 +294,7 @@ $(document).bind("mobileinit", function() {
         <h3>Indicators</h3>
         <p> {{ sampling_program_info.description }}</p>
         <p>
-          {% for limit_type in sampling_program_info.advisory_limits %}
+          {% for limit_type in sampling_program_info.advisory_limits.keys() %}
             {% if limit_type != 'No data' %}
               {% if limit_type != 'High' %}
                 <img src="/static/images/{{ limit.icon }}" /> {{ limit_type }} level ({{ limit[limit_type].min_limit }}-{{ limit[limit_type].max_limit }} per 100mL of water)<br />

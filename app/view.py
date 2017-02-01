@@ -63,14 +63,13 @@ class SitePage(View):
         .join(Project_Area, Project_Area.id == Advisory_Limits.site_id)\
         .filter(Project_Area.area_name == self.site_name)\
         .order_by(Advisory_Limits.min_limit).all()
-      limits = []
+      limits = {}
       for limit in limit_recs:
-        limits.append({
-          'limit_type': limit.limit_type,
+        limits[limit.limit_type] = {
           'min_limit': limit.min_limit,
           'max_limit': limit.max_limit,
           'icon': limit.icon
-        })
+        }
       program_info = {
           'sampling_program': rec.sampling_program,
           'url': rec.url,

@@ -440,6 +440,7 @@ if(onlineStatus != 'off'){
   });
 
 
+
   //Functions to assign CSS styles to color table background and other colored labels
   function calcDataRating(etcoc, station_sample_date) {
     var rating = 'none';

@@ -440,8 +440,50 @@ if(onlineStatus != 'off'){
   });
 
 
+  function calcDataRating(etcoc, station_data) {
+    var rating = 'none';
+    var station_sample_date = station_data.date;
+    var advisory = station_data.advisory;
+
+    if(advisory=='Yes' || advisory=='Long Term')
+    {
+      rating = 'high';
+    }
+    else {
+      if (station_sample_date !== undefined && station_sample_date.length) {
+        var sampleDate = parseDate(station_sample_date);
+
+        sampleDate = new Date(sampleDate);
+
+        //remove > and < for calculating color
+        if (typeof etcoc !== 'undefined') {
+          //DWR 2015-12-10
+          //Verify that the etcoc is a string.
+          if (typeof etcoc === "string") {
+            etcoc = etcoc.replace('>', '').replace('<', '');
+          }
+        }
+
+        if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
+          rating = 'none';
+        }
+        else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
+          rating = 'low';
+        }
+        else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
+          rating = 'medium';
+        }
+        else {
+          rating = 'high';
+        }
+      }
+    }
+    return  rating;
+  }
+
 
   //Functions to assign CSS styles to color table background and other colored labels
+  /*
   function calcDataRating(etcoc, station_sample_date) {
     var rating = 'none';
     if(station_sample_date !== undefined && station_sample_date.length) {
@@ -461,10 +503,10 @@ if(onlineStatus != 'off'){
       if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
         rating = 'none';
       }
-      else if (isNaN(etcoc) || etcoc <= 50) {
+      else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
         rating = 'low';
       }
-      else if (etcoc > 50 && etcoc <= 103) {
+      else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
         rating = 'medium';
       }
       else {
@@ -473,7 +515,7 @@ if(onlineStatus != 'off'){
     }
     return  rating;
   }
-
+  */
   function calcAdvisoryRating(advisory){
     if(advisory=='Yes' || advisory=='Long Term'){
       rating = 'high';
@@ -611,16 +653,19 @@ if(onlineStatus != 'off'){
             var data = station.value;
           }
 
+          /*
           if (markerType == 'data') {
             markerRating = calcDataRating(data, station.date);
           }
-
+          */
           if (markerType == 'forecast') {
             markerRating = forecast;
           }
 
           if (markerType == 'advisories') {
-            markerRating = calcAdvisoryRating(station.advisory);
+            //markerRating = calcAdvisoryRating(station.advisory);
+            markerRating = calcRating(data, station);
+
           }
 
 

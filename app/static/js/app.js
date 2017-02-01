@@ -9,9 +9,9 @@ Math.roundTo = function(val, dec) {
   }
 };
 
-
+var advisory_limits
 function initialize_app(limits) {
-  limits;
+  advisory_limits = limits;
 }
 
 

@@ -664,7 +664,7 @@ if(onlineStatus != 'off'){
 
           if (markerType == 'advisories') {
             //markerRating = calcAdvisoryRating(station.advisory);
-            markerRating = calcRating(data, station);
+            markerRating = calcAdvisoryRating(data, station);
 
           }
 

@@ -334,7 +334,8 @@ $(document).bind("mobileinit", function() {
   var wq_site_name = "{{ site_name }}";
   var wq_site_bbox = "{{ bounding_box }}";
   var rest_url = '{{ rest_url }}';
-  var advisory_limits = "{{ sampling_program_info }}";
+  initialize_app({{ sampling_program_info.limits|tojson|safe }});
+  //var advisory_limits = "";
   function wq_app() {
     var self = this;
   }

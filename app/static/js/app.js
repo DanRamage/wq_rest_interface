@@ -10,9 +10,10 @@ Math.roundTo = function(val, dec) {
 };
 
 
-function initialize_app() {
-
+function initialize_app(limits) {
+  limits;
 }
+
 
 function days_between(date1, date2) {
 

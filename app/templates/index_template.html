@@ -90,10 +90,27 @@ $(document).bind("mobileinit", function() {
 	<div id="mainfooter" data-role="footer" data-position="fixed" data-id="mainfooter" data-tap-toggle="false" data-theme="a">
 		<div data-role="navbar">
 			<ul id="navItems">
-				<li><a id="forecastButton" class="ui-state-persist ui-btn-active" onclick="changeMapMarker('forecast');$('#forecastButton').addClass('ui-state-persist');$('#advisoriesButton').removeClass('ui-state-persist');$('#dataButton').removeClass('ui-state-persist');">Forecast</a></li>
-				<li><a id="advisoriesButton" onclick="changeMapMarker('advisories');$('#advisoriesButton').addClass('ui-state-persist');$('#forecastButton').removeClass('ui-state-persist');$('#dataButton').removeClass('ui-state-persist');">Advisory</a></li>
-				<li><a id="dataButton" onclick="changeMapMarker('data');$('#dataButton').addClass('ui-state-persist');$('#advisoriesButton').removeClass('ui-state-persist');$('#forecastButton').removeClass('ui-state-persist');">Data</a></li>
-			</ul>
+        <li><a id="forecastButton" class="ui-state-persist ui-btn-active"
+               onclick="changeMapMarker('forecast');
+               $('#forecastButton').addClass('ui-state-persist');
+               $('#advisoriesButton').removeClass('ui-state-persist');
+               $('#dataButton').removeClass('ui-state-persist');">Forecast</a>
+        </li>
+        <li><a id="advisoriesButton"
+               onclick="changeMapMarker('advisories');
+               $('#advisoriesButton').addClass('ui-state-persist');
+               $('#forecastButton').removeClass('ui-state-persist');
+               $('#dataButton').removeClass('ui-state-persist');">Swim Advisory</a>
+        </li>
+        <!--
+        <li><a id="dataButton"
+               onclick="changeMapMarker('data');
+               $('#dataButton').addClass('ui-state-persist');
+               $('#advisoriesButton').removeClass('ui-state-persist');
+               $('#forecastButton').removeClass('ui-state-persist');">Data</a>
+        </li>
+        -->
+      </ul>
 		</div>
 	</div>
 	<!--

@@ -963,7 +963,7 @@ if(onlineStatus != 'off'){
 
     $( "#details_forecast_column" ).append(' ('+new Date().getDate()+' '+month[new Date().getMonth()]+')');
 
-    if(currentEtcoc[$.mobile.pageData.id].length == 0 || typeof currentEtcoc[$.mobile.pageData.id].date === "undefined"){
+    if(currentEtcoc[$.mobile.pageData.id].date.length == 0 || typeof currentEtcoc[$.mobile.pageData.id].date === "undefined"){
       $( "#details_data_column" ).append('<span>&nbsp;</span>'); //need to keep number of spans consistent - maybe not necessary here like it is on the beach list page
     }
     else{

@@ -751,7 +751,7 @@ if(onlineStatus != 'off'){
           }).click(function () {
             var popup_label_class = 'popup_label_none';
             if(dateIcon.length) {
-              popup_label_class = "popup_label_' + calcDataRating(data, station) + '"
+              popup_label_class = "popup_label_'" + calcDataRating(data, station) + "'";
             }
             $('#map_canvas').gmap('openInfoWindow', {
               'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +

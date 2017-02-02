@@ -534,17 +534,23 @@ if(onlineStatus != 'off'){
     var advisory = station.advisory;
     var date = station.date;
     var data_age_days = days_between(new Date(), new Date(date));
-    if(data_age_days < 30)
+    if(advisory == 'Long Term')
     {
-      if (advisory == 'Yes' || advisory == 'Long Term') {
-        css_class = 'popup_label_high';
+      css_class = 'popup_label_high';
+    }
+    else
+    {
+      if (data_age_days > 30) {
+        css_class = 'popup_label_nodata';
       }
       else {
-        css_class = 'popup_label_low';
+        if (advisory == 'Yes') {
+          css_class = 'popup_label_high';
+        }
+        else {
+          css_class = 'popup_label_low';
+        }
       }
-    }
-    else{
-      css_class = 'popup_label_nodata';
     }
     return css_class;
   }

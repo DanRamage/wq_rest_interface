@@ -517,7 +517,8 @@ if(onlineStatus != 'off'){
     return  rating;
   }
   */
-  function calcAdvisoryRating(advisory){
+  function calcAdvisoryRating(station){
+    var advisory = station.advisory;
     if(advisory=='Yes' || advisory=='Long Term'){
       rating = 'high';
     }
@@ -527,7 +528,26 @@ if(onlineStatus != 'off'){
 
     return  rating;
   }
-
+  function get_advisory_style(station)
+  {
+    var css_class = 'popup_label_none';
+    var advisory = station.advisory;
+    var date = station.date;
+    var data_age_days = days_between(new Date(), new Date(date));
+    if(data_age_days < 30)
+    {
+      if (advisory == 'Yes' || advisory == 'Long Term') {
+        css_class = 'popup_label_high';
+      }
+      else {
+        css_class = 'popup_label_low';
+      }
+    }
+    else{
+      css_class = 'popup_label_nodata';
+    }
+    return css_class;
+  }
 
   //Map legend setup
   function Legend(name, controlWidth, content, contentWidth) {
@@ -701,7 +721,7 @@ if(onlineStatus != 'off'){
               'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
               '<div>' +
               '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
-              '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="popup_label_' + calcAdvisoryRating(station.advisory) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
+              '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
               '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class=popup_label_class>' + data + '</span></div></div>' +
               '<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>' +
               '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +

@@ -751,7 +751,7 @@ if(onlineStatus != 'off'){
           }).click(function () {
             var popup_label_class = 'popup_label_none';
             if(dateIcon.length) {
-              popup_label_class = "popup_label_' + calcDataRating(data, parseDate(station.date)) + '"
+              popup_label_class = "popup_label_' + calcDataRating(data, station) + '"
             }
             $('#map_canvas').gmap('openInfoWindow', {
               'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
@@ -957,7 +957,7 @@ if(onlineStatus != 'off'){
         distanceUnits = '';
       }
 
-      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station.advisory)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
+      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
 
     });
 

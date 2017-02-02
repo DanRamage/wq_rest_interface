@@ -518,6 +518,33 @@ if(onlineStatus != 'off'){
   }
   */
   function calcAdvisoryRating(station){
+    var rating = 'none';
+    var advisory = station.advisory;
+    if(advisory == 'Long Term')
+    {
+      rating = 'high';
+    }
+    else
+    {
+      if(station.date.length) {
+        var date = station.date;
+        var data_age_days = days_between(new Date(), new Date(date));
+        if (data_age_days > 30) {
+          rating = 'none';
+        }
+        else {
+          if (advisory == 'Yes') {
+            rating = 'high';
+          }
+          else {
+            rating = 'low';
+          }
+        }
+      }
+    }
+    return rating;
+
+    /*
     var advisory = station.advisory;
     if(advisory=='Yes' || advisory=='Long Term'){
       rating = 'high';
@@ -527,6 +554,7 @@ if(onlineStatus != 'off'){
     }
 
     return  rating;
+    */
   }
   function get_advisory_style(station)
   {

@@ -751,17 +751,6 @@ if(onlineStatus != 'off'){
 
     $('#map_canvas').gmap('addControl', homeButton.div, google.maps.ControlPosition.TOP_LEFT);
     $('#markerTypeSelector').trigger('create'); //Applies JQM styling to the markerTypeSelector radio buttons
-    //Load in site specific info page.
-    //var site_info_url = '/sites/' + site + '/info';
-    /*
-    var site_info_url = site + '/rest/info';
-    //$( "#moreInformation" ).load(site_info_url);
-    $.get( site_info_url, function( info_page )
-    {
-      $( "#moreInformation" ).html( info_page );
-    });
-    */
-
   });
 
 
@@ -1055,6 +1044,19 @@ if(onlineStatus != 'off'){
                 },
                 plotBands: [{
                     color: '#96ca2d',
+                    from: advisory_limits['Low'].min_limit,
+                    to: advisory_limits['Low'].max_limit},
+                    {color: '#F9FA4A',
+                    from: advisory_limits['Low'].max_limit,
+                    to: advisory_limits['Medium'].max_limit},
+                    {color: '#DB1A0F',
+                    from: advisory_limits['High'].max_limit,
+                    to: 10000}
+                    ]
+
+              /*
+                plotBands: [{
+                    color: '#96ca2d',
                     from: 0,
                     to: 50},
                     {color: '#F9FA4A',
@@ -1064,6 +1066,7 @@ if(onlineStatus != 'off'){
                     from: 104,
                     to: 10000}
                     ]
+               */
             },
             tooltip: {
                 formatter: function() {

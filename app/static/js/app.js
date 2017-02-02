@@ -1050,7 +1050,7 @@ if(onlineStatus != 'off'){
                     from: advisory_limits['Low'].max_limit,
                     to: advisory_limits['Medium'].max_limit},
                     {color: '#DB1A0F',
-                    from: advisory_limits['High'].max_limit,
+                    from: advisory_limits['High'].min_limit,
                     to: 10000}
                     ]
 

@@ -929,7 +929,7 @@ if(onlineStatus != 'off'){
         distanceUnits = '';
       }
 
-      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station.advisory)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, parseDate(station.date))+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
+      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station.advisory)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
 
     });
 
@@ -1119,7 +1119,7 @@ if(onlineStatus != 'off'){
       data = currentEtcoc[$.mobile.pageData.id].value;
     }
 
-    $('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(currentEtcoc[$.mobile.pageData.id].advisory)+ ' details-rating">'+currentEtcoc[$.mobile.pageData.id].advisory+'</span><span class="'+calcDataRating(data, parseDate(currentEtcoc[$.mobile.pageData.id].date))+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
+    $('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(currentEtcoc[$.mobile.pageData.id].advisory)+ ' details-rating">'+currentEtcoc[$.mobile.pageData.id].advisory+'</span><span class="'+calcDataRating(data, currentEtcoc[$.mobile.pageData.id])+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
 
   });
 

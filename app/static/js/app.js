@@ -1119,7 +1119,7 @@ if(onlineStatus != 'off'){
       data = currentEtcoc[$.mobile.pageData.id].value;
     }
 
-    $('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(currentEtcoc[$.mobile.pageData.id].advisory)+ ' details-rating">'+currentEtcoc[$.mobile.pageData.id].advisory+'</span><span class="'+calcDataRating(data, currentEtcoc[$.mobile.pageData.id])+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
+    $('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(currentEtcoc[$.mobile.pageData.id])+ ' details-rating">'+currentEtcoc[$.mobile.pageData.id].advisory+'</span><span class="'+calcDataRating(data, currentEtcoc[$.mobile.pageData.id])+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
 
   });
 

@@ -538,7 +538,7 @@ if(onlineStatus != 'off'){
     }
     else
     {
-      if(station.date.length()) {
+      if(station.date.length) {
         var date = station.date;
         var data_age_days = days_between(new Date(), new Date(date));
         if (data_age_days > 30) {

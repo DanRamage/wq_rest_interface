@@ -520,9 +520,8 @@ if(onlineStatus != 'off'){
         if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
           rating = 'none';
         }
-        else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) ||
-          (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit))
-        {
+        else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) &&
+          (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
           rating = 'low';
         }
         /*
@@ -611,6 +610,49 @@ if(onlineStatus != 'off'){
 
     return  rating;
     */
+  }
+  function get_bacteria_style(station)
+  {
+    var css_class = 'popup_label_none';
+    var rating = 'none';
+    var station_sample_date = station_data.date;
+    var advisory = station_data.advisory;
+
+    if(advisory=='Yes' || advisory=='Long Term')
+    {
+      css_class = 'popup_label_high';
+    }
+    else {
+      if (station_sample_date !== undefined && station_sample_date.length) {
+        var sampleDate = parseDate(station_sample_date);
+
+        sampleDate = new Date(sampleDate);
+
+        //remove > and < for calculating color
+        if (typeof etcoc !== 'undefined') {
+          //DWR 2015-12-10
+          //Verify that the etcoc is a string.
+          if (typeof etcoc === "string") {
+            etcoc = etcoc.replace('>', '').replace('<', '');
+          }
+        }
+
+        if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
+          css_class = 'popup_label_none';
+        }
+        else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
+          css_class = 'popup_label_low';
+        }
+        else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
+          css_class = 'popup_label_medium';
+        }
+        else {
+          css_class = 'popup_label_high';
+        }
+      }
+    }
+
+    return(css_class);
   }
   function get_advisory_style(station)
   {
@@ -814,7 +856,7 @@ if(onlineStatus != 'off'){
               '<div>' +
               '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
               '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
-              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class=' +popup_label_class +'>' + data + '</span></div></div>' +
+              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class=' + get_bacteria_style(station) +'>' + data + '</span></div></div>' +
               '<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>' +
               '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +
               '</div>' +

@@ -616,8 +616,8 @@ if(onlineStatus != 'off'){
   {
     var css_class = 'popup_label_none';
     var rating = 'none';
-    var station_sample_date = station_data.date;
-    var advisory = station_data.advisory;
+    var station_sample_date = station.date;
+    var advisory = station.advisory;
 
     if(advisory=='Yes' || advisory=='Long Term')
     {

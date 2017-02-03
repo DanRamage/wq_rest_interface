@@ -93,8 +93,8 @@ class SitePage(View):
         advisory_data,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
 
       data = {
-        'prediction_data': simplejson.dumps(prediction_data),
-        'advisory_data': simplejson.dumps(advisory_data)
+        'prediction_data': simplejson.loads(prediction_data),
+        'advisory_data': simplejson.loads(advisory_data)
       }
     except Exception as e:
       current_app.logger.exception(e)

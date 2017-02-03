@@ -520,12 +520,16 @@ if(onlineStatus != 'off'){
         if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
           rating = 'none';
         }
-        else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
+        else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) ||
+          (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit))
+        {
           rating = 'low';
         }
+        /*
         else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
           rating = 'medium';
         }
+        */
         else {
           rating = 'high';
         }

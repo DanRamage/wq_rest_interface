@@ -9,9 +9,27 @@ Math.roundTo = function(val, dec) {
   }
 };
 
-var advisory_limits
-function initialize_app(limits) {
+var advisory_limits;
+var predictionData = {};
+var currentEtcoc = {};
+
+function initialize_app(data, limits) {
   advisory_limits = limits;
+
+  var forecast_date = data['prediction_data'].contents.testDate;
+
+  $.each( data['prediction_data'], function(i, beach) {
+    predictionData[beach.properties.station] = {
+      "station" : beach.properties.station,
+      "desc" : beach.properties.desc,
+      "ensemble" : beach.properties.ensemble,
+      "forecast_date": forecast_date,
+      "message" : beach.properties.message,
+      "region" : beach.properties.region,
+      "lat" : beach.geometry.coordinates[1],
+      "lng" : beach.geometry.coordinates[0] };
+  });
+
 }
 
 

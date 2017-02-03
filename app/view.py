@@ -81,9 +81,29 @@ class SitePage(View):
       current_app.logger.exception(e)
     return program_info
 
+  def get_data(self):
+    data = {}
+    try:
+      if self.site_name == 'myrtlebeach':
+        #Get prediction data
+        prediction_data, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
+        advisory_data, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
+      elif self.site_name == 'sarasota':
+        prediction_data, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
+        advisory_data,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+
+      data = {
+        'prediction_data': simplejson.dumps(prediction_data),
+        'advisory_data': simplejson.dumps(advisory_data)
+      }
+    except Exception as e:
+      current_app.logger.exception(e)
+    return data
+
   def dispatch_request(self):
     site_message = self.get_site_message()
     program_info = self.get_program_info()
+    data = self.get_data()
     try:
       current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, site_message))
       return render_template('index_template.html',
@@ -91,7 +111,8 @@ class SitePage(View):
                              site_name=self.site_name,
                              wq_site_bbox='',
                              sampling_program_info=program_info,
-                             rest_url='')
+                             rest_url='',
+                             data=data)
     except Exception as e:
       current_app.logger.exception(e)
     return render_template('index_template.html',

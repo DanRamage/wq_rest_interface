@@ -48,7 +48,14 @@ function initialize_app(data, limits) {
         advisoryText = 'None';
       }
 
-      currentEtcoc[stations.properties.station] = {"desc" : stations.properties.desc, "date" : j.date, "lat" : stations.geometry.coordinates[1], "lng" : stations.geometry.coordinates[0], "value" : j.value, "advisory" : advisoryText};
+      currentEtcoc[stations.properties.station] = {
+        "desc" : stations.properties.desc,
+        "date" : j.date,
+        "lat" : stations.geometry.coordinates[1],
+        "lng" : stations.geometry.coordinates[0],
+        "value" : j.value,
+        "advisory" : advisoryText
+      };
 
     });
   });

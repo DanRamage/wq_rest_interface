@@ -30,7 +30,7 @@ function initialize_app(data, limits) {
   });
 
 
-  $.each(data['advisory_data'], function(s,stations){
+  $.each(data['advisory_data'].features, function(s,stations){
     permanentAdvisory = stations.properties.sign;
 
     $.each(stations.properties.test, function(i,j){

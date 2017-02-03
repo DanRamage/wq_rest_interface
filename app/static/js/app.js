@@ -12,10 +12,14 @@ Math.roundTo = function(val, dec) {
 var advisory_limits;
 var predictionData = {};
 var currentEtcoc = {};
+var wq_site_name = "";
+var wq_site_bbox;
 
-function initialize_app(data, limits) {
+function initialize_app(data, limits, site_name, bbox) {
+  wq_site_name = site_name;
+  wq_site_bbox = bbox;
+
   advisory_limits = limits;
-
   var forecast_date = data['prediction_data'].contents.testDate;
   $.each( data['prediction_data'].contents.stationData.features, function(i, beach) {
     predictionData[beach.properties.station] = {

@@ -111,7 +111,6 @@ class SitePage(View):
                              site_name=self.site_name,
                              wq_site_bbox='',
                              sampling_program_info=program_info,
-                             rest_url='',
                              data=data)
     except Exception as e:
       current_app.logger.exception(e)
@@ -120,7 +119,7 @@ class SitePage(View):
                              site_name=self.site_name,
                              wq_site_bbox='',
                              sampling_program_info={},
-                             rest_url='')
+                             data={})
 
 
 class MyrtleBeachPage(SitePage):

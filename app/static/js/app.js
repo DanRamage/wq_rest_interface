@@ -520,7 +520,7 @@ if(onlineStatus != 'off'){
         if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
           rating = 'none';
         }
-        else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) &&
+        else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) ||
           (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit))
         {
           rating = 'low';
@@ -857,7 +857,7 @@ if(onlineStatus != 'off'){
               '<div>' +
               '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
               '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
-              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class=' + get_bacteria_style(station) +'>' + data + '</span></div></div>' +
+              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station) +'">' + data + '</span></div></div>' +
               '<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>' +
               '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +
               '</div>' +

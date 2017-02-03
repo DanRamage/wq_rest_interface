@@ -615,41 +615,34 @@ if(onlineStatus != 'off'){
   function get_bacteria_style(station, etcoc)
   {
     var css_class = 'popup_label_none';
-    var rating = 'none';
     var station_sample_date = station.date;
-    var advisory = station.advisory;
 
-    if(advisory=='Yes' || advisory=='Long Term')
+    if (station_sample_date !== undefined && station_sample_date.length)
     {
-      css_class = 'popup_label_high';
-    }
-    else {
-      if (station_sample_date !== undefined && station_sample_date.length) {
-        var sampleDate = parseDate(station_sample_date);
+      var sampleDate = parseDate(station_sample_date);
 
-        sampleDate = new Date(sampleDate);
+      sampleDate = new Date(sampleDate);
 
-        //remove > and < for calculating color
-        if (typeof etcoc !== 'undefined') {
-          //DWR 2015-12-10
-          //Verify that the etcoc is a string.
-          if (typeof etcoc === "string") {
-            etcoc = etcoc.replace('>', '').replace('<', '');
-          }
+      //remove > and < for calculating color
+      if (typeof etcoc !== 'undefined') {
+        //DWR 2015-12-10
+        //Verify that the etcoc is a string.
+        if (typeof etcoc === "string") {
+          etcoc = etcoc.replace('>', '').replace('<', '');
         }
+      }
 
-        if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
-          css_class = 'popup_label_none';
-        }
-        else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
-          css_class = 'popup_label_low';
-        }
-        else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
-          css_class = 'popup_label_medium';
-        }
-        else {
-          css_class = 'popup_label_high';
-        }
+      if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
+        css_class = 'popup_label_none';
+      }
+      else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
+        css_class = 'popup_label_low';
+      }
+      else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
+        css_class = 'popup_label_medium';
+      }
+      else {
+        css_class = 'popup_label_high';
       }
     }
 

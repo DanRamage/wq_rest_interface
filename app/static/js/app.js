@@ -15,10 +15,8 @@ var currentEtcoc = {};
 var wq_site_name = "";
 var wq_site_bbox;
 
-function initialize_app(data, limits, site_name, bbox) {
-  wq_site_name = site_name;
-  wq_site_bbox = bbox;
-
+//function initialize_app(data, limits, site_name, bbox) {
+function initialize_app(data, limits) {
   advisory_limits = limits;
   var forecast_date = data['prediction_data'].contents.testDate;
   $.each( data['prediction_data'].contents.stationData.features, function(i, beach) {

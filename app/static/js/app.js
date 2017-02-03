@@ -521,7 +521,8 @@ if(onlineStatus != 'off'){
           rating = 'none';
         }
         else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) &&
-          (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
+          (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit))
+        {
           rating = 'low';
         }
         /*

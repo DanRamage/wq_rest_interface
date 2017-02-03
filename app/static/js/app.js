@@ -442,8 +442,9 @@ $.ajax({
 */
 //Get monitoring data and populate currentEtcoc array for all stations
 //Using $.ajax and async: false, rather than $.getJSON to ensure that currentEtcoc is populated before pages try to use it.
-if(onlineStatus != 'off'){
 
+if(onlineStatus != 'off'){
+  /*
   var currentEtcoc = {};
 
   $.ajax({
@@ -490,7 +491,7 @@ if(onlineStatus != 'off'){
         //alert(thrownError);
       }
   });
-
+  */
 
   function calcDataRating(etcoc, station_data) {
     var rating = 'none';

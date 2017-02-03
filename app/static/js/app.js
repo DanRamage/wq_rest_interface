@@ -625,8 +625,6 @@ if(onlineStatus != 'off'){
 
       //remove > and < for calculating color
       if (typeof etcoc !== 'undefined') {
-        //DWR 2015-12-10
-        //Verify that the etcoc is a string.
         if (typeof etcoc === "string") {
           etcoc = etcoc.replace('>', '').replace('<', '');
         }
@@ -731,7 +729,7 @@ if(onlineStatus != 'off'){
   var legendContentHtml = [];
 
   legendContentHtml['forecast'] = '<div><p><strong>Today\'s forecasted conditions</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No forecast available<br /><img src="static/images/low_marker.png" /> Low bacteria level</div><div style="float:left"><img src="static/images/medium_marker.png" /> Medium bacteria level<br /><img src="static/images/high_marker.png" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
-  legendContentHtml['advisories'] = '<div><p><strong>Swim advisories</strong></p><p><img src="static/images/low_marker.png" /> None: no swimming advisory issued - safe to swim.<br /><img src="static/images/high_marker.png" /> Yes: an advisory is current - swimming not recommended.</p><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
+  legendContentHtml['advisories'] = '<div><p><strong>Swim advisories</strong></p><p><img src="static/images/low_marker.png" /> None: no swimming advisory issued - safe to swim.<br /><img src="static/images/high_marker.png" /> Yes: an advisory is current - swimming not recommended.</p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No forecast available<br /><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
   legendContentHtml['data'] = '<div><p><strong>Bacteria level data</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No data available<br /><img src="static/images/low_marker.png" /> Low bacteria level</div><div style="float:left"><img src="static/images/medium_marker.png" /> Medium bacteria level<br /><img src="static/images/high_marker.png" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
 
   var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
@@ -841,10 +839,12 @@ if(onlineStatus != 'off'){
             'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
             'bounds': bounds
           }).click(function () {
+            /*
             var popup_label_class = 'popup_label_none';
             if(dateIcon.length) {
               popup_label_class = "popup_label_" + calcDataRating(data, station);
             }
+            */
             $('#map_canvas').gmap('openInfoWindow', {
               'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
               '<div>' +

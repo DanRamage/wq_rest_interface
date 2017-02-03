@@ -29,6 +29,30 @@ function initialize_app(data, limits) {
       "lng" : beach.geometry.coordinates[0] };
   });
 
+
+  $.each(data['advisory_data'], function(s,stations){
+    permanentAdvisory = stations.properties.sign;
+
+    $.each(stations.properties.test, function(i,j){
+
+      //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
+      if(parseInt(j.value,10) >= limits['High'].min_limit || permanentAdvisory === true){
+        if(permanentAdvisory === true){
+          advisoryText = 'Long Term';
+        }
+        else{
+          advisoryText = 'Yes';
+        }
+      }
+      else{
+        advisoryText = 'None';
+      }
+
+      currentEtcoc[stations.properties.station] = {"desc" : stations.properties.desc, "date" : j.date, "lat" : stations.geometry.coordinates[1], "lng" : stations.geometry.coordinates[0], "value" : j.value, "advisory" : advisoryText};
+
+    });
+  });
+
   return;
 }
 

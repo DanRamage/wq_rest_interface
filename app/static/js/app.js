@@ -29,6 +29,7 @@ function initialize_app(data, limits) {
       "lng" : beach.geometry.coordinates[0] };
   });
 
+  return;
 }
 
 
@@ -365,6 +366,8 @@ $(document).bind("pagebeforechange", function( event, data ) {
 
 //Populate predictionData array with needed parameters for all stations.
 //Using $.ajax and async: false, rather than $.getJSON to ensure that predictionData is populated before pages try to use it.
+
+/*
 var predictionData = {};
 var popupMessage;
 
@@ -405,7 +408,7 @@ $.ajax({
       //alert(thrownError);
     }
 });
-
+*/
 //Get monitoring data and populate currentEtcoc array for all stations
 //Using $.ajax and async: false, rather than $.getJSON to ensure that currentEtcoc is populated before pages try to use it.
 if(onlineStatus != 'off'){

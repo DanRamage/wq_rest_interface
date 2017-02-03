@@ -17,8 +17,7 @@ function initialize_app(data, limits) {
   advisory_limits = limits;
 
   var forecast_date = data['prediction_data'].contents.testDate;
-
-  $.each( data['prediction_data'], function(i, beach) {
+  $.each( data['prediction_data'].contents.stationData.features, function(i, beach) {
     predictionData[beach.properties.station] = {
       "station" : beach.properties.station,
       "desc" : beach.properties.desc,

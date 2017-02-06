@@ -14,9 +14,10 @@ var predictionData = {};
 var currentEtcoc = {};
 var wq_site_name = "";
 var wq_site_bbox;
-
+var site;
 //function initialize_app(data, limits, site_name, bbox) {
-function initialize_app(data, limits) {
+function initialize_app(site_name, data, limits) {
+  site = site_name;
   advisory_limits = limits;
   var forecast_date = data['prediction_data'].contents.testDate;
   $.each( data['prediction_data'].contents.stationData.features, function(i, beach) {
@@ -210,16 +211,11 @@ var onlineStatus = 'on';
 var current_date = new Date();
 var markerType = 'forecast'; //Initial markers set to show forecast results
 
+/*
 var site = null; //Site the app will be displaying.
-//The base REST url to pull data.
-//var base_rest_url = "http://howsthebeach.org/rest/";
-//var base_rest_url = "http://dev.howsthebeach.org/rest/";
-//var base_rest_url = "http://dev.howsthebeach.org/";
-//Site specific base url.
-//var site_base_url = '/' + site + '/rest/';
 
 site = GetSiteFromURL(window.location.pathname);
-
+*/
 
 //Build the URL we use to get the site specific data.
 //site_base_url = "http://" + site + '.' + base_rest_url + site +'/';

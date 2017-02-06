@@ -331,7 +331,7 @@ $(document).bind("mobileinit", function() {
 
 <script src="static/js/app.js"></script>
 <script>
-  initialize_app({{ data|tojson|safe }}, {{ sampling_program_info.advisory_limits|tojson|safe }});
+  initialize_app({{ site_name }}, {{ data|tojson|safe }}, {{ sampling_program_info.advisory_limits|tojson|safe }});
   function wq_app() {
     var self = this;
   }

@@ -9,13 +9,22 @@ Math.roundTo = function(val, dec) {
   }
 };
 
+//Define key global variables and arrays
+var userLat;
+var userLng;
+var dateSet;
+var onlineStatus = 'on';
+
+var current_date = new Date();
+var markerType = 'forecast'; //Initial markers set to show forecast results
+
 var advisory_limits;
 var predictionData = {};
 var currentEtcoc = {};
 var wq_site_name = "";
 var wq_site_bbox;
 var site;
-//function initialize_app(data, limits, site_name, bbox) {
+
 function initialize_app(site_name, data, limits) {
   site = site_name;
   advisory_limits = limits;
@@ -200,26 +209,6 @@ function date_by_subtracting_days(date, days) {
         date.getMilliseconds()
     );
 }
-
-
-//Define key global variables and arrays
-var userLat;
-var userLng;
-var dateSet;
-var onlineStatus = 'on';
-
-var current_date = new Date();
-var markerType = 'forecast'; //Initial markers set to show forecast results
-
-/*
-var site = null; //Site the app will be displaying.
-
-site = GetSiteFromURL(window.location.pathname);
-*/
-
-//Build the URL we use to get the site specific data.
-//site_base_url = "http://" + site + '.' + base_rest_url + site +'/';
-//site_base_url = base_rest_url  + site + '/rest/';
 
 
 
@@ -536,41 +525,6 @@ if(onlineStatus != 'off'){
     return  rating;
   }
 
-
-  //Functions to assign CSS styles to color table background and other colored labels
-  /*
-  function calcDataRating(etcoc, station_sample_date) {
-    var rating = 'none';
-    if(station_sample_date !== undefined && station_sample_date.length) {
-      var sampleDate = parseDate(station_sample_date);
-
-      sampleDate = new Date(sampleDate);
-
-      //remove > and < for calculating color
-      if (typeof etcoc !== 'undefined') {
-        //DWR 2015-12-10
-        //Verify that the etcoc is a string.
-        if (typeof etcoc === "string") {
-          etcoc = etcoc.replace('>', '').replace('<', '');
-        }
-      }
-
-      if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
-        rating = 'none';
-      }
-      else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
-        rating = 'low';
-      }
-      else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
-        rating = 'medium';
-      }
-      else {
-        rating = 'high';
-      }
-    }
-    return  rating;
-  }
-  */
   function calcAdvisoryRating(station){
     var rating = 'none';
     var advisory = station.advisory;
@@ -598,17 +552,6 @@ if(onlineStatus != 'off'){
     }
     return rating;
 
-    /*
-    var advisory = station.advisory;
-    if(advisory=='Yes' || advisory=='Long Term'){
-      rating = 'high';
-    }
-    else{
-      rating = 'low';
-    }
-
-    return  rating;
-    */
   }
   function get_bacteria_style(station, etcoc)
   {

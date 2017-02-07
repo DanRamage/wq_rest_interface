@@ -960,7 +960,7 @@ if(onlineStatus != 'off'){
 
       var dateIcon = '';
 
-      if(typeof station.date === "undefined" or station.date.length === 0){
+      if(typeof station.date === "undefined" || station.date.length === 0){
         dateIcon = '<span>&nbsp;</span>'; //need to keep number of spans consistent which is important for column sorting and was being affected if no data available and hence no date span being displayed
         var data = 'None';
       }

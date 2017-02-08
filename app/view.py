@@ -125,12 +125,12 @@ class SitePage(View):
                              data=data)
     except Exception as e:
       current_app.logger.exception(e)
-    rendered_template = render_template('index_template.html',
-                             site_message='',
-                             site_name=self.site_name,
-                             wq_site_bbox='',
-                             sampling_program_info={},
-                             data={})
+      rendered_template = render_template('index_template.html',
+                               site_message='',
+                               site_name=self.site_name,
+                               wq_site_bbox='',
+                               sampling_program_info={},
+                               data={})
 
     current_app.logger.debug('dispatch_request finished in %f seconds' % (time.time()-start_time))
     return rendered_template

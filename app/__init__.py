@@ -1,4 +1,4 @@
-import sys
+import os
 from flask import Flask, send_from_directory, current_app
 from flask_sqlalchemy import SQLAlchemy
 import flask_admin as flask_admin
@@ -120,21 +120,10 @@ def install_secret_key(app):
   then exit.
 
   """
-  """
   if not FLASK_DEBUG:
-    filename = os.path.join(app.instance_path, filename)
-    try:
-        app.config['SECRET_KEY'] = open(filename, 'rb').read()
-    except IOError:
-        print 'Error: No secret key. Create it with:'
-        if not os.path.isdir(os.path.dirname(filename)):
-            print 'mkdir -p', os.path.dirname(filename)
-        print 'head -c 24 /dev/urandom >', filename
-        sys.exit(1)
+    os.urandom(24)
   else:
     app.config['SECRET_KEY'] = SECRET_KEY
-  """
-  app.config['SECRET_KEY'] = SECRET_KEY
 
 
 # Initialize flask-login

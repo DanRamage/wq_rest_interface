@@ -172,6 +172,7 @@ class SiteBaseAPI(MethodView):
 
 class PredictionsAPI(MethodView):
   def get(self, sitename=None):
+    start_time = time.time()
     current_app.logger.debug('PredictionsAPI get for site: %s' % (sitename))
     ret_code = 404
     results = None
@@ -185,11 +186,13 @@ class PredictionsAPI(MethodView):
                     'contents': None
                     })
 
+    current_app.logger.debug('PredictionsAPI get for site: %s finished in %f seconds' % (sitename, time.time() - start_time))
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 
 class BacteriaDataAPI(MethodView):
   def get(self, sitename=None):
+    start_time = time.time()
     current_app.logger.debug('BacteriaDataAPI get for site: %s' % (sitename))
     ret_code = 404
     results = None
@@ -212,6 +215,7 @@ class BacteriaDataAPI(MethodView):
                     'contents': None
                     })
 
+    current_app.logger.debug('BacteriaDataAPI get for site: %s finished in %f seconds' % (sitename, time.time() - start_time))
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 

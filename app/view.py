@@ -110,13 +110,14 @@ class SitePage(View):
     return data
 
   def dispatch_request(self):
+    start_time = time.time()
     current_app.logger.debug('dispatch_request started')
     site_message = self.get_site_message()
     program_info = self.get_program_info()
     data = self.get_data()
     try:
       current_app.logger.debug('Site: %s rendered.' % (self.site_name))
-      return render_template('index_template.html',
+      rendered_template = render_template('index_template.html',
                              site_message=site_message,
                              site_name=self.site_name,
                              wq_site_bbox='',
@@ -124,13 +125,15 @@ class SitePage(View):
                              data=data)
     except Exception as e:
       current_app.logger.exception(e)
-    return render_template('index_template.html',
+    rendered_template = render_template('index_template.html',
                              site_message='',
                              site_name=self.site_name,
                              wq_site_bbox='',
                              sampling_program_info={},
                              data={})
 
+    current_app.logger.debug('dispatch_request finished in %f seconds' % (time.time()-start_time))
+    return rendered_template
 
 class MyrtleBeachPage(SitePage):
   def __init__(self):

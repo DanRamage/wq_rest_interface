@@ -115,7 +115,7 @@ class SitePage(View):
     program_info = self.get_program_info()
     data = self.get_data()
     try:
-      current_app.logger.debug('Site: %s rendered. Site Message: %s' % (self.site_name, site_message))
+      current_app.logger.debug('Site: %s rendered.' % (self.site_name))
       return render_template('index_template.html',
                              site_message=site_message,
                              site_name=self.site_name,
@@ -243,6 +243,7 @@ class StationDataAPI(MethodView):
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
   def get_requested_station_data(self, station, request, station_directory):
+    start_time = time.time()
     ret_code = 404
     current_app.logger.debug("get_requested_station_data Started")
 
@@ -299,9 +300,9 @@ class StationDataAPI(MethodView):
     except Exception, e:
       current_app.logger.exception(e)
 
-    current_app.logger.debug("get_requested_station_data Finished")
 
     results = geojson.dumps(json_data, separators=(',', ':'))
+    current_app.logger.debug("get_requested_station_data finished in %s seconds" % (time.time() - start_time))
     return results
 
 

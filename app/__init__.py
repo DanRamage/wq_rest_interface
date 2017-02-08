@@ -121,7 +121,7 @@ def install_secret_key(app):
 
   """
   if not FLASK_DEBUG:
-    os.urandom(24)
+    app.config['SECRET_KEY'] = os.urandom(24)
   else:
     app.config['SECRET_KEY'] = SECRET_KEY
 

@@ -110,6 +110,7 @@ class SitePage(View):
     return data
 
   def dispatch_request(self):
+    current_app.logger.debug('dispatch_request started')
     site_message = self.get_site_message()
     program_info = self.get_program_info()
     data = self.get_data()

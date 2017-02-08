@@ -7,7 +7,7 @@ import flask_admin as admin
 import flask_login as login
 from flask_admin.contrib import sqla
 from flask_admin import helpers, expose
-
+import time
 import simplejson
 import geojson
 from datetime import datetime
@@ -43,16 +43,21 @@ class ShowIntroPage(View):
 
 class SitePage(View):
   def __init__(self, site_name):
-    current_app.logger.debug('SitePage __init__')
+    current_app.logger.debug('__init__')
     self.site_name = site_name
 
   def get_site_message(self):
+    current_app.logger.debug('get_site_message started')
+    start_time = time.time()
     rec = db.session.query(Site_Message)\
       .join(Project_Area, Project_Area.id == Site_Message.site_id)\
       .filter(Project_Area.area_name == self.site_name).first()
+    current_app.logger.debug('get_site_message finished in %f seconds' % (time.time()-start_time))
     return rec
 
   def get_program_info(self):
+    current_app.logger.debug('get_program_info started')
+    start_time = time.time()
     program_info = {}
     try:
       rec = db.session.query(Project_Info_Page)\
@@ -79,9 +84,12 @@ class SitePage(View):
         }
     except Exception as e:
       current_app.logger.exception(e)
+    current_app.logger.debug('get_program_info finished in %f seconds' % (time.time()-start_time))
     return program_info
 
   def get_data(self):
+    current_app.logger.debug('get_data started')
+    start_time = time.time()
     data = {}
     try:
       if self.site_name == 'myrtlebeach':
@@ -98,6 +106,7 @@ class SitePage(View):
       }
     except Exception as e:
       current_app.logger.exception(e)
+    current_app.logger.debug('get_data finished in %f seconds' % (time.time()-start_time))
     return data
 
   def dispatch_request(self):

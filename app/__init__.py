@@ -74,7 +74,7 @@ def build_url_rules(app):
 
   #Page rules
   app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
-  app.add_url_rule('/myrtlebeach', view_func=SaludaPage.as_view('saluda'))
+  app.add_url_rule('/saluda', view_func=SaludaPage.as_view('saluda'))
 
   #REST rules
   app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])

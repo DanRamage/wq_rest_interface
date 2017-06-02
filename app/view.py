@@ -127,7 +127,7 @@ class SitePage(View):
 class SaludaPage(SitePage):
   def __init__(self):
     current_app.logger.debug('SaludaPage __init__')
-    SitePage.__init__(self, 'myrtlebeach')
+    SitePage.__init__(self, 'saluda')
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

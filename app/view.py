@@ -20,21 +20,10 @@ from app import db
 from admin_models import User
 from wq_models import Project_Area, Site_Message, Project_Info_Page, Advisory_Limits
 
-FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
-FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
-FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
+SC_RIVERS_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
+SC_RIVERS_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
+SC_RIVERS_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
-SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
-SC_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
-SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
-
-#SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
-#SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
-#SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
-
-SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
-SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
-SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
 class ShowIntroPage(View):
   def dispatch_request(self):
@@ -135,16 +124,10 @@ class SitePage(View):
     current_app.logger.debug('dispatch_request finished in %f seconds' % (time.time()-start_time))
     return rendered_template
 
-class MyrtleBeachPage(SitePage):
+class SaludaPage(SitePage):
   def __init__(self):
-    current_app.logger.debug('MyrtleBeachPage __init__')
+    current_app.logger.debug('SaludaPage __init__')
     SitePage.__init__(self, 'myrtlebeach')
-
-
-class SarasotaPage(SitePage):
-  def __init__(self):
-    current_app.logger.debug('SarasotaPage __init__')
-    SitePage.__init__(self, 'sarasota')
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
@@ -180,10 +163,8 @@ class PredictionsAPI(MethodView):
     ret_code = 404
     results = None
 
-    if sitename == 'myrtlebeach':
-      results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
-    elif sitename == 'sarasota':
-      results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
+    if sitename == 'saluda':
+      results, ret_code = get_data_file(SC_RIVERS_PREDICTIONS_FILE)
     else:
       results = simplejson.dumps({'status': {'http_code': ret_code},
                     'contents': None
@@ -200,19 +181,13 @@ class BacteriaDataAPI(MethodView):
     ret_code = 404
     results = None
 
-    if sitename == 'myrtlebeach':
-      results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
+    if sitename == 'saluda':
+      results, ret_code = get_data_file(SC_RIVERS_ADVISORIES_FILE)
       #Wrap the results in the status and contents keys. The app expects this format.
       json_ret = {'status': {'http_code': ret_code},
                   'contents': simplejson.loads(results)}
       results = simplejson.dumps(json_ret)
 
-    elif sitename == 'sarasota':
-      results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
-      #Wrap the results in the status and contents keys. The app expects this format.
-      json_ret = {'status' : {'http_code': ret_code},
-                  'contents': simplejson.loads(results)}
-      results = simplejson.dumps(json_ret)
     else:
       results = simplejson.dumps({'status': {'http_code': ret_code},
                     'contents': None
@@ -231,13 +206,10 @@ class StationDataAPI(MethodView):
     current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_date))
     ret_code = 404
 
-    if sitename == 'myrtlebeach':
+    if sitename == 'saluda':
       results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
       ret_code = 200
 
-    elif sitename == 'sarasota':
-      results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
-      ret_code = 200
     else:
       results = simplejson.dumps({'status': {'http_code': ret_code},
                     'contents': None

@@ -57,7 +57,7 @@ def build_flask_admin(app):
 
   login_manager.init_app(app)
   # Create admin
-  admin = flask_admin.Admin(app, 'Water Quality Administation', index_view=MyAdminIndexView(), base_template='my_master.html')
+  admin = flask_admin.Admin(app, 'River WQ Administation', index_view=MyAdminIndexView(), base_template='my_master.html')
 
   # Add view
   admin.add_view(MyModelView(User, db.session))
@@ -70,12 +70,11 @@ def build_flask_admin(app):
   return
 
 def build_url_rules(app):
-  from view import ShowIntroPage, MyrtleBeachPage, SarasotaPage, PredictionsAPI, BacteriaDataAPI, StationDataAPI
+  from view import ShowIntroPage, SaludaPage, PredictionsAPI, BacteriaDataAPI, StationDataAPI
 
   #Page rules
   app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
-  app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
-  app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
+  app.add_url_rule('/myrtlebeach', view_func=SaludaPage.as_view('saluda'))
 
   #REST rules
   app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])
@@ -88,16 +87,6 @@ def build_url_rules(app):
       #return render_template('500.html'), 500
 
 
-  """
-  @app.route('/<sitename>/rest/info')
-  def info_page(sitename):
-    app.logger.debug("info_page for site: %s" % (sitename))
-
-    if sitename == 'myrtlebeach':
-      return send_from_directory('/var/www/flaskhowsthebeach/sites/myrtlebeach', 'info.html')
-    elif sitename == 'sarasota':
-      return send_from_directory('/var/www/flaskhowsthebeach/sites/sarasota', 'info.html')
-  """
   return
 
 def init_logging(app):

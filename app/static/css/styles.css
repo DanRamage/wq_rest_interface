@@ -356,3 +356,11 @@ and (max-device-width : 720px) {
     height: 75px;
     margin: 5px;
 }
+
+.message_area_text {
+	color: #FF5858;
+	background-color: #FFFFFF;
+}
+.message_text {
+	text-align: center;
+}

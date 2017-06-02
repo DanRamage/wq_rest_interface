@@ -6,7 +6,7 @@
 <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />-->
 <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-<title>HowstheBeach</title>
+<title>Hows My SC River</title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
@@ -51,15 +51,6 @@ $(document).bind("mobileinit", function() {
 
 <link rel="stylesheet" href="static/css/styles.css" />
 
-	<style>
-		.message_area_text {
-			color: #FF5858;
-			background-color: #FFFFFF;
-		}
-		.message_text {
-			text-align: center;
-		}
-	</style>
 </head>
 
 <body>
@@ -90,36 +81,15 @@ $(document).bind("mobileinit", function() {
 	<div id="mainfooter" data-role="footer" data-position="fixed" data-id="mainfooter" data-tap-toggle="false" data-theme="a">
 		<div data-role="navbar">
 			<ul id="navItems">
-        <li><a id="forecastButton" class="ui-state-persist ui-btn-active"
-               onclick="changeMapMarker('forecast');
-               $('#forecastButton').addClass('ui-state-persist');
-               $('#advisoriesButton').removeClass('ui-state-persist');
-               $('#dataButton').removeClass('ui-state-persist');">Forecast</a>
-        </li>
         <li><a id="advisoriesButton"
                onclick="changeMapMarker('advisories');
                $('#advisoriesButton').addClass('ui-state-persist');
                $('#forecastButton').removeClass('ui-state-persist');
-               $('#dataButton').removeClass('ui-state-persist');">Swim Advisory</a>
+               $('#dataButton').removeClass('ui-state-persist');">Advisories</a>
         </li>
-        <!--
-        <li><a id="dataButton"
-               onclick="changeMapMarker('data');
-               $('#dataButton').addClass('ui-state-persist');
-               $('#advisoriesButton').removeClass('ui-state-persist');
-               $('#forecastButton').removeClass('ui-state-persist');">Data</a>
-        </li>
-        -->
       </ul>
 		</div>
 	</div>
-	<!--
-	<div data-role="popup" id="site_message" data-history="false" data-position-to="window" data-transition="turn">
-		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-		<p>Due to Hurricane Matthew's damage of Springmaid Pier, data sources required
-		for the forecasts are currently unavailable.</p>
-	</div>
-	-->
 </div>
 
 <div id="beachListPage" data-role="page" data-title="HowstheBeach">
@@ -136,13 +106,9 @@ $(document).bind("mobileinit", function() {
 						<div id="arrows_1" class="arrow-asc"></div>
 						<div style="display:inline-block">Location</div>
 					</span>
-					<span onclick="sortBy(3)" class="list-table-heading">
-						<div id="arrows_3"></div>
-						<div id="forecast_column" style="display:inline-block">Forecast<br /></div>
-					</span>
 					<span onclick="sortBy(4)" class="list-table-heading">
 						<div id="arrows_4"></div>
-						<div style="display:inline-block">Swim<br />Advisory</div>
+						<div style="display:inline-block">Advisory</div>
 					</span>
 					<span onclick="sortBy(5)" class="list-table-heading"><div id="arrows_5"></div>
 						<div style="display:inline-block">Bacteria<br />Data</div>

@@ -68,14 +68,15 @@ class SitePage(View):
       url = ''
       description = ''
       swim_advisory_info = ''
-      if rec.sampling_program is not None:
-        sampling_program = rec.sampling_program
-      if rec.url is not None:
-        url = rec.url
-      if rec.description is not None:
-        description = rec.description
-      if rec.swim_advisory_info is not None:
-        swim_advisory_info = rec.swim_advisory_info
+      if rec is not None:
+        if rec.sampling_program is not None:
+          sampling_program = rec.sampling_program
+        if rec.url is not None:
+          url = rec.url
+        if rec.description is not None:
+          description = rec.description
+        if rec.swim_advisory_info is not None:
+          swim_advisory_info = rec.swim_advisory_info
       program_info = {
           'sampling_program': sampling_program,
           'url': url,

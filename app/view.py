@@ -64,12 +64,24 @@ class SitePage(View):
           'max_limit': limit.max_limit,
           'icon': limit.icon
         }
+      sampling_program = ''
+      url = ''
+      description = ''
+      swim_advisory_info = ''
+      if rec.sampling_program is not None:
+        sampling_program = rec.sampling_program
+      if rec.url is not None:
+        url = rec.url
+      if rec.description is not None:
+        description = rec.description
+      if rec.swim_advisory_info is not None:
+        swim_advisory_info = rec.swim_advisory_info
       program_info = {
-          'sampling_program': rec.sampling_program,
-          'url': rec.url,
-          'description': rec.description,
+          'sampling_program': sampling_program,
+          'url': url,
+          'description': description,
           'advisory_limits': limits,
-          'swim_advisory_info': rec.swim_advisory_info
+          'swim_advisory_info': swim_advisory_info
         }
     except Exception as e:
       current_app.logger.exception(e)

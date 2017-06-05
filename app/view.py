@@ -81,13 +81,10 @@ class SitePage(View):
     start_time = time.time()
     data = {}
     try:
-      if self.site_name == 'myrtlebeach':
+      if self.site_name == 'saluda':
         #Get prediction data
-        prediction_data, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
-        advisory_data, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
-      elif self.site_name == 'sarasota':
-        prediction_data, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
-        advisory_data,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+        prediction_data, ret_code = get_data_file(SC_RIVERS_PREDICTIONS_FILE)
+        advisory_data, ret_code = get_data_file(SC_RIVERS_ADVISORIES_FILE)
 
       data = {
         'prediction_data': simplejson.loads(prediction_data),

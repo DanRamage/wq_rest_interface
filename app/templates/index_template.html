@@ -260,7 +260,7 @@ $(document).bind("mobileinit", function() {
         <h3>Indicators</h3>
         <p> {{ sampling_program_info.description }}</p>
         <p>
-          {%  if sampling_program_info.advisory_limits|length %}
+          {%  if advisory_limits in sampling_program_info %}
             {% for limit_type, limit_rec in sampling_program_info.advisory_limits.iteritems() %}
               {% if limit_type != 'No data' %}
                 {% if limit_type != 'High' %}

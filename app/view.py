@@ -21,7 +21,7 @@ from admin_models import User
 from wq_models import Project_Area, Site_Message, Project_Info_Page, Advisory_Limits
 
 SC_RIVERS_PREDICTIONS_FILE='/mnt/sc_rivers_wq/Predictions.json'
-SC_RIVERS_ADVISORIES_FILE='/mnt/sc_rivers_wq/monitorstations/beachAdvisoryResults.json'
+SC_RIVERS_ADVISORIES_FILE='/mnt/sc_rivers_wq/beachAdvisoryResults.json'
 SC_RIVERS_STATIONS_DATA_DIR='/mnt/sc_rivers_wq/monitorstations'
 
 

@@ -144,7 +144,7 @@ def get_data_file(filename):
 
   ret_code = 404
   results = {'status': {'http_code': ret_code},
-                'contents': None
+                'contents': {}
                 }
 
   try:

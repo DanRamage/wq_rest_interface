@@ -28,7 +28,7 @@ var site;
 function initialize_app(site_name, data, limits) {
   site = site_name;
   advisory_limits = limits;
-  var forecast data;
+  var forecast_data;
   if('contents' in data['prediction_data']) {
     forecast_date = data['prediction_data'].contents.testDate;
     $.each(data['prediction_data'].contents.stationData.features, function (i, beach) {

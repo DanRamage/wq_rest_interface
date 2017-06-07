@@ -30,7 +30,7 @@ function initialize_app(site_name, data, limits) {
   advisory_limits = limits;
 
   var forecast_data;
-  if('contents' in data['prediction_data']) {
+  if(data['prediction_data'].contents !== null ) {
     forecast_date = data['prediction_data'].contents.testDate;
     $.each(data['prediction_data'].contents.stationData.features, function (i, beach) {
       predictionData[beach.properties.station] = {

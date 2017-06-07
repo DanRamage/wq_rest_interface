@@ -666,7 +666,8 @@ if(onlineStatus != 'off'){
       $.each( currentEtcoc, function(i, station) {
         var forecast = 'None';
         var station_message = '';
-        if(i in predictionData)
+
+        if(Object.keys(predictionData).length && i in predictionData)
         {
           //Map markers
           if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {

@@ -142,11 +142,6 @@ class SaludaPage(SitePage):
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
 
-  ret_code = 404
-  results = {'status': {'http_code': ret_code},
-                'contents': {}
-                }
-
   try:
     current_app.logger.debug("Opening file: %s" % (filename))
     with open(filename, 'r') as data_file:
@@ -155,6 +150,11 @@ def get_data_file(filename):
 
   except (Exception, IOError) as e:
     current_app.logger.exception(e)
+
+    ret_code = 404
+    results = simplejson.dumps({'status': {'http_code': ret_code},
+                    'contents': None
+                    })
 
   current_app.logger.debug("get_data_file Finished.")
 

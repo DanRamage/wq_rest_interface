@@ -667,8 +667,9 @@ if(onlineStatus != 'off'){
         var forecast = 'None';
         var station_message = '';
 
-        if(Object.keys(predictionData).length && i in predictionData)
-        {
+        forecast = 'None';
+        station_message = '';
+        if(Object.keys(predictionData).length && i in predictionData) {
           //Map markers
           if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {
             forecast = 'None';
@@ -683,78 +684,62 @@ if(onlineStatus != 'off'){
           else {
             station_message = '';
           }
-          var dateIcon = '';
-
-          var sample_date = '';
-          if (typeof station.date === "undefined" || station.date.length === 0) {
-            dateIcon = '';
-            var data = 'None';
-          }
-          else {
-            var sample_date = new Date(parseDate(station.date));
-            //dateIcon = ' (' + new Date(parseDate(station.date)).getDate() + ' ' + month[new Date(parseDate(station.date)).getMonth()] + ' \'' + new Date(parseDate(station.date)).getFullYear().toString().substr(2, 2) + ')';
-            dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
-            var data = station.value;
-          }
-
-          /*
-          if (markerType == 'data') {
-            markerRating = calcDataRating(data, station.date);
-          }
-          */
-          if (markerType == 'forecast') {
-            markerRating = forecast;
-          }
-
-          if (markerType == 'advisories') {
-            //markerRating = calcAdvisoryRating(station.advisory);
-            markerRating = calcDataRating(data, station);
-
-          }
-
-
-          //https://developers.google.com/maps/documentation/javascript/reference#MapTypeControlStyle for options to disable other elements on the map
-          var myStyles = [
-            {
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [
-                {visibility: "off"}
-              ]
-            }
-          ];
-
-          $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.MAP);
-          $('#map_canvas').gmap('option', 'styles', myStyles);
-          $('#map_canvas').gmap('option', 'disableDefaultUI', true); //disable all controls then add in what we want
-          $('#map_canvas').gmap('option', 'mapTypeControl', true);
-          $('#map_canvas').gmap('option', 'streetViewControl', true);
-          $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
-
-          $('#map_canvas').gmap('addMarker', {
-            'position': new google.maps.LatLng(station.lat, station.lng),
-            'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
-            'bounds': bounds
-          }).click(function () {
-            /*
-            var popup_label_class = 'popup_label_none';
-            if(dateIcon.length) {
-              popup_label_class = "popup_label_" + calcDataRating(data, station);
-            }
-            */
-            $('#map_canvas').gmap('openInfoWindow', {
-              'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
-              '<div>' +
-              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
-              '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
-              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) +'">' + data + '</span></div></div>' +
-              '<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>' +
-              '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +
-              '</div>' +
-              '</div>'
-            }, this);
-          });
         }
+        var dateIcon = '';
+
+        var sample_date = '';
+        if (typeof station.date === "undefined" || station.date.length === 0) {
+          dateIcon = '';
+          var data = 'None';
+        }
+        else {
+          var sample_date = new Date(parseDate(station.date));
+          dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
+          var data = station.value;
+        }
+
+        if (markerType == 'forecast') {
+          markerRating = forecast;
+        }
+
+        if (markerType == 'advisories') {
+          markerRating = calcDataRating(data, station);
+        }
+        //https://developers.google.com/maps/documentation/javascript/reference#MapTypeControlStyle for options to disable other elements on the map
+        var myStyles = [
+          {
+            featureType: "poi",
+            elementType: "labels",
+            stylers: [
+              {visibility: "off"}
+            ]
+          }
+        ];
+
+        $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.MAP);
+        $('#map_canvas').gmap('option', 'styles', myStyles);
+        $('#map_canvas').gmap('option', 'disableDefaultUI', true); //disable all controls then add in what we want
+        $('#map_canvas').gmap('option', 'mapTypeControl', true);
+        $('#map_canvas').gmap('option', 'streetViewControl', true);
+        $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
+
+        $('#map_canvas').gmap('addMarker', {
+          'position': new google.maps.LatLng(station.lat, station.lng),
+          'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
+          'bounds': bounds
+        }).click(function () {
+          $('#map_canvas').gmap('openInfoWindow', {
+            'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
+            '<div>' +
+            '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
+            '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
+            '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) +'">' + data + '</span></div></div>' +
+            '<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>' +
+            '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +
+            '</div>' +
+            '</div>'
+          }, this);
+        });
       });
 
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type

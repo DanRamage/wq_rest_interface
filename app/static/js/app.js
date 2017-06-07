@@ -29,9 +29,8 @@ function initialize_app(site_name, data, limits) {
   site = site_name;
   advisory_limits = limits;
 
-  var forecast_data;
   if(data['prediction_data'].contents !== null ) {
-    forecast_date = data['prediction_data'].contents.testDate;
+    var forecast_date = data['prediction_data'].contents.testDate;
     $.each(data['prediction_data'].contents.stationData.features, function (i, beach) {
       predictionData[beach.properties.station] = {
         "station": beach.properties.station,
@@ -435,54 +434,6 @@ $.ajax({
 //Using $.ajax and async: false, rather than $.getJSON to ensure that currentEtcoc is populated before pages try to use it.
 
 if(onlineStatus != 'off'){
-  /*
-  var currentEtcoc = {};
-
-  $.ajax({
-      type: "GET",
-      cache : false,
-      async: false,
-      crossDomain: false,
-      timeout: 5000,
-      //url: site_base_url + "sample_data/current_results",
-      url: "/sample_data/current_results/" + site,
-      dataType: "json",
-      success: function(currentData) {
-        $.each(currentData.contents.features, function(s,stations){
-          //if(stations.geometry.coordinates[1] <= 33.8241275 && stations.geometry.coordinates[1] >= 33.575971){ //Remove all sites outside the Grand Strand area
-
-            permanentAdvisory = stations.properties.sign;
-
-            $.each(stations.properties.test, function(i,j){
-
-              //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
-              if(parseInt(j.value,10) >= 104 || permanentAdvisory === true){
-                if(permanentAdvisory === true){
-                  advisoryText = 'Long Term';
-                }
-                else{
-                  advisoryText = 'Yes';
-                }
-              }
-              else{
-                advisoryText = 'None';
-              }
-
-              currentEtcoc[stations.properties.station] = {"desc" : stations.properties.desc, "date" : j.date, "lat" : stations.geometry.coordinates[1], "lng" : stations.geometry.coordinates[0], "value" : j.value, "advisory" : advisoryText};
-
-            });
-            console.log('CE:'+currentEtcoc);
-
-          //}
-
-        });
-      },
-      error: function (xhr, ajaxOptions, thrownError) {
-        //alert(xhr.status);
-        //alert(thrownError);
-      }
-  });
-  */
 
   function calcDataRating(etcoc, station_data) {
     var rating = 'none';

@@ -16,7 +16,7 @@ var dateSet;
 var onlineStatus = 'on';
 
 var current_date = new Date();
-var markerType = 'forecast'; //Initial markers set to show forecast results
+var markerType = 'advisories'; //Initial markers set to show forecast results
 
 var advisory_limits;
 var predictionData = {};

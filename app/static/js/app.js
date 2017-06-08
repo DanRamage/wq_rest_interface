@@ -891,7 +891,6 @@ if(onlineStatus != 'off'){
       }
     }
     $('#beachList li').remove();
-    var currentSection;
 
     $.each(currentEtcoc, function(i,station){
       var span_entries = [];

@@ -981,16 +981,17 @@ if(onlineStatus != 'off'){
   var monitoringChart;
 
   $('#beachDetailsPage').bind('pageinit', function(event) {
-
-    $( "#details_forecast_column" ).append(' ('+new Date().getDate()+' '+month[new Date().getMonth()]+')');
-
-    if(currentEtcoc[$.mobile.pageData.id].date.length == 0 || typeof currentEtcoc[$.mobile.pageData.id].date === "undefined"){
-      $( "#details_data_column" ).append('<span>&nbsp;</span>'); //need to keep number of spans consistent - maybe not necessary here like it is on the beach list page
+    if(has_prediction_data) {
+      $("#details_forecast_column").append(' (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')');
     }
-    else{
-      $( "#details_data_column" ).append(' ('+new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getDate()+' '+month[new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getMonth()]+' \''+new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getFullYear().toString().substr(2,2)+')');
+    if(has_sample_data) {
+      if (currentEtcoc[$.mobile.pageData.id].date.length == 0 || typeof currentEtcoc[$.mobile.pageData.id].date === "undefined") {
+        $("#details_data_column").append('<span>&nbsp;</span>'); //need to keep number of spans consistent - maybe not necessary here like it is on the beach list page
+      }
+      else {
+        $("#details_data_column").append(' (' + new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getDate() + ' ' + month[new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getMonth()] + ' \'' + new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getFullYear().toString().substr(2, 2) + ')');
+      }
     }
-
     dateSet = 1;
 
 

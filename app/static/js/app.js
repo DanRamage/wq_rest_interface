@@ -77,7 +77,7 @@ function initialize_app(site_name, data, limits) {
 
       });
     });
-    var_has_sample_data = true;
+    has_sample_data = true;
   }
   return;
 }

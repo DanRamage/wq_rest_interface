@@ -1,0 +1,47 @@
+{% extends "index_template_base.html" %}
+{% block title %}My SC Rivers{% endblock %}
+{% block about_content %}
+  <div data-role="collapsible-set" data-inset="false">
+    <div data-role="collapsible" data-collapsed="false">
+      <h3>&nbsp;About</h3>
+
+        <div class="logo_container">
+        </div>
+    </div>
+    <div data-role="collapsible">
+      <h3>&nbsp;Swim Advisory Data</h3>
+      <p><h3>{{ sampling_program_info.sampling_program }} Sampling Program </h3>
+        {{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank">program page</a>
+      </p>
+      <h3>Swimming Advisories</h3>
+      <p>
+        {{ sampling_program_info.swim_advisory_info }}
+      </p>
+
+      <h3>Indicators</h3>
+      <p> {{ sampling_program_info.description }}</p>
+      <p>
+        {% if sampling_program_info.advisory_limits %}
+          {% for limit_type, limit_rec in sampling_program_info.advisory_limits.iteritems() %}
+            {% if limit_type != 'No data' %}
+              {% if limit_type != 'High' %}
+                <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level ({{ limit_rec.min_limit }}-{{ limit_rec.max_limit }} per 100mL of water)<br />
+              {% else %}
+                <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level (>{{ limit_rec.min_limit }} per 100mL of water)<br />
+              {% endif %}
+            {% else %}
+              <img src="/static/images/{{ limit_rec.icon }}" /> No data available in the last 30 days<br />
+            {% endif %}
+          {%  endfor %}
+        {% endif %}
+      </p>
+
+        <!--
+        <p><img src="/static/images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
+        <img src="/static/images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />
+        <img src="/static/images/high_marker.png" /> Permanent: SCDHEC has issued a swimming advisory on a permanent basis. These are issued in specific locations where the bacteria water quality standard has been exceeded frequently in previous monitoring.</p>
+        -->
+    </div>
+  </div>
+
+{% endblock %}

@@ -6,7 +6,9 @@
 <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />-->
 <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-<title>Hows My SC River</title>
+<title>
+  {%  block title %}{%  endblock %}
+</title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
@@ -209,66 +211,9 @@ $(document).bind("mobileinit", function() {
 		</div>
 	</div>
 
-	<div data-role="content">
-
-		<div data-role="collapsible-set" data-inset="false">
-			<div data-role="collapsible" data-collapsed="false">
-				<h3>&nbsp;About</h3>
-
-					<div class="logo_container">
-					</div>
-			</div>
-			<div data-role="collapsible" id="forecast_panel">
-			<h3>&nbsp;Forecast</h3>
-				<h3>What is the forecast?</h3>
-					<p>Bacteria levels can change very rapidly between sampling dates. To fill in the gaps, we make daily predictions of bacteria conditions. <strong>These predictions do not represent swimming advisories</strong>, but provide estimates of the likelihood that bacteria conditions would warrant issuing an advisory if sampling were conducted that day.</p><p><strong>These forecasts are for informational purposes only</strong></p>
-					<p>The probability that today's bacteria level will exceed the safe swimming standard based on an automated prediction system.</p>
-                    <p>
-                        <img src="/static/images/none_marker.png" /> No forecast available<br />
-                        <img src="/static/images/low_marker.png" /> Low<br />
-                        <img src="/static/images/medium_marker.png" /> Medium<br />
-                        <img src="/static/images/high_marker.png" /> High<br />
-                    </p>
-				    <h3>How is the forecast generated?</h3>
-					   <p>Predictions are made based on relationships between bacteria level and rainfall, salinity, wind conditions, and water temperature found in previous sampling. These relationships are used to create daily estimates of bacteria level.</p>
-			</div>
-			<div data-role="collapsible">
-				<h3>&nbsp;Swim Advisory Data</h3>
-        <p><h3>{{ sampling_program_info.sampling_program }} Sampling Program </h3>
-          {{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank">program page</a>
-        </p>
-        <h3>Swimming Advisories</h3>
-        <p>
-          {{ sampling_program_info.swim_advisory_info }}
-        </p>
-
-        <h3>Indicators</h3>
-        <p> {{ sampling_program_info.description }}</p>
-        <p>
-          {% if sampling_program_info.advisory_limits %}
-            {% for limit_type, limit_rec in sampling_program_info.advisory_limits.iteritems() %}
-              {% if limit_type != 'No data' %}
-                {% if limit_type != 'High' %}
-                  <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level ({{ limit_rec.min_limit }}-{{ limit_rec.max_limit }} per 100mL of water)<br />
-                {% else %}
-                  <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level (>{{ limit_rec.min_limit }} per 100mL of water)<br />
-                {% endif %}
-              {% else %}
-                <img src="/static/images/{{ limit_rec.icon }}" /> No data available in the last 30 days<br />
-              {% endif %}
-            {%  endfor %}
-          {% endif %}
-        </p>
-
-          <!--
-					<p><img src="/static/images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
-					<img src="/static/images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />
-					<img src="/static/images/high_marker.png" /> Permanent: SCDHEC has issued a swimming advisory on a permanent basis. These are issued in specific locations where the bacteria water quality standard has been exceeded frequently in previous monitoring.</p>
-					-->
-			</div>
-		</div>
-
-    </div>
+	<div id="about_content" data-role="content">
+    {% block about_content%}{% endblock %}
+  </div>
 
 </div>
 

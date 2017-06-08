@@ -20,7 +20,9 @@ var markerType = 'advisories'; //Initial markers set to show forecast results
 
 var advisory_limits;
 var predictionData = {};
+var has_prediction_data = false;
 var currentEtcoc = {};
+var has_sample_data = false;
 var wq_site_name = "";
 var wq_site_bbox;
 var site;
@@ -43,38 +45,40 @@ function initialize_app(site_name, data, limits) {
         "lng": beach.geometry.coordinates[0]
       };
     });
+    has_prediction_data = true;
   }
+  if(data['advisory_data'].features !== null) {
+    $.each(data['advisory_data'].features, function (s, stations) {
+      permanentAdvisory = stations.properties.sign;
 
-  $.each(data['advisory_data'].features, function(s,stations){
-    permanentAdvisory = stations.properties.sign;
+      $.each(stations.properties.test, function (i, j) {
 
-    $.each(stations.properties.test, function(i,j){
-
-      //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
-      if(parseInt(j.value,10) >= limits['High'].min_limit || permanentAdvisory === true){
-        if(permanentAdvisory === true){
-          advisoryText = 'Long Term';
+        //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
+        if (parseInt(j.value, 10) >= limits['High'].min_limit || permanentAdvisory === true) {
+          if (permanentAdvisory === true) {
+            advisoryText = 'Long Term';
+          }
+          else {
+            advisoryText = 'Yes';
+          }
         }
-        else{
-          advisoryText = 'Yes';
+        else {
+          advisoryText = 'None';
         }
-      }
-      else{
-        advisoryText = 'None';
-      }
 
-      currentEtcoc[stations.properties.station] = {
-        "desc" : stations.properties.desc,
-        "date" : j.date,
-        "lat" : stations.geometry.coordinates[1],
-        "lng" : stations.geometry.coordinates[0],
-        "value" : j.value,
-        "advisory" : advisoryText
-      };
+        currentEtcoc[stations.properties.station] = {
+          "desc": stations.properties.desc,
+          "date": j.date,
+          "lat": stations.geometry.coordinates[1],
+          "lng": stations.geometry.coordinates[0],
+          "value": j.value,
+          "advisory": advisoryText
+        };
 
+      });
     });
-  });
-
+    var_has_sample_data = true;
+  }
   return;
 }
 
@@ -880,38 +884,19 @@ if(onlineStatus != 'off'){
 
   $('#beachListPage').bind('pageinit', function(event) {
 
-    var trans = {'Gardcty' : 'Garden City - 3rd Ave S to Azalea Ace', 'NMB2' : 'North Myrtle Beach - 16th Ave N to 17th Ave S', 'NMB3' : 'North Myrtle Beach - 33rd Ave S to 2m N of Wyndham Hotel', 'MB1' : 'Myrtle Beach - Lands End Resort, Arcadia to 77th Ave N', 'MB2' : 'Myrtle Beach - Cane Patch Swatch to 34th Ave N', 'MB3' : 'Myrtle Beach - 24th Ave N to Withers Swash', 'MB4' : 'Myrtle Beach - 23rd Ave S to Myrtle Beach State Park', 'Surfside' : 'Surfside - Pirateland Swash to 3rd Ave N'};
-
-    if(typeof dateSet === 'undefined'){
-      $( "#forecast_column" ).append(' ('+new Date().getDate()+' '+month[new Date().getMonth()]+')');
-      dateSet = 1;
+    if(has_prediction_data) {
+      if (typeof dateSet === 'undefined') {
+        $("#forecast_column").append(' (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')');
+        dateSet = 1;
+      }
     }
-
     $('#beachList li').remove();
     var currentSection;
 
     $.each(currentEtcoc, function(i,station){
+      var span_entries = [];
 
-      if(typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST"){
-        var forecast = 'None';
-      }
-      else{
-        var forecast = predictionData[i].ensemble;
-      }
-
-      var dateIcon = '';
-
-      if(typeof station.date === "undefined" || station.date.length === 0){
-        dateIcon = '<span>&nbsp;</span>'; //need to keep number of spans consistent which is important for column sorting and was being affected if no data available and hence no date span being displayed
-        var data = 'None';
-      }
-      else{
-        var sample_date = new Date(parseDate(station.date));
-        dateIcon = ' ('+sample_date.getDate()+'&nbsp;'+month[sample_date.getMonth()]+' \''+sample_date.getFullYear().toString().substr(2,2)+')';
-        //dateIcon = ' ('+new Date(parseDate(station.date)).getDate()+'&nbsp;'+month[new Date(parseDate(station.date)).getMonth()]+' \''+new Date(parseDate(station.date)).getFullYear().toString().substr(2,2)+')';
-        var data = station.value;
-      }
-
+      //Site location span.
       if(typeof userLat !== 'undefined'){
         distance = calcDistance(userLat,userLng,station.lat,station.lng)*0.621371;
         if(distance <100){
@@ -930,8 +915,43 @@ if(onlineStatus != 'off'){
         distance = '';
         distanceUnits = '';
       }
+      span_entries.push('<span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br/>\
+            <span id="' + distance + '" style="font-weight:normal">' + distance + '</span>\
+            <span style="font-weight:normal">' + distanceUnits + '</span>\
+          </span>'
+       )
+      if(has_prediction_data) {
+        if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {
+          var forecast = 'None';
+        }
+        else {
+          var forecast = predictionData[i].ensemble;
+        }
+        //Forecast span
+        span_entries.push('<span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span>')
+      }
+      var dateIcon = '';
 
-      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
+      if(typeof station.date === "undefined" || station.date.length === 0){
+        dateIcon = '<span>&nbsp;</span>'; //need to keep number of spans consistent which is important for column sorting and was being affected if no data available and hence no date span being displayed
+        var data = 'None';
+      }
+      else{
+        var sample_date = new Date(parseDate(station.date));
+        dateIcon = ' ('+sample_date.getDate()+'&nbsp;'+month[sample_date.getMonth()]+' \''+sample_date.getFullYear().toString().substr(2,2)+')';
+        //dateIcon = ' ('+new Date(parseDate(station.date)).getDate()+'&nbsp;'+month[new Date(parseDate(station.date)).getMonth()]+' \''+new Date(parseDate(station.date)).getFullYear().toString().substr(2,2)+')';
+        var data = station.value;
+      }
+      //Advisory span
+      span_entries.push('<span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span>')
+      //Sample data span
+      span_entries.push('<span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br/>'+dateIcon+'</span></a>')
+      var list_entry = '<li data-theme="d" style="padding:0" data-icon="false"\
+            data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a\
+          style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '">'\
+          + span_entries.join('') + '</li>';
+      $('#beachList').append(list_entry);
+      //$('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
 
     });
 

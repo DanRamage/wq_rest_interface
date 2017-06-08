@@ -1004,6 +1004,29 @@ if(onlineStatus != 'off'){
     $('#detail_map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
 
 
+    //Build band limits/colors based on what we have.
+    var plot_bands = [];
+    if('Low' in advisory_limits) {
+      plot_bands.push({
+        color: '#96ca2d',
+        from: advisory_limits['Low'].min_limit,
+        to: advisory_limits['Low'].max_limit
+      });
+    }
+    if('Medium' in advisory_limits) {
+      plot_bands.push({
+        color: '#F9FA4A',
+        from: advisory_limits['Medium'].min_limit,
+        to: advisory_limits['Medium'].max_limit
+      });_
+    }
+    if('High' in advisory_limits) {
+      plot_bands.push({
+        color: '#DB1A0F',
+        from: advisory_limits['High'].min_limit,
+        to: 10000
+      });_
+    }
 
     //Set up monitoring data graph - no data at this stage - this gets populated when #beachDetailsPage is loaded with station code
     options = {
@@ -1065,31 +1088,7 @@ if(onlineStatus != 'off'){
                     text: 'Bacteria per 100 mL',
                     margin: 25
                 },
-                plotBands: [{
-                    color: '#96ca2d',
-                    from: advisory_limits['Low'].min_limit,
-                    to: advisory_limits['Low'].max_limit},
-                    {color: '#F9FA4A',
-                    from: advisory_limits['Medium'].min_limit,
-                    to: advisory_limits['Medium'].max_limit},
-                    {color: '#DB1A0F',
-                    from: advisory_limits['High'].min_limit,
-                    to: 10000}
-                    ]
-
-              /*
-                plotBands: [{
-                    color: '#96ca2d',
-                    from: 0,
-                    to: 50},
-                    {color: '#F9FA4A',
-                    from: 50,
-                    to: 104},
-                    {color: '#DB1A0F',
-                    from: 104,
-                    to: 10000}
-                    ]
-               */
+                plotBands: plot_bands
             },
             tooltip: {
                 formatter: function() {

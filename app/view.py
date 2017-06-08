@@ -116,7 +116,7 @@ class SitePage(View):
     data = self.get_data()
     try:
       current_app.logger.debug('Site: %s rendered.' % (self.site_name))
-      rendered_template = render_template('index_template.html',
+      rendered_template = render_template('sc_rivers_index.html',
                              site_message=site_message,
                              site_name=self.site_name,
                              wq_site_bbox='',
@@ -124,7 +124,7 @@ class SitePage(View):
                              data=data)
     except Exception as e:
       current_app.logger.exception(e)
-      rendered_template = render_template('index_template.html',
+      rendered_template = render_template('sc_rivers_index.html',
                                site_message='',
                                site_name=self.site_name,
                                wq_site_bbox='',

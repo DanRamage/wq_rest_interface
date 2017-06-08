@@ -1028,6 +1028,7 @@ if(onlineStatus != 'off'){
       });
     }
 
+
     //Set up monitoring data graph - no data at this stage - this gets populated when #beachDetailsPage is loaded with station code
     options = {
         chart: {

@@ -1018,14 +1018,14 @@ if(onlineStatus != 'off'){
         color: '#F9FA4A',
         from: advisory_limits['Medium'].min_limit,
         to: advisory_limits['Medium'].max_limit
-      });_
+      });
     }
     if('High' in advisory_limits) {
       plot_bands.push({
         color: '#DB1A0F',
         from: advisory_limits['High'].min_limit,
         to: 10000
-      });_
+      });
     }
 
     //Set up monitoring data graph - no data at this stage - this gets populated when #beachDetailsPage is loaded with station code

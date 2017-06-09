@@ -1,5 +1,7 @@
 {% extends "index_template_base.html" %}
+{% block title %}My SC Rivers{% endblock %}
 {% block head %}
+    {{ super() }}
     <style type="text/css">
       .details-table-heading{
         display:block;
@@ -11,7 +13,6 @@
       }
     </style>
 {% endblock %}
-{% block title %}My SC Rivers{% endblock %}
 {% block about_content %}
   <div data-role="collapsible-set" data-inset="false">
     <div data-role="collapsible" data-collapsed="false">

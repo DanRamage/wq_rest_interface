@@ -135,7 +135,6 @@
 	</div>
 </div>
 
-{% block site_popup %}{% endblock %}
 
 <script src="static/js/app.js"></script>
 <script>
@@ -143,6 +142,8 @@
   function wq_app() {
     var self = this;
   }
+  {% block site_popup %}{% endblock %}
+
 </script>
 
 </body>

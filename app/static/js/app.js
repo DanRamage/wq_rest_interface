@@ -736,9 +736,8 @@ if(onlineStatus != 'off'){
             'content': $('#infoPopup'),
             this
           });
-
-        /*
-        click(function () {
+      });
+        /*click(function () {
           $('#map_canvas').gmap('openInfoWindow', {
             'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
             '<div>' +
@@ -750,9 +749,7 @@ if(onlineStatus != 'off'){
             '</div>' +
             '</div>'
           }, this);
-          */
-        });
-      });
+        });*/
 
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type
   }

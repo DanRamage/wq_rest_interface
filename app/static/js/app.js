@@ -733,9 +733,13 @@ if(onlineStatus != 'off'){
           'bounds': bounds
         }).click(function () {
           var popup_items = [];
-          popup_items.push('<div class="info_popup_forecast_outer_div"><div id="info_popup_forecast" class="info_popup_forecast_inner_div">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
-          popup_items.push('<div class="info_popup_advisory_outer_div"><div id="info_popup_advisory" class="info_popup_advisory_inner_div">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">');
-          popup_items.push('<div class="info_popup_data_outer_div"><div id="info_popup_sample_data" class="info_popup_data_inner_div">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) +'">' + data + '</span></div></div>');
+          if(has_prediction_data) {
+            popup_items.push('<div class="info_popup_forecast_outer_div"><div id="info_popup_forecast" class="info_popup_forecast_inner_div">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
+          }
+          if(has_sample_data) {
+            popup_items.push('<div class="info_popup_advisory_outer_div"><div id="info_popup_advisory" class="info_popup_advisory_inner_div">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">');
+            popup_items.push('<div class="info_popup_data_outer_div"><div id="info_popup_sample_data" class="info_popup_data_inner_div">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) + '">' + data + '</span></div></div>');
+          }
           var site_popup = '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
                         '<div>' +
                         popup_items.join('') +

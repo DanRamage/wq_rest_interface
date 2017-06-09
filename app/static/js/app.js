@@ -733,7 +733,7 @@ if(onlineStatus != 'off'){
           'bounds': bounds
         }).click(function () {
           $('#map_canvas').gmap('openInfoWindow',
-            {'content': $('#infoPopup')}, this);
+            {'content': site_popup}, this);
         });
       });
     /*

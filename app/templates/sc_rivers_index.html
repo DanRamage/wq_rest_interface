@@ -1,4 +1,16 @@
 {% extends "index_template_base.html" %}
+{% block head %}
+    <style>
+      .details-table-heading{
+        display:block;
+        width:49%;
+        float:left;
+        text-align: center;
+        padding:10px 0 0 0;
+        border-right: 1px solid #FFF;
+      }
+    </style>
+{% endblock %}
 {% block title %}My SC Rivers{% endblock %}
 {% block about_content %}
   <div data-role="collapsible-set" data-inset="false">

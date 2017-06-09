@@ -1158,7 +1158,6 @@ if(onlineStatus != 'off'){
 
   });
 
-
   $('#beachDetailsPage').bind('pageshow', function(event) { //graph generation needs to be on pageshow, else x-axis labels are cut off
 
     var graphHeight = getScreenSize('height') - document.getElementById('detailsheader').offsetHeight - document.getElementById('beachDetailsContainer').offsetHeight;

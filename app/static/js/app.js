@@ -733,6 +733,13 @@ if(onlineStatus != 'off'){
           'bounds': bounds
         }).click(function () {
           $('#map_canvas').gmap('openInfoWindow', {
+            'content': $('#infoPopup'),
+            this
+          });
+
+        /*
+        click(function () {
+          $('#map_canvas').gmap('openInfoWindow', {
             'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
             '<div>' +
             '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
@@ -743,6 +750,7 @@ if(onlineStatus != 'off'){
             '</div>' +
             '</div>'
           }, this);
+          */
         });
       });
 

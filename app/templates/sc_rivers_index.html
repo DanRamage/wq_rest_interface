@@ -2,6 +2,7 @@
 {% block title %}My SC Rivers{% endblock %}
 {% block post_css_block %}
     {{ super() }}
+    <!--Change the widths since we don't have the forecast columns -->
     <style type="text/css">
       .details-table-heading{
         width:49%;
@@ -9,7 +10,6 @@
       .details-rating{
         width:49%;
       }
-
     </style>
 {% endblock %}
 {% block about_content %}
@@ -47,12 +47,6 @@
           {%  endfor %}
         {% endif %}
       </p>
-
-        <!--
-        <p><img src="/static/images/low_marker.png" /> None: there is no swimming advisory issued and it is considered safe to swim at this beach<br />
-        <img src="/static/images/high_marker.png" /> Yes: an advisory is current – DHEC does not recommend swimming at this beach<br />
-        <img src="/static/images/high_marker.png" /> Permanent: SCDHEC has issued a swimming advisory on a permanent basis. These are issued in specific locations where the bacteria water quality standard has been exceeded frequently in previous monitoring.</p>
-        -->
     </div>
   </div>
 
@@ -146,4 +140,10 @@
 
   </div>
 
+{% endblock %}
+
+{% block site_popup %}
+  <div id="infoPopup">
+    This is a test.
+  </div>
 {% endblock %}

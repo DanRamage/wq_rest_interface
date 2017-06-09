@@ -733,11 +733,11 @@ if(onlineStatus != 'off'){
           'bounds': bounds
         }).click(function () {
           $('#map_canvas').gmap('openInfoWindow', {
-            'content': $('#infoPopup'),
+            'content': $('#infoPopup')},
             this
-          });
+          );
       });
-        
+
         /*click(function () {
           $('#map_canvas').gmap('openInfoWindow', {
             'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +

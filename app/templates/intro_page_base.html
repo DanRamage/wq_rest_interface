@@ -23,16 +23,8 @@
   <body>
 
     <div class="container-fluid">
-      <div class="row row-buffer-20px"></div>
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <img class="img-rounded" src="static/images/swimmer_icon.png"  style="width: 80px; height: 80px;">
-        </div>
-      </div>
-      <div class="row">
-        <div id="header_block" class="col-lg-12 header_text">
-          {%  block header_block %}{% endblock %}
-        </div>
+      <div id="header_block">
+        {% block header_block %}{% endblock %}
       </div>
       <div id="marketing_block" class="marketing">
         {% block marketing_block %}{% endblock %}

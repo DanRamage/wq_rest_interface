@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" class="full">
+
+  <head>
+    {%  block heead %}
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!--
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      -->
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <title>
+        {%  block title %}{%  endblock %}
+      </title>
+
+      <!-- Bootstrap -->
+      <link href="static/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <link href="static/css/styles.css" rel="stylesheet">
+      <link href="static/css/intro_page.css" rel="stylesheet">
+    {% endblock %}
+  </head>
+  <body>
+
+    <div class="container-fluid">
+      <div class="row row-buffer-20px"></div>
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <img class="img-rounded" src="static/images/swimmer_icon.png"  style="width: 80px; height: 80px;">
+        </div>
+      </div>
+      <div class="row">
+        <div id="header_block" class="col-lg-12 header_text">
+          {%  block header_block %}{% endblock %}
+        </div>
+      </div>
+      <div id="marketing_block" class="marketing">
+        {% block marketing_block %}{% endblock %}
+      <footer id="footer_block" class="footer footer_text">
+        {% block footer_block %}{% endblock %}
+      </footer>
+    </div>
+  </body>
+</html>

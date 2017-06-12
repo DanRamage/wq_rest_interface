@@ -28,7 +28,7 @@ SC_RIVERS_STATIONS_DATA_DIR='/mnt/sc_rivers_wq/monitorstations'
 class ShowIntroPage(View):
   def dispatch_request(self):
     current_app.logger.debug('intro_page rendered')
-    return render_template("intro_page.html")
+    return render_template("sc_rivers_intro_page.html")
 
 class SitePage(View):
   def __init__(self, site_name):

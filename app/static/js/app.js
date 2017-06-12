@@ -54,7 +54,7 @@ function initialize_app(site_name, data, limits) {
       $.each(stations.properties.test, function (i, j) {
 
         //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
-        if (parseInt(j.value, 10) >= limits['High'].min_limit || permanentAdvisory === true) {
+        if (parseInt(j.value, 10) >= limits["High"].min_limit || permanentAdvisory === true) {
           if (permanentAdvisory === true) {
             advisoryText = 'Long Term';
           }
@@ -466,13 +466,13 @@ if(onlineStatus != 'off'){
         if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
           rating = 'none';
         }
-        else if((isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) ||
-          (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit))
+        else if((isNaN(etcoc) || etcoc <= advisory_limits["Low"].max_limit) ||
+          (etcoc > advisory_limits["Low"].max_limit && etcoc <= advisory_limits["Medium"].max_limit))
         {
           rating = 'low';
         }
         /*
-        else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
+        else if (etcoc > advisory_limits["Low"].max_limit && etcoc <= advisory_limits["Medium"].max_limit) {
           rating = 'medium';
         }
         */
@@ -533,10 +533,10 @@ if(onlineStatus != 'off'){
       if (etcoc == 'None' || days_between(new Date(), sampleDate) > 30) {
         css_class = 'popup_label_none';
       }
-      else if (isNaN(etcoc) || etcoc <= advisory_limits['Low'].max_limit) {
+      else if (isNaN(etcoc) || etcoc <= advisory_limits["Low"].max_limit) {
         css_class = 'popup_label_low';
       }
-      else if (etcoc > advisory_limits['Low'].max_limit && etcoc <= advisory_limits['Medium'].max_limit) {
+      else if (etcoc > advisory_limits["Low"].max_limit && etcoc <= advisory_limits["Medium"].max_limit) {
         css_class = 'popup_label_medium';
       }
       else {
@@ -628,9 +628,9 @@ if(onlineStatus != 'off'){
 
   var legendContentHtml = [];
 
-  legendContentHtml['forecast'] = '<div><p><strong>Today\'s forecasted conditions</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No forecast available<br /><img src="static/images/" + advisory_limits['Low'].icon" /> Low bacteria level</div><div style="float:left"><img src="static/images/" + advisory_limits['Medium'].icon" /> Medium bacteria level<br /><img src="static/images/" + advisory_limits['High'].icon" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
-  legendContentHtml['advisories'] = '<div><p><strong>Swim advisories</strong></p><p><img src="static/images/" + advisory_limits['Low'].icon" /> None: no swimming advisory issued - safe to swim.<br /><img src="static/images/" + advisory_limits['High'].icon" /> Yes: an advisory is current - swimming not recommended.</br><img src="static/images/none_marker.png" />No data available or data older than 30 days.<br /></p><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
-  legendContentHtml['data'] = '<div><p><strong>Bacteria level data</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No data available<br /><img src="static/images/" + advisory_limits['Low'].icon" /> Low bacteria level</div><div style="float:left"><img src="static/images/" + advisory_limits['Medium'].icon" /> Medium bacteria level<br /><img src="static/images/" + advisory_limits['High'].icon" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
+  legendContentHtml['forecast'] = '<div><p><strong>Today\'s forecasted conditions</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No forecast available<br /><img src="static/images/" + advisory_limits["Low"].icon" /> Low bacteria level</div><div style="float:left"><img src="static/images/" + advisory_limits["Medium"].icon" /> Medium bacteria level<br /><img src="static/images/" + advisory_limits["High"].icon" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
+  legendContentHtml['advisories'] = '<div><p><strong>Swim advisories</strong></p><p><img src="static/images/" + advisory_limits["Low"].icon" /> None: no swimming advisory issued - safe to swim.<br /><img src="static/images/" + advisory_limits["High"].icon" /> Yes: an advisory is current - swimming not recommended.</br><img src="static/images/none_marker.png" />No data available or data older than 30 days.<br /></p><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
+  legendContentHtml['data'] = '<div><p><strong>Bacteria level data</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No data available<br /><img src="static/images/" + advisory_limits["Low"].icon" /> Low bacteria level</div><div style="float:left"><img src="static/images/" + advisory_limits["Medium"].icon" /> Medium bacteria level<br /><img src="static/images/" + advisory_limits["High"].icon" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
 
   var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
   var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
@@ -1052,21 +1052,21 @@ if(onlineStatus != 'off'){
     if('Low' in advisory_limits) {
       plot_bands.push({
         color: '#96ca2d',
-        from: advisory_limits['Low'].min_limit,
-        to: advisory_limits['Low'].max_limit
+        from: advisory_limits["Low"].min_limit,
+        to: advisory_limits["Low"].max_limit
       });
     }
     if('Medium' in advisory_limits) {
       plot_bands.push({
         color: '#F9FA4A',
-        from: advisory_limits['Medium'].min_limit,
-        to: advisory_limits['Medium'].max_limit
+        from: advisory_limits["Medium"].min_limit,
+        to: advisory_limits["Medium"].max_limit
       });
     }
     if('High' in advisory_limits) {
       plot_bands.push({
         color: '#DB1A0F',
-        from: advisory_limits['High'].min_limit,
+        from: advisory_limits["High"].min_limit,
         to: 10000
       });
     }

@@ -607,7 +607,7 @@ if(onlineStatus != 'off'){
       else if (isNaN(etcoc) || etcoc <= advisory_limits["Low"].max_limit) {
         css_class = 'popup_label_low';
       }
-      else if (etcoc > advisory_limits["Low"].max_limit && etcoc <= advisory_limits["Medium"].max_limit) {
+      else if (("Medium" in advisory_limits) && (etcoc > advisory_limits["Low"].max_limit && etcoc <= advisory_limits["Medium"].max_limit)) {
         css_class = 'popup_label_medium';
       }
       else {

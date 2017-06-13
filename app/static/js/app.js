@@ -791,7 +791,15 @@ if(onlineStatus != 'off'){
         $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
 
         var marker_rating = capitalizeFirstLetter(markerRating);
-        var marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
+        var marker_icon;
+        if(forecast !== 'None') {
+          marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
+        }
+        else
+        {
+          marker_icon =  'static/images/none_marker.png';
+        }
+
         //'static/images/' + markerRating.toLowerCase() + '_marker.png'
         $('#map_canvas').gmap('addMarker', {
           'position': new google.maps.LatLng(station.lat, station.lng),
@@ -1294,7 +1302,14 @@ if(onlineStatus != 'off'){
     $('#detail_map_canvas').gmap('clear', 'markers'); //clear the marker from the last beach details view
 
     var marker_rating = capitalizeFirstLetter(forecast);
-    var marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
+    var marker_icon;
+    if(forecast !== 'None') {
+      marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
+    }
+    else
+    {
+      marker_icon =  'static/images/none_marker.png';
+    }
     //'static/images/'+forecast.toLowerCase()+'_marker.png'
     $('#detail_map_canvas').gmap('addMarker', {
       'position': new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng),

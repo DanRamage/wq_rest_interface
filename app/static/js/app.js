@@ -8,6 +8,9 @@ Math.roundTo = function(val, dec) {
     return val;
   }
 };
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 //Define key global variables and arrays
 var userLat;
@@ -787,9 +790,12 @@ if(onlineStatus != 'off'){
         $('#map_canvas').gmap('option', 'streetViewControl', true);
         $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
 
+        var marker_rating = capitalizeFirstLetter(markerRating);
+        var marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
+        //'static/images/' + markerRating.toLowerCase() + '_marker.png'
         $('#map_canvas').gmap('addMarker', {
           'position': new google.maps.LatLng(station.lat, station.lng),
-          'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
+          'icon': marker_icon,
           'bounds': bounds
         }).click(function () {
           var popup_items = [];
@@ -1287,9 +1293,12 @@ if(onlineStatus != 'off'){
     //Create the beach details map
     $('#detail_map_canvas').gmap('clear', 'markers'); //clear the marker from the last beach details view
 
+    var marker_rating = capitalizeFirstLetter(forecast);
+    var marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
+    //'static/images/'+forecast.toLowerCase()+'_marker.png'
     $('#detail_map_canvas').gmap('addMarker', {
       'position': new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng),
-      'icon': 'static/images/'+forecast.toLowerCase()+'_marker.png',
+      'icon': marker_icon,
       'bounds': false
 
     });

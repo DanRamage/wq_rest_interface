@@ -1127,6 +1127,8 @@ if(onlineStatus != 'off'){
     //Build band limits/colors based on what we have.
     var plot_bands = [];
     if('Low' in advisory_limits) {
+      var $el = $('<div class="high"></div>');
+      color = $el.css('background-color');
       plot_bands.push({
         color: '#96ca2d',
         from: advisory_limits["Low"].min_limit,

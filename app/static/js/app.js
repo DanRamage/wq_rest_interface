@@ -855,7 +855,6 @@ if(onlineStatus != 'off'){
             });
     */
     var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
-    var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
 
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type
   }
@@ -1105,6 +1104,7 @@ if(onlineStatus != 'off'){
     }
     dateSet = 1;
 
+    var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
 
     //Legend needs to be set up on pageinit or it duplicates, or is positioned further down the page
     $('#detail_map_canvas').gmap('addControl', legendDetail.div, google.maps.ControlPosition.RIGHT_BOTTOM);

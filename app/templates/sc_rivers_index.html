@@ -43,45 +43,6 @@
     }
     </style>
 {% endblock %}
-{% block about_content %}
-  <div data-role="collapsible-set" data-inset="false">
-    <div data-role="collapsible" data-collapsed="false">
-      <h3>&nbsp;About</h3>
-
-        <div class="logo_container">
-        </div>
-    </div>
-    <div data-role="collapsible">
-      <h3>&nbsp;Swim Advisory Data</h3>
-      <p><h3>{{ sampling_program_info.sampling_program }} Sampling Program </h3>
-        {{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank">program page</a>
-      </p>
-      <h3>Swimming Advisories</h3>
-      <p>
-        {{ sampling_program_info.swim_advisory_info }}
-      </p>
-
-      <h3>Indicators</h3>
-      <p> {{ sampling_program_info.description }}</p>
-      <p>
-        {% if sampling_program_info.advisory_limits %}
-          {% for limit_type, limit_rec in sampling_program_info.advisory_limits.iteritems() %}
-            {% if limit_type != 'No data' %}
-              {% if limit_type != 'High' %}
-                <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level ({{ limit_rec.min_limit }}-{{ limit_rec.max_limit }} per 100mL of water)<br />
-              {% else %}
-                <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level (>{{ limit_rec.min_limit }} per 100mL of water)<br />
-              {% endif %}
-            {% else %}
-              <img src="/static/images/{{ limit_rec.icon }}" /> No data available in the last 7 days<br />
-            {% endif %}
-          {%  endfor %}
-        {% endif %}
-      </p>
-    </div>
-  </div>
-
-{% endblock %}
 
 {% block beachListPage %}
   <div data-role="header" data-id="mainheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
@@ -167,6 +128,54 @@
 
     <div id="map_panel" data-role="tab-content" style="padding:0">
       <div id="detail_map_canvas" style="width:100%"></div>
+    </div>
+
+  </div>
+
+{% endblock %}
+
+{% block about_content %}
+  <div data-role="collapsible-set" data-inset="false">
+    <div data-role="collapsible" data-collapsed="false">
+      <h3>&nbsp;About</h3>
+
+        <div class="logo_container">
+        </div>
+    </div>
+    <div data-role="collapsible">
+      <h3>&nbsp;Advisory Data</h3>
+      <p><h3>{{ sampling_program_info.sampling_program }} Sampling Program </h3>
+        {{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank">program page</a>
+      </p>
+      <h3>Swimming Advisories</h3>
+      <p>
+        {{ sampling_program_info.swim_advisory_info }}
+      </p>
+
+      <h3>Indicators</h3>
+      <p> {{ sampling_program_info.description }}</p>
+      <p>
+        {% if sampling_program_info.advisory_limits %}
+          {% for limit_type, limit_rec in sampling_program_info.advisory_limits.iteritems() %}
+            {% if limit_type != 'No data' %}
+              {% if limit_type != 'High' %}
+                <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level ({{ limit_rec.min_limit }}-{{ limit_rec.max_limit }} per 100mL of water)<br />
+              {% else %}
+                <img src="/static/images/{{ limit_rec.icon }}" /> {{ limit_type }} level (>{{ limit_rec.min_limit }} per 100mL of water)<br />
+              {% endif %}
+            {% else %}
+              <img src="/static/images/{{ limit_rec.icon }}" /> No data available in the last 7 days<br />
+            {% endif %}
+          {%  endfor %}
+        {% endif %}
+      </p>
+    </div>
+    <div data-role="collapsible" data-collapsed="false">
+      <h3>&nbsp;Bacteria Sources</h3>
+    </div>
+
+    <div data-role="collapsible" data-collapsed="false">
+      <h3> Water Safety Info</h3>
     </div>
 
   </div>

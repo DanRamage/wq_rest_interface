@@ -146,8 +146,6 @@ function initialize_app(site_name, data, limits) {
       '<br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
       */
   }
-  //var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
-  //var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
 
   return;
 }
@@ -850,6 +848,9 @@ if(onlineStatus != 'off'){
               }, this);
             });
     */
+    var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
+    var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
+
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type
   }
 

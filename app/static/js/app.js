@@ -792,7 +792,7 @@ if(onlineStatus != 'off'){
 
         var marker_rating = capitalizeFirstLetter(markerRating);
         var marker_icon;
-        if(marker_icon !== 'None') {
+        if(marker_rating !== 'None') {
           marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
         }
         else
@@ -1303,7 +1303,7 @@ if(onlineStatus != 'off'){
 
     var marker_rating = capitalizeFirstLetter(forecast);
     var marker_icon;
-    if(marker_icon !== 'None') {
+    if(marker_rating !== 'None') {
       marker_icon = 'static/images/' + advisory_limits[marker_rating].icon;
     }
     else

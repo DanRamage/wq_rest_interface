@@ -1127,25 +1127,37 @@ if(onlineStatus != 'off'){
     //Build band limits/colors based on what we have.
     var plot_bands = [];
     if('Low' in advisory_limits) {
-      var dummy = $('<div class="popup_label_high" style="display: none;"></div>').appendTo('body');
+      //TO get the color used, we have to create a dummy variable to then get the background-color
+      //attribute.
+      var dummy = $('<div class="popup_label_low" style="display: none;"></div>').appendTo('body');
       var color = dummy.css('background-color');
       dummy.remove();
       plot_bands.push({
-        color: '#96ca2d',
+        color: color,
         from: advisory_limits["Low"].min_limit,
         to: advisory_limits["Low"].max_limit
       });
     }
     if('Medium' in advisory_limits) {
+      //TO get the color used, we have to create a dummy variable to then get the background-color
+      //attribute.
+      var dummy = $('<div class="popup_label_medium" style="display: none;"></div>').appendTo('body');
+      var color = dummy.css('background-color');
+      dummy.remove();
       plot_bands.push({
-        color: '#F9FA4A',
+        color: color,
         from: advisory_limits["Medium"].min_limit,
         to: advisory_limits["Medium"].max_limit
       });
     }
     if('High' in advisory_limits) {
+      //TO get the color used, we have to create a dummy variable to then get the background-color
+      //attribute.
+      var dummy = $('<div class="popup_label_high" style="display: none;"></div>').appendTo('body');
+      var color = dummy.css('background-color');
+      dummy.remove();
       plot_bands.push({
-        color: '#DB1A0F',
+        color: color,
         from: advisory_limits["High"].min_limit,
         to: 10000
       });

@@ -217,7 +217,7 @@ class StationDataAPI(MethodView):
     ret_code = 404
 
     if sitename == 'saluda':
-      results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
+      results = self.get_requested_station_data(station_name, request, SC_RIVERS_STATIONS_DATA_DIR)
       ret_code = 200
 
     else:

@@ -818,7 +818,14 @@ if(onlineStatus != 'off'){
                         '<div>' +
                         popup_items.join('') +
                         '<div style="float:left;padding-left:30px;">' +
-                        '<div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div>' +
+                        '<div>' +
+                          '<a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true">' +
+                            '<span class="ui-btn-inner ui-btn-corner-all">' +
+                              '<span class="ui-btn-text">More Details</span>' +
+                              '<span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span>' +
+                            '</span>' +
+                          '</a>' +
+                        '</div>' +
                         '</div>' +
                         '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +
                         '</div>' +

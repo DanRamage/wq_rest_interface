@@ -224,14 +224,6 @@
 
     <div data-role="collapsible">
       <h3>&nbsp;Advisory Data</h3>
-      <p><h3>{{ sampling_program_info.sampling_program }} Sampling Program </h3>
-        {{ sampling_program_info.sampling_program }} <a href="{{ sampling_program_info.url }}" target="_blank">program page</a>
-      </p>
-      <h3>Swimming Advisories</h3>
-      <p>
-        {{ sampling_program_info.swim_advisory_info }}
-      </p>
-
       <h3>Indicators</h3>
       <p> {{ sampling_program_info.description }}</p>
       <p>
@@ -252,12 +244,17 @@
     </div>
     <div data-role="collapsible">
       <h3>&nbsp;Bacteria Sources</h3>
+      <p>
+        Sources of fecal contamination to surface waters include wastewater treatment plants, on-site septic systems, domestic and wild animal manure, and storm runoff.
+      </p>
     </div>
 
     <div data-role="collapsible">
       <h3> Water Safety Info</h3>
+      <p>
+        More information on swimming safety can be found on DHEC's website <a href="o	http://www.scdhec.gov/HomeAndEnvironment/Water/NaturalSwimmingAreas/" target="_blank">here.</a>
+      </p>
     </div>
-
   </div>
 
 {% endblock %}

@@ -852,6 +852,13 @@ if(onlineStatus != 'off'){
           */
           $('#map_canvas').gmap('openInfoWindow',
             {'content': site_popup}, this);
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'SampleSiteClick',
+            eventAction: 'click',
+            eventLabel: station.desc
+          });
+
         });
       });
     /*

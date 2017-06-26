@@ -28,7 +28,8 @@ SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/monitorstations'
 class ShowIntroPage(View):
   def dispatch_request(self):
     current_app.logger.debug('intro_page rendered')
-    return render_template("sc_rivers_intro_page.html")
+    return render_template("full_pic_test.html")
+
 
 class SitePage(View):
   def __init__(self, site_name):

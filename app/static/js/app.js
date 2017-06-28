@@ -867,7 +867,7 @@ if(onlineStatus != 'off'){
 
         if('extents_geometry' in station)
         {
-          var options = new google.maps.PolylineOptions();
+          var options = new google.maps.Polyline();
           options.add(station.extents_geometry);
           options.width(5);
           options.color(Color.RED);

@@ -866,7 +866,7 @@ if(onlineStatus != 'off'){
         });
         if('extents_geometry' in station)
         {
-          var options = new PolylineOptions();
+          var options = $('#map_canvas').gmap('PolylineOptions');
           options.add(station.extents_geometry);
           options.width(5);
           options.color(Color.RED);

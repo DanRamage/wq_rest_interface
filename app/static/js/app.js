@@ -877,7 +877,8 @@ if(onlineStatus != 'off'){
             strokeWeight: 5,
             strokeColor: 0xFF0000
           });
-          $('#map_canvas').gmap('addPolyline', p_line);
+          p_line.setMap($('#map_canvas').gmap);
+          //$('#map_canvas').gmap('addPolyline', p_line);
         }
       });
     /*

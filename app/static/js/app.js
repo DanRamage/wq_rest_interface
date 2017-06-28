@@ -867,10 +867,11 @@ if(onlineStatus != 'off'){
 
         if('extents_geometry' in station)
         {
-          var p_line = new google.maps.Polyline();
-          p_line.setPoints(station.extents_geometry);
-          p_line.setWidth(5);
-          p_line.setColor(Color.RED);
+          var p_line = new google.maps.Polyline({
+            path: station.extents_geometry,
+            strokeWeight: 5,
+            strokeColor: 0xFF0000
+          });
           $('#map_canvas').gmap('addPolyline', p_line);
         }
       });

@@ -808,7 +808,8 @@ if(onlineStatus != 'off'){
           'position': new google.maps.LatLng(station.lat, station.lng),
           'icon': marker_icon,
           'bounds': bounds
-        }).click(function () {
+        }).click(function ()
+        {
           var popup_items = [];
           if(has_prediction_data) {
             popup_items.push('<div class="info_popup_forecast_outer_div"><div id="info_popup_forecast" class="info_popup_forecast_inner_div">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
@@ -864,6 +865,13 @@ if(onlineStatus != 'off'){
 
         });
       });
+      if('extents_geometry' in station)
+      {
+        $('#map_canvas').gmap.addPolyline(new PolylineOptions()
+             .add(station.extents_geometry)
+             .width(5)
+             .color(Color.RED));
+      }
     /*
     click(function () {
               $('#map_canvas').gmap('openInfoWindow', {

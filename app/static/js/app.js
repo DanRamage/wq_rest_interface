@@ -78,7 +78,10 @@ function initialize_app(site_name, data, limits) {
           "value": j.value,
           "advisory": advisoryText
         };
-
+        if('extents_geometry' in station.properties)
+        {
+          currentEtcoc[stations.properties.station]['extents_geometry'] = station.properties.extents_geometry.geometry.coordinates;
+        }
       });
     });
     has_sample_data = true;

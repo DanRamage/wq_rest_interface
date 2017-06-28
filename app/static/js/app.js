@@ -80,7 +80,7 @@ function initialize_app(site_name, data, limits) {
         };
         if('extents_geometry' in stations.properties)
         {
-          currentEtcoc[stations.properties.station]['extents_geometry'] = stations.properties.extents_geometry.geometry.coordinates;
+          currentEtcoc[stations.properties.station]['extents_geometry'] = stations.properties.extents_geometry.geometry.coordinates[0];
         }
       });
     });

@@ -870,7 +870,7 @@ if(onlineStatus != 'off'){
           var line_path = [];
           $.each(station.extents_geometry, function(ndx, coord)
           {
-            line_path.append({lat: coord[1], lng: coord[0]})
+            line_path.push({lat: coord[1], lng: coord[0]});
           });
           var p_line = new google.maps.Polyline({
             path: line_path,

@@ -872,7 +872,8 @@ if(onlineStatus != 'off'){
           {
             line_path.push({lat: coord[1], lng: coord[0]});
           });
-          $('#map_canvas').gmap('drawPolyline', {
+          $('#map_canvas').gmap('addShape', 'Polyline', {
+            id: station.name + '_polyline',
             path: line_path,
             strokeWeight: 5,
             strokeOpacity: 0.75,

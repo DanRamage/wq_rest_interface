@@ -875,13 +875,11 @@ if(onlineStatus != 'off'){
           var g_map = $('#map_canvas').gmap('get', 'map');
           new google.maps.Polyline({
             path: line_path,
-            strokeWeight: 5,
+            strokeWeight: 3,
             strokeOpacity: 0.75,
-            strokeColor: 0xFF0000,
+            strokeColor: "#FF0000",
             map: g_map
           });
-          //p_line.setMap($('#map_canvas').gmap);
-          //$('#map_canvas').gmap('addPolyline', p_line);
         }
       });
     /*

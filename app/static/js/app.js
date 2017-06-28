@@ -864,14 +864,14 @@ if(onlineStatus != 'off'){
           });
 
         });
+        if('extents_geometry' in station)
+        {
+          $('#map_canvas').gmap.addPolyline(new PolylineOptions()
+               .add(station.extents_geometry)
+               .width(5)
+               .color(Color.RED));
+        }
       });
-      if('extents_geometry' in station)
-      {
-        $('#map_canvas').gmap.addPolyline(new PolylineOptions()
-             .add(station.extents_geometry)
-             .width(5)
-             .color(Color.RED));
-      }
     /*
     click(function () {
               $('#map_canvas').gmap('openInfoWindow', {

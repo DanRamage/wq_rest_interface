@@ -866,11 +866,11 @@ if(onlineStatus != 'off'){
         });
         if('extents_geometry' in station)
         {
-          var options = $('#map_canvas').gmap('PolylineOptions');
+          var options = new google.maps.PolylineOptions();
           options.add(station.extents_geometry);
           options.width(5);
           options.color(Color.RED);
-          $('#map_canvas').gmap.addPolyline(options);
+          $('#map_canvas').gmap('addPolyline', options);
         }
       });
     /*

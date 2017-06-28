@@ -867,8 +867,13 @@ if(onlineStatus != 'off'){
 
         if('extents_geometry' in station)
         {
+          var line_path = [];
+          $.each(station.extents_geometry, function(ndx, coord)
+          {
+            line_path.append({lat: coord[1], lng: coord[0]})
+          });
           var p_line = new google.maps.Polyline({
-            path: station.extents_geometry,
+            path: line_path,
             strokeWeight: 5,
             strokeColor: 0xFF0000
           });

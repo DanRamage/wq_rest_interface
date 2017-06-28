@@ -864,6 +864,7 @@ if(onlineStatus != 'off'){
           });
 
         });
+
         if('extents_geometry' in station)
         {
           var options = new google.maps.PolylineOptions();

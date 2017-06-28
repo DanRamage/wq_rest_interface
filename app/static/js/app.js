@@ -867,11 +867,11 @@ if(onlineStatus != 'off'){
 
         if('extents_geometry' in station)
         {
-          var options = new google.maps.Polyline();
-          options.add(station.extents_geometry);
-          options.width(5);
-          options.color(Color.RED);
-          $('#map_canvas').gmap('addPolyline', options);
+          var p_line = new google.maps.Polyline();
+          p_line.setPoints(station.extents_geometry);
+          p_line.setWidth(5);
+          p_line.setColor(Color.RED);
+          $('#map_canvas').gmap('addPolyline', p_line);
         }
       });
     /*

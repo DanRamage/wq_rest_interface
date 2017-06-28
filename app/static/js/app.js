@@ -866,10 +866,11 @@ if(onlineStatus != 'off'){
         });
         if('extents_geometry' in station)
         {
-          $('#map_canvas').gmap.addPolyline(new PolylineOptions()
-               .add(station.extents_geometry)
-               .width(5)
-               .color(Color.RED));
+          var options = new PolylineOptions();
+          options.add(station.extents_geometry);
+          options.width(5);
+          options.color(Color.RED);
+          $('#map_canvas').gmap.addPolyline(options);
         }
       });
     /*

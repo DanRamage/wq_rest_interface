@@ -872,12 +872,13 @@ if(onlineStatus != 'off'){
           {
             line_path.push({lat: coord[1], lng: coord[0]});
           });
-          var p_line = new google.maps.Polyline({
+          var p_line = $('#map_canvas').gmap.drawPolyline({
             path: line_path,
             strokeWeight: 5,
+            strokeOpacity: 0.75,
             strokeColor: 0xFF0000
           });
-          p_line.setMap($('#map_canvas').gmap);
+          //p_line.setMap($('#map_canvas').gmap);
           //$('#map_canvas').gmap('addPolyline', p_line);
         }
       });

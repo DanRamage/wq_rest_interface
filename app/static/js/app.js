@@ -899,7 +899,7 @@ if(onlineStatus != 'off'){
             path: line_path,
             strokeWeight: 3,
             strokeOpacity: 0.75,
-            strokeColor: "#FF0000",
+            strokeColor: html_colors[marker_rating],
             map: g_map
           });
         }

@@ -13,7 +13,7 @@ import geojson
 from datetime import datetime
 from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from config import DEBUG_DATA_FILES
 #from admin_models import User
 
 from app import db

@@ -32,7 +32,7 @@ else:
 class ShowIntroPage(View):
   def dispatch_request(self):
     current_app.logger.debug('intro_page rendered')
-    return render_template("sc_rivers_intro_page.html")
+    return render_template("sc_rivers_intro.html")
 
 
 class SitePage(View):

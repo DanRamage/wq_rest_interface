@@ -20,10 +20,14 @@ from app import db
 from admin_models import User
 from wq_models import Project_Area, Site_Message, Project_Info_Page, Advisory_Limits
 
-SC_RIVERS_PREDICTIONS_FILE='/home/xeniaprod/feeds/sc_rivers/Predictions.json'
-SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/beachAdvisoryResults.json'
-SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/monitorstations'
-
+if not DEBUG_DATA_FILES:
+  SC_RIVERS_PREDICTIONS_FILE='/home/xeniaprod/feeds/sc_rivers/Predictions.json'
+  SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/beachAdvisoryResults.json'
+  SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/monitorstations'
+else:
+  SC_RIVERS_PREDICTIONS_FILE='/home/xeniaprod/feeds/sc_rivers/debug/Predictions.json'
+  SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/debug/beachAdvisoryResults.json'
+  SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/debug/monitorstations'
 
 class ShowIntroPage(View):
   def dispatch_request(self):

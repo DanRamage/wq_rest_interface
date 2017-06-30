@@ -1,76 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" class="full">
-
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!--
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>How's My SC River?</title>
-
-    <!-- Bootstrap -->
-    <link href="static/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="static/css/styles.css" rel="stylesheet">
-    <link href="static/css/intro_page.css" rel="stylesheet">
+    {%  block head %}{% endblock %}
   </head>
   <body>
-
-    <div class="container-fluid">
-      <div class="row row-buffer-20px"></div>
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <img class="img-rounded" src="static/images/swimmer_icon.png"  style="width: 80px; height: 80px;">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12 header_text">
-          <h1 class="text-center">HOW'S MY RIVER?</h1>
-          <h2 class="text-center">Headed to the river? Use this app to see if the water quality is healthy before going in!</h2>
-        </div>
-      </div>
-      <div class="marketing">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h3 class="marketing-header">Choose a location to explore</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-4"></div>
-          <div class="col-lg-4 entry_col">
-            <a class="btn" href="/myrtlebeach" role="button">
-              <img class="img-rounded" src="static/images/sc_button.png"  style="width: 140px; height: 140px;">
-            </a>
-            <p><a class="btn btn-default details-btn" href="/saluda" role="button">Saluda/Broad/Congaree</br>South Carolina &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-          <div class="col-lg-4"></div>
-        </div>
-        <div class="row">
-          <div class="col-lg-1"></div>
-          <div class="col-lg-10 marketing-disclaimer">
-            <p>
-              <h5><em>Disclaimer: This product is for informational purposes only.</em></h5>
-            </p>
-          </div>
-          <div class="col-lg-1"></div>
-        </div>
-
-      </div>
-      <footer class="footer footer_text">
-        <div class="row row-buffer-20px"></div>
-        <div class="row">
-          <div class="col-xs-2 col-md-1">
-            <img class="img-rounded center-block" src="static/images/swimmer_icon.png" style="width: 40px; height: 40px;">
-          </div>
-          <div class="col-xs-10 col-md-11 partners">
-          </div>
-        </div>
-        <div class="row logo_row">
-          </div>
-        </div>
-      </footer>
-    </div>
+    {% block body %}{% endblock %}
   </body>
 </html>

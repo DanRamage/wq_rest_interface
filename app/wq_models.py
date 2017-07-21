@@ -52,7 +52,7 @@ class Site_Message(db.Model):
   message = db.Column(db.String(512))
 
   site = db.relationship('Project_Area', backref='site_message')
-  site_message_level = db.relationship('Site_Message_Level', backref='site_message')
+  site_message_level = db.relationship('Site_Message_Level', backref='site_message_level')
   def __str__(self):
     return self.message
 

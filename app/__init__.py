@@ -50,7 +50,8 @@ def build_flask_admin(app):
     site_message_view, \
     project_type_view, \
     project_info_view, \
-    advisory_limits_view
+    advisory_limits_view, \
+    site_message_level_view
 
   from admin_models import User
   from wq_models import Project_Area, Site_Message, Project_Type, Project_Info_Page, Advisory_Limits, Site_Message_Level

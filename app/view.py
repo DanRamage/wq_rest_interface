@@ -404,6 +404,11 @@ class site_message_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
+class site_message_level_view(sqla.ModelView):
+  column_list = ('site_message_level')
+  def is_accessible(self):
+    return login.current_user.is_authenticated
+
 class project_info_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated

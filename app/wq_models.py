@@ -31,16 +31,28 @@ class Project_Area(db.Model):
   def __str__(self):
     return self.area_name
 
+class Site_Message_Level(db.Model):
+  __tablename__ = 'site_message_level'
+  id = db.Column(db.Integer, primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
+
+  message_level = db.Column(db.String(32))
+
+  def __str__(self):
+    return self.message_level
+
 class Site_Message(db.Model):
   __tablename__ = 'site_message'
   id = db.Column(db.Integer, primary_key=True)
   row_entry_date = db.Column(db.String(32))
   row_update_date = db.Column(db.String(32))
   site_id = db.Column(db.Integer, db.ForeignKey('project_area.id'))
-  message = db.Column(db.String(256))
+  message_level = db.Column(db.Integer, db.ForeignKey('site_message_level.id'))
+  message = db.Column(db.String(512))
 
   site = db.relationship('Project_Area', backref='site_message')
-
+  site_message_level = db.relationship('Site_Message_Level', backref='site_message')
   def __str__(self):
     return self.message
 

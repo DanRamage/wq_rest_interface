@@ -390,18 +390,7 @@ class MyAdminIndexView(admin.AdminIndexView):
         return redirect(url_for('.index'))
 
 
-
-class project_type_view(sqla.ModelView):
-  def is_accessible(self):
-    return login.current_user.is_authenticated
-
-class project_area_view(sqla.ModelView):
-  column_list = ['area_name', 'display_name']
-  form_columns = ['area_name', 'display_name']
-
-  def is_accessible(self):
-    return login.current_user.is_authenticated
-
+class base_view(sqla.ModelView):
   def create_model(self, form):
     try:
       model = self.model()
@@ -421,21 +410,47 @@ class project_area_view(sqla.ModelView):
 
     return model
 
-class site_message_view(sqla.ModelView):
-  column_list = ('site', 'message')
+  def update_model(self, form, model):
+    try:
+      update_time = datetime.utcnow()
+      if model.row_entry_date is None:
+        model.row_entry_date = update_time.strftime("%Y-%m-%d %H:%M:%S")
+      model.row_update_date = update_time.strftime("%Y-%m-%d %H:%M:%S")
+    except Exception as ex:
+      current_app.logger.exception(ex)
+      self.session.rollback()
+    return sqla.ModelView.update_model(self, form, model)
+
+
+class project_type_view(base_view):
+  column_list = ['name', 'row_entry_date', 'row_update_date']
+  form_columns = ['name']
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class site_message_level_view(sqla.ModelView):
-  column_list = ('message_level')
+class project_area_view(base_view):
+  column_list = ['area_name', 'display_name', 'row_entry_date', 'row_update_date']
+  form_columns = ['area_name', 'display_name']
+
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class project_info_view(sqla.ModelView):
+
+class site_message_view(base_view):
+  column_list = ['site', 'message', 'row_entry_date', 'row_update_date']
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class advisory_limits_view(sqla.ModelView):
+class site_message_level_view(base_view):
+  column_list = ['message_level', 'row_entry_date', 'row_update_date']
+  def is_accessible(self):
+    return login.current_user.is_authenticated
+
+class project_info_view(base_view):
+  def is_accessible(self):
+    return login.current_user.is_authenticated
+
+class advisory_limits_view(base_view):
   def is_accessible(self):
     return login.current_user.is_authenticated
   """

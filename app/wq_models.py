@@ -48,7 +48,7 @@ class Site_Message(db.Model):
   row_entry_date = db.Column(db.String(32))
   row_update_date = db.Column(db.String(32))
   site_id = db.Column(db.Integer, db.ForeignKey('project_area.id'))
-  message_level_id = db.Column(db.Integer, db.ForeignKey('site_message_level.id'))
+  message_lvl_id = db.Column(db.Integer, db.ForeignKey('site_message_level.id'))
   message = db.Column(db.String(512))
 
   site = db.relationship('Project_Area', backref='site_message')

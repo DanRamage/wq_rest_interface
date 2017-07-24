@@ -402,6 +402,25 @@ class project_area_view(sqla.ModelView):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
+  def create_model(self, form):
+    try:
+      model = self.model()
+      form.populate_obj(model)
+      model.user = login.current_user
+      entry_time = datetime.utcnow()
+      model.row_entry_date = entry_time.strftime("%Y-%m-%d %H:%M:%S")
+      self.session.add(model)
+      self._on_model_change(form, model, True)
+      self.session.commit()
+    except Exception as ex:
+      current_app.logger.exception(ex)
+      self.session.rollback()
+      return False
+    else:
+      self.after_model_change(form, model, True)
+
+    return model
+
 class site_message_view(sqla.ModelView):
   column_list = ('site', 'message')
   def is_accessible(self):

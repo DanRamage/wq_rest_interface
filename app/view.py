@@ -396,6 +396,7 @@ class project_type_view(sqla.ModelView):
     return login.current_user.is_authenticated
 
 class project_area_view(sqla.ModelView):
+  column_list = ('area_name', 'display_name')
   def is_accessible(self):
     return login.current_user.is_authenticated
 
@@ -405,7 +406,7 @@ class site_message_view(sqla.ModelView):
     return login.current_user.is_authenticated
 
 class site_message_level_view(sqla.ModelView):
-  #column_list = ('message_level')
+  column_list = ('message_level')
   def is_accessible(self):
     return login.current_user.is_authenticated
 

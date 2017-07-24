@@ -396,7 +396,9 @@ class project_type_view(sqla.ModelView):
     return login.current_user.is_authenticated
 
 class project_area_view(sqla.ModelView):
-  column_list = ('area_name', 'display_name')
+  column_list = ['area_name', 'display_name']
+  form_columns = ['area_name', 'display_name']
+
   def is_accessible(self):
     return login.current_user.is_authenticated
 

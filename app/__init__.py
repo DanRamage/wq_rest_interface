@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory, current_app
+from flask import Flask, current_app, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 import flask_admin as flask_admin
 import flask_login as flask_login
@@ -82,6 +82,15 @@ def build_url_rules(app):
   app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])
   app.add_url_rule('/sample_data/current_results/<string:sitename>', view_func=BacteriaDataAPI.as_view('sample_data_view'), methods=['GET'])
   app.add_url_rule('/station_data/<string:sitename>/<string:station_name>', view_func=StationDataAPI.as_view('station_data_view'), methods=['GET'])
+
+  @app.before_request
+  def check_for_maintenance():
+    if IS_MAINTENANCE_MODE and request.path != url_for('maintenance'):
+      return redirect(url_for('maintenance'))
+      # Or alternatively, dont redirect
+      # return 'Sorry, off for maintenance!', 503
+
+  app.add_url_rule('/maintenance', view_func=ShowIntroPage.as_view('intro_page'))
 
   @app.errorhandler(500)
   def internal_error(exception):

@@ -29,6 +29,13 @@ else:
   SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/debug/beachAdvisoryResults.json'
   SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/debug/monitorstations'
 
+
+class MaintenanceMode(View):
+  def dispatch_request(self):
+    current_app.logger.debug('MaintenanceMode rendered')
+    return render_template("MaintenanceMode.html")
+
+
 class ShowIntroPage(View):
   def dispatch_request(self):
     current_app.logger.debug('intro_page rendered')

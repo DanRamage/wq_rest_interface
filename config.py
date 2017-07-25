@@ -1,9 +1,11 @@
 FLASK_DEBUG = False
-PYCHARM_DEBUG=False
+PYCHARM_DEBUG=True
 DEBUG_DATA_FILES=True
 # Create dummy secrey key so we can use sessions
 SECRET_KEY = '123456790'
 SECRET_KEY_FILE = 'secret_key'
+
+IS_MAINTENANCE_MODE = True
 
 # Create in-memory database
 DATABASE_FILE = 'river_db.sqlite'

@@ -72,7 +72,12 @@ def build_flask_admin(app):
   return
 
 def build_url_rules(app):
-  from view import ShowIntroPage, SaludaPage, PredictionsAPI, BacteriaDataAPI, StationDataAPI
+  from view import ShowIntroPage, \
+    SaludaPage, \
+    MaintenanceMode, \
+    PredictionsAPI, \
+    BacteriaDataAPI, \
+    StationDataAPI
 
   #Page rules
   app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
@@ -90,7 +95,7 @@ def build_url_rules(app):
       # Or alternatively, dont redirect
       # return 'Sorry, off for maintenance!', 503
 
-  app.add_url_rule('/maintenance', view_func=ShowIntroPage.as_view('intro_page'))
+  app.add_url_rule('/maintenance', view_func=MaintenanceMode.as_view('maintenance'))
 
   @app.errorhandler(500)
   def internal_error(exception):

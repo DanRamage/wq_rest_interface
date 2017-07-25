@@ -13,7 +13,7 @@ import geojson
 from datetime import datetime
 from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import DEBUG_DATA_FILES
+from config import DEBUG_DATA_FILES, PYCHARM_DEBUG
 #from admin_models import User
 
 from app import db
@@ -29,6 +29,10 @@ else:
   SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/debug/beachAdvisoryResults.json'
   SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/debug/monitorstations'
 
+if PYCHARM_DEBUG:
+  SC_RIVERS_PREDICTIONS_FILE='/Users/danramage/tmp/sc_rivers/Predictions.json'
+  SC_RIVERS_ADVISORIES_FILE='/Users/danramage/tmp/sc_rivers/beachAdvisoryResults.json'
+  SC_RIVERS_STATIONS_DATA_DIR='/Users/danramage/tmp/sc_rivers/monitorstations'
 
 class MaintenanceMode(View):
   def dispatch_request(self):

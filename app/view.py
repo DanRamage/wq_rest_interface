@@ -438,11 +438,13 @@ class project_area_view(base_view):
 
 class site_message_view(base_view):
   column_list = ['site', 'message', 'row_entry_date', 'row_update_date']
+  form_columns = ['site', 'message']
   def is_accessible(self):
     return login.current_user.is_authenticated
 
 class site_message_level_view(base_view):
   column_list = ['message_level', 'row_entry_date', 'row_update_date']
+  form_columns = ['message_level']
   def is_accessible(self):
     return login.current_user.is_authenticated
 
@@ -451,6 +453,8 @@ class project_info_view(base_view):
     return login.current_user.is_authenticated
 
 class advisory_limits_view(base_view):
+  column_list = ['site_id', 'min_limit', 'max_limit', 'icon', 'limit_type', 'row_entry_date', 'row_update_date']
+  form_columns = ['site_id', 'min_limit', 'max_limit', 'icon', 'limit_type']
   def is_accessible(self):
     return login.current_user.is_authenticated
   """

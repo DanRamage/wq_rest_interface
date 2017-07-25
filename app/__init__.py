@@ -67,7 +67,7 @@ def build_flask_admin(app):
   admin.add_view(site_message_view(Site_Message, db.session, name="Message"))
   admin.add_view(site_message_level_view(Site_Message_Level, db.session, name="Message Level"))
   #admin.add_view(project_info_view(Project_Info_Page, db.session, name="Program Info"))
-  admin.add_view(project_info_view(Advisory_Limits, db.session, name="Advisory Limits"))
+  admin.add_view(advisory_limits_view(Advisory_Limits, db.session, name="Advisory Limits"))
 
   return
 

@@ -31,6 +31,8 @@ var wq_site_bbox;
 var site;
 var legendContentHtml = [];
 var html_colors = {};
+var latest_sample_date;
+
 function initialize_app(site_name, data, limits) {
   site = site_name;
   advisory_limits = limits;
@@ -81,6 +83,12 @@ function initialize_app(site_name, data, limits) {
         if('extents_geometry' in stations.properties)
         {
           currentEtcoc[stations.properties.station]['extents_geometry'] = stations.properties.extents_geometry.geometry.coordinates[0];
+        }
+        var date_time = j.date.split(' ');
+        var sample_date_ms = Date.parse(date_time[0]);
+        if(latest_sample_date === undefined || latest_sample_date < sample_date_ms)
+        {
+          latest_sample_date = date_time[0];
         }
       });
     });
@@ -213,7 +221,7 @@ function calcDistance(lat1,lng1,lat2,lng2){
   return d;
 }
 
-
+/*
 function GetURLParameter(sParam)
 {
   var sPageURL = window.location.search.substring(1);
@@ -228,7 +236,8 @@ function GetURLParameter(sParam)
   }
   return null;
 }
-
+*/
+/*
 function GetSiteFromURL(url)
 {
   //Split the domain components up to get the subdomain which should be the
@@ -237,6 +246,7 @@ function GetSiteFromURL(url)
   var path = url.split('/');
   return(path[1]);
 }
+*/
 function strtr(str,list){
   for( var c in list ){
     str = String(str).replace( new RegExp( c ,"g"), list[c] );
@@ -488,48 +498,7 @@ $(document).bind("pagebeforechange", function( event, data ) {
 //Populate predictionData array with needed parameters for all stations.
 //Using $.ajax and async: false, rather than $.getJSON to ensure that predictionData is populated before pages try to use it.
 
-/*
-var predictionData = {};
-var popupMessage;
 
-$.ajax({
-    type: "GET",
-    cache : false,
-    async: false,
-    crossDomain: false,
-    timeout: 5000,
-    //url: "http://howsthebeach.org/ba-simple-proxy.php?url=http://129.252.139.124/mapping/xenia/feeds/florida_wq/Predictions.json",
-    //url: "http://dev.howsthebeach.org/rest/sarasota/predictions/current_results",
-    //url: site_base_url + "predictions/current_results",
-    url: "/predictions/current_results/" + site,
-    dataType: "json",
-    success: function(data) {
-      $.each( data, function(i, contents) {
-        if(contents.message != '') popupMessage = contents.message;
-      });
-      var forecast_date = data.contents.testDate;
-
-      $.each( data.contents.stationData.features, function(i, beach) {
-        predictionData[beach.properties.station] = {
-          "station" : beach.properties.station,
-          "desc" : beach.properties.desc,
-          "ensemble" : beach.properties.ensemble,
-          "forecast_date": forecast_date,
-          "message" : beach.properties.message,
-          "region" : beach.properties.region,
-          "lat" : beach.geometry.coordinates[1],
-          "lng" : beach.geometry.coordinates[0] };
-      });
-
-      console.log('PD:'+predictionData);
-    },
-    error: function (xhr, ajaxOptions, thrownError) {
-      onlineStatus = 'off';
-      //alert(xhr.status);
-      //alert(thrownError);
-    }
-});
-*/
 //Get monitoring data and populate currentEtcoc array for all stations
 //Using $.ajax and async: false, rather than $.getJSON to ensure that currentEtcoc is populated before pages try to use it.
 
@@ -671,6 +640,20 @@ if(onlineStatus != 'off'){
     return css_class;
   }
 
+  function latest_sample_date_div()
+  {
+    var container = document.createElement("div");
+    container.style.position = "relative";
+    container.style.margin = "5px 5px 5px 5px";
+    container.style.zIndex = "9999999999999999999999999";
+
+    var legendButtonHtml = '<div style="padding:3px" class="ui-btn ui-input-btn ui-corner-all ui-mini">' +
+            'Latest Date: ' + latest_sample_date +
+           '</div>';
+
+    container.innerHTML = legendButtonHtml;
+    this.div = container;
+  };
   //Map legend setup
   function Legend(name, controlWidth, content, contentWidth) {
     this.name = name;
@@ -922,6 +905,11 @@ if(onlineStatus != 'off'){
     var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
 
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type
+    if(markerType == 'advisories')
+    {
+      var sample_date = new latest_sample_date_div();
+      $('#map_canvas').gmap('addControl', sample_date.div, google.maps.ControlPosition.TOP_CENTER); //Add legend back in with text for new marker type
+    }
   }
 
 

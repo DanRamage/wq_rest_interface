@@ -648,7 +648,7 @@ if(onlineStatus != 'off'){
     container.style.zIndex = "9999999999999999999999999";
 
     var legendButtonHtml = '<div style="padding:3px" class="ui-btn ui-input-btn ui-corner-all ui-mini">' +
-            'Latest Date: ' + latest_sample_date +
+            'Latest Sample: ' + latest_sample_date +
            '</div>';
 
     container.innerHTML = legendButtonHtml;

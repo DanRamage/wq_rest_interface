@@ -452,29 +452,7 @@ waitUntilExists("homeResetButton",function(){
 
 $(window).bind('orientationchange', function(e) {
   //alert('orientationchange: '+e.orientation);
-  //$(window).trigger('resize');
-  if ($("#beachDetailsPage").is(".ui-page-active")) {
-    $('#beachDetailsPage').trigger('pageshow');
-  }
-  if ($("#mapPage").is(".ui-page-active")) {
-    $('#mapPage').trigger('pageshow');
-
-    //alert('H:'+getScreenSize('height')+' W:'+getScreenSize('width'));
-    //if(e.orientation == 'portrait'){
-    if (getScreenSize('height') > getScreenSize('width')) {
-      legendWidth = "275";
-      infoPopupWidth = "200";
-      infoPopupHeight = "200";
-    }
-    else {
-      legendWidth = "400";
-      infoPopupWidth = "370";
-      infoPopupHeight = "130";
-    }
-
-    $('#legend').width(legendWidth);
-    $('#map_canvas').gmap('closeInfoWindow'); //close it because it will have the wrong dimensions for new screen orientation
-  }
+  $(window).trigger('resize');
 });
 
 $(window).bind('resize', function(e) {

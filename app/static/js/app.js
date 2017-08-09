@@ -930,6 +930,7 @@ if(onlineStatus != 'off'){
 
     var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight)+2;
 
+
     $('#map_canvas').css( "height", mapHeight );
 
     if(markerMapped!==1){

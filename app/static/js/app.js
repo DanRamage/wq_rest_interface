@@ -451,7 +451,7 @@ waitUntilExists("homeResetButton",function(){
 
 
 $(window).bind('orientationchange', function(e) {
-  //alert('orientationchange: '+e.orientation);
+  alert('orientationchange: '+e.orientation);
   $(window).trigger('resize');
 });
 

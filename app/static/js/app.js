@@ -246,14 +246,14 @@ function GetSiteFromURL(url)
   var path = url.split('/');
   return(path[1]);
 }
-*/
+
 function strtr(str,list){
   for( var c in list ){
     str = String(str).replace( new RegExp( c ,"g"), list[c] );
   }
   return str;
 }
-
+*/
 function capitalize (text) {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
@@ -928,7 +928,7 @@ if(onlineStatus != 'off'){
 
   $('#mapPage').bind('pageshow', function(event) {
 
-    var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight*2)+2;
+    var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight)+2;
 
     $('#map_canvas').css( "height", mapHeight );
 

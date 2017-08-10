@@ -66,9 +66,11 @@
 <div id="mapPage" data-role="page">
 
 	<div id="mainheader" data-role="header" data-id="mainheader" data-theme="a" data-position="fixed" data-tap-toggle="false">
-		<div data-role="navbar">
+		<div data-role="navbar" data-iconpos="left">
 			<ul id="navItems">
-				<li><a href="#mapPage" class="ui-state-persist ui-btn-active">Map</a></li><li><a href="#beachListPage">Search</a></li><li><a href="#moreInformation">Info</a></li>
+				<li><a href="#mapPage" class="ui-state-persist ui-btn-active">Map</a></li>
+        <li data-icon="search"><a href="#beachListPage">Search</a></li>
+        <li data-icon="info"><a href="#moreInformation">Info</a></li>
 			</ul>
 		</div>
 		{% if site_message %}

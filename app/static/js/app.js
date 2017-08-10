@@ -644,6 +644,7 @@ if(onlineStatus != 'off'){
   {
     this.name = "LatestSample";
     var container = document.createElement("div");
+    container.setAttribute('id', 'latest_sample');
     container.style.position = "relative";
     container.style.margin = "5px 5px 5px 5px";
     container.style.zIndex = "9999999999999999999999999";
@@ -914,8 +915,10 @@ if(onlineStatus != 'off'){
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type
     if(markerType == 'advisories')
     {
-      var sample_date = new latest_sample_date_div();
-      $('#map_canvas').gmap('addControl', sample_date.div, google.maps.ControlPosition.TOP_CENTER); //Add legend back in with text for new marker type
+      if($("#latest_sample").length == 0) {
+        var sample_date = new latest_sample_date_div();
+        $('#map_canvas').gmap('addControl', sample_date.div, google.maps.ControlPosition.TOP_CENTER); //Add legend back in with text for new marker type
+      }
     }
   }
 

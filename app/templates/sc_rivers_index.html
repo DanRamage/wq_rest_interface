@@ -66,11 +66,11 @@
 
 {% block beachListPage %}
   <div data-role="header" data-id="mainheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
-    <div data-role="navbar">
+    <div data-role="navbar" data-iconpos="left">
       <ul id="navItems">
-        <li><a href="#mapPage">Map</a></li>
-        <li><a href="#beachListPage" class="ui-state-persist ui-btn-active">Search</a></li>
-        <li><a href="#moreInformation">Info</a></li>
+        <li><a data-icon="home" href="#mapPage">Map</a></li>
+        <li><a data-icon="search" href="#beachListPage" class="ui-state-persist ui-btn-active">Search</a></li>
+        <li><a data-icon="info" href="#moreInformation">Info</a></li>
       </ul>
     </div>
     <ul id="beachListHeadings" data-role="listview">

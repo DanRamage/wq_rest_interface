@@ -879,12 +879,18 @@ if(onlineStatus != 'off'){
             line_path.push({lat: coord[1], lng: coord[0]});
           });
           var g_map = $('#map_canvas').gmap('get', 'map');
+          var z_index = 1;
+          if(marker_rating == "High")
+          {
+            z_index = 99999;
+          }
           new google.maps.Polyline({
             path: line_path,
             strokeWeight: 3,
             strokeOpacity: 0.75,
             strokeColor: html_colors[marker_rating],
-            map: g_map
+            map: g_map,
+            zIndex: z_index
           });
         }
       });

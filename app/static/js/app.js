@@ -642,6 +642,7 @@ if(onlineStatus != 'off'){
 
   function latest_sample_date_div()
   {
+    this.name = "LatestSample";
     var container = document.createElement("div");
     container.style.position = "relative";
     container.style.margin = "5px 5px 5px 5px";

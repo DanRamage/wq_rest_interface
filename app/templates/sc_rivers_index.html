@@ -64,6 +64,18 @@
     </style>
 {% endblock %}
 
+{% block site_message_block %}
+  {% if site_message %}
+  <div id="message_area" class="message_area_text">
+    <div id="site_message_text" class="message_text">
+      <p>
+        <h3><bold>{{site_message}} More Info</bold></h3>
+      </p>
+    </div>
+  </div>
+  {% endif %}
+{%  endblock %}
+
 {% block beachListPage %}
   <div data-role="header" data-id="mainheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
     <div data-role="navbar" data-iconpos="left">

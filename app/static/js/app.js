@@ -54,6 +54,7 @@ function initialize_app(site_name, data, limits) {
     has_prediction_data = true;
   }
   if(data['advisory_data'].features !== null) {
+    var latest_ms = 0;
     $.each(data['advisory_data'].features, function (s, stations) {
       permanentAdvisory = stations.properties.sign;
 
@@ -86,7 +87,6 @@ function initialize_app(site_name, data, limits) {
         }
         var date_time = j.date.split(' ');
         var sample_date_ms = Date.parse(date_time[0]);
-        var latest_ms = 0;
         if(latest_sample_date === undefined || latest_ms < sample_date_ms)
         {
           latest_sample_date = date_time[0];

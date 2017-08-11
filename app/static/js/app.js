@@ -183,8 +183,8 @@ function initialize_app(site_name, data, limits) {
   html_colors['None'] = color;
 
   $("a#message_link").click(function(event){
-      $("#about").collapse();
-      $("#faq").expand();
+      $("#about").collapsible("collapse");
+      $("#faq").collapsible("expand");
     });
 
   return;

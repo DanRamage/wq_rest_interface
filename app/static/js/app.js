@@ -182,6 +182,9 @@ function initialize_app(site_name, data, limits) {
   dummy.remove();
   html_colors['None'] = color;
 
+  $("a#message_link").click(function(event){
+      alert("Thanks for visiting!");
+    });
 
   return;
 }

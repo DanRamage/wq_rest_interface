@@ -73,15 +73,17 @@
         <li><a data-icon="info" href="#moreInformation">Info</a></li>
 			</ul>
 		</div>
-		{% if site_message %}
-		<div id="message_area" class="message_area_text">
-			<div id="site_message_text" class="message_text">
-				<p>
-					<h3><bold>{{site_message}}</bold></h3>
-				</p>
-			</div>
-		</div>
-		{% endif %}
+    {% block site_message_block %}
+      {% if site_message %}
+      <div id="message_area" class="message_area_text">
+        <div id="site_message_text" class="message_text">
+          <p>
+            <h3><bold>{{site_message}}</bold></h3>
+          </p>
+        </div>
+      </div>
+      {% endif %}
+    {%  endblock %}
 	</div>
 
 	<div data-role="content" style="padding:0;">

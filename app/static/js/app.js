@@ -86,7 +86,7 @@ function initialize_app(site_name, data, limits) {
         }
         var date_time = j.date.split(' ');
         var sample_date_ms = Date.parse(date_time[0]);
-        var latest_ms = sample_date_ms;
+        var latest_ms = 0;
         if(latest_sample_date === undefined || latest_ms < sample_date_ms)
         {
           latest_sample_date = date_time[0];

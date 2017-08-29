@@ -186,7 +186,7 @@ class AlertMessagePage(View):
     start_time = time.time()
     current_app.logger.debug('AlertMessagePage dispatch_request started')
     resp = VoiceResponse()
-    resp.say("Test Alert")
+    resp.say("There are no alerts from the Saluda River Coalition at this time")
     current_app.logger.debug('AlertMessagePage dispatch_request finished in %f seconds' % (time.time()-start_time))
     return str(resp)
 

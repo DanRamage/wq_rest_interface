@@ -188,7 +188,7 @@ class AlertMessagePage(View):
     resp = VoiceResponse()
     resp.say("Test Alert")
     current_app.logger.debug('AlertMessagePage dispatch_request finished in %f seconds' % (time.time()-start_time))
-
+    return str(resp)
 
 class SiteBaseAPI(MethodView):
   def __init__(self):

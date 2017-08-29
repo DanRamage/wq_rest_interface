@@ -178,7 +178,7 @@ def get_data_file(filename):
 
   return results,ret_code
 
-class AlertMessagePage:
+class AlertMessagePage(View):
   def __init__(self):
     return
 

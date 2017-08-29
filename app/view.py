@@ -15,6 +15,8 @@ from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import DEBUG_DATA_FILES, PYCHARM_DEBUG
 #from admin_models import User
+from twilio.twiml.voice_response import VoiceResponse
+
 
 from app import db
 from admin_models import User
@@ -175,6 +177,18 @@ def get_data_file(filename):
   current_app.logger.debug("get_data_file Finished.")
 
   return results,ret_code
+
+class AlertMessagePage:
+  def __init__(self):
+    return
+
+  def dispatch_request(self):
+    start_time = time.time()
+    current_app.logger.debug('AlertMessagePage dispatch_request started')
+    resp = VoiceResponse()
+    resp.say("Test Alert")
+    current_app.logger.debug('AlertMessagePage dispatch_request finished in %f seconds' % (time.time()-start_time))
+
 
 class SiteBaseAPI(MethodView):
   def __init__(self):
@@ -431,7 +445,6 @@ class base_view(sqla.ModelView):
       current_app.logger.exception(ex)
       self.session.rollback()
     return sqla.ModelView.update_model(self, form, model)
-
 
 class project_type_view(base_view):
   column_list = ['name', 'row_entry_date', 'row_update_date']

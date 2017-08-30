@@ -194,7 +194,7 @@ class AlertMessagePage(View):
         json_data = simplejson.load(json_file)
         if len(json_data['sites']):
           sites = ",".join(json_data['sites'])
-          resp.say("For %s sites %s  have high bacteria counts" % (json_data['sampling_date'], sites))
+          resp.say("For %s the following sites have high bacteria counts: %s" % (json_data['sampling_date'], sites))
         else:
           resp.say("For %s there are no alerts from the Saluda River Coalition" % (json_data['sampling_date']))
     except(IOError,Exception) as e:

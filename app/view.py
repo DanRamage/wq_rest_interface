@@ -188,8 +188,8 @@ class AlertMessagePage(View):
   def dispatch_request(self):
     start_time = time.time()
     current_app.logger.debug('AlertMessagePage dispatch_request started')
+    resp = VoiceResponse()
     try:
-      resp = VoiceResponse()
       with open(VOICEMAIL_FILE, "r") as json_file:
         json_data = simplejson.load(json_file)
         if len(json_data['sites']):
@@ -197,6 +197,8 @@ class AlertMessagePage(View):
           resp.say("For %s sites %s  have high bacteria counts" % (json_data['sampling_date'], sites))
         else:
           resp.say("For %s there are no alerts from the Saluda River Coalition" % (json_data['sampling_date']))
+    except(IOError,Exception) as e:
+      current_app.logger.exception(e)
     #resp.say("Test")
     current_app.logger.debug('Message: %s' % (resp))
     current_app.logger.debug('AlertMessagePage dispatch_request finished in %f seconds' % (time.time()-start_time))

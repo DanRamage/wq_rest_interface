@@ -26,15 +26,18 @@ if not DEBUG_DATA_FILES:
   SC_RIVERS_PREDICTIONS_FILE='/home/xeniaprod/feeds/sc_rivers/Predictions.json'
   SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/beachAdvisoryResults.json'
   SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/monitorstations'
+  VOICEMAIL_FILE='/home/xeniaprod/feeds/sc_rivers/voicemail.json'
 else:
   SC_RIVERS_PREDICTIONS_FILE='/home/xeniaprod/feeds/sc_rivers/debug/Predictions.json'
   SC_RIVERS_ADVISORIES_FILE='/home/xeniaprod/feeds/sc_rivers/debug/beachAdvisoryResults.json'
   SC_RIVERS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/sc_rivers/debug/monitorstations'
+  VOICEMAIL_FILE='/home/xeniaprod/feeds/sc_rivers/voicemail.json'
 
 if PYCHARM_DEBUG:
   SC_RIVERS_PREDICTIONS_FILE='/Users/danramage/tmp/sc_rivers/Predictions.json'
   SC_RIVERS_ADVISORIES_FILE='/Users/danramage/tmp/sc_rivers/beachAdvisoryResults.json'
   SC_RIVERS_STATIONS_DATA_DIR='/Users/danramage/tmp/sc_rivers/monitorstations'
+  VOICEMAIL_FILE='/Users/danramage/tmp/voicemail.json'
 
 class MaintenanceMode(View):
   def dispatch_request(self):
@@ -185,8 +188,15 @@ class AlertMessagePage(View):
   def dispatch_request(self):
     start_time = time.time()
     current_app.logger.debug('AlertMessagePage dispatch_request started')
-    resp = VoiceResponse()
-    resp.say("There are no alerts from the Saluda River Coalition at this time")
+    try:
+      resp = VoiceResponse()
+      with open(VOICEMAIL_FILE, "r") as json_file:
+        json_data = simplejson.load(json_file)
+        if len(json_data['sites']):
+          sites = ",".join(json_data['sites'])
+          resp.say("For %s sites %s  have high bacteria counts" % (json_data['sampling_date'], sites))
+        else:
+          resp.say("For %s there are no alerts from the Saluda River Coalition" % (json_data['sampling_date']))
     #resp.say("Test")
     current_app.logger.debug('Message: %s' % (resp))
     current_app.logger.debug('AlertMessagePage dispatch_request finished in %f seconds' % (time.time()-start_time))

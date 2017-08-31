@@ -157,7 +157,7 @@ class SitePage(View):
 
 class SaludaPage(SitePage):
   def __init__(self):
-    current_app.logger.debug('SaludaPage __init__')
+    current_app.logger.debug('IP: %s SaludaPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'saluda')
 
 def get_data_file(filename):

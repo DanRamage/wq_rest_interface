@@ -392,7 +392,8 @@ class MyAdminIndexView(admin.AdminIndexView):
         if helpers.validate_form_on_submit(form):
             user = form.get_user()
             login.login_user(user)
-
+        else:
+          current_app.logger.debug("IP: %s User: %s is not authenticated" % (request.remote_addr, form.login.data))
         if login.current_user.is_authenticated:
             return redirect(url_for('.index'))
         #link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'

@@ -47,7 +47,7 @@ class MaintenanceMode(View):
 
 class ShowIntroPage(View):
   def dispatch_request(self):
-    current_app.logger.debug('intro_page rendered')
+    current_app.logger.debug('%s intro_page rendered' % (request.remote_addr))
     return render_template("sc_rivers_intro.html")
 
 
@@ -57,7 +57,7 @@ class SitePage(View):
     self.site_name = site_name
 
   def get_site_message(self):
-    current_app.logger.debug('get_site_message started')
+    current_app.logger.debug('%s get_site_message started' % (request.remote_addr))
     start_time = time.time()
     rec = db.session.query(Site_Message)\
       .join(Project_Area, Project_Area.id == Site_Message.site_id)\
@@ -131,7 +131,7 @@ class SitePage(View):
 
   def dispatch_request(self):
     start_time = time.time()
-    current_app.logger.debug('dispatch_request started')
+    current_app.logger.debug('%s dispatch_request started' % (request.remote_addr))
     site_message = self.get_site_message()
     program_info = self.get_program_info()
     data = self.get_data()
@@ -187,7 +187,7 @@ class AlertMessagePage(View):
 
   def dispatch_request(self):
     start_time = time.time()
-    current_app.logger.debug('AlertMessagePage dispatch_request started')
+    current_app.logger.debug('%s AlertMessagePage dispatch_request started' % (request.remote_addr))
     resp = VoiceResponse()
     try:
       with open(VOICEMAIL_FILE, "r") as json_file:
@@ -213,7 +213,7 @@ class SiteBaseAPI(MethodView):
 class PredictionsAPI(MethodView):
   def get(self, sitename=None):
     start_time = time.time()
-    current_app.logger.debug('PredictionsAPI get for site: %s' % (sitename))
+    current_app.logger.debug('%s PredictionsAPI get for site: %s' % (request.remote_addr, sitename))
     ret_code = 404
     results = None
 
@@ -231,7 +231,7 @@ class PredictionsAPI(MethodView):
 class BacteriaDataAPI(MethodView):
   def get(self, sitename=None):
     start_time = time.time()
-    current_app.logger.debug('BacteriaDataAPI get for site: %s' % (sitename))
+    current_app.logger.debug('%s BacteriaDataAPI get for site: %s' % (request.remote_addr, sitename))
     ret_code = 404
     results = None
 
@@ -257,7 +257,7 @@ class StationDataAPI(MethodView):
     if 'startdate' in request.args:
       start_date = request.args['startdate']
 
-    current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_date))
+    current_app.logger.debug('%s StationDataAPI get for site: %s station: %s date: %s' % (request.remote_addr, sitename, station_name, start_date))
     ret_code = 404
 
     if sitename == 'saluda':
@@ -378,7 +378,7 @@ class MyAdminIndexView(admin.AdminIndexView):
 
     @expose('/')
     def index(self):
-        current_app.logger.debug("Admin index page")
+        current_app.logger.debug("%s Admin index page" % (request.remote_addr))
         if not login.current_user.is_authenticated:
           current_app.logger.debug("User: %s is not authenticated" % (login.current_user))
           return redirect(url_for('.login_view'))
@@ -387,7 +387,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
         # handle user login
-        current_app.logger.debug("Login  page")
+        current_app.logger.debug("%s Login page" % (request.remote_addr))
         form = LoginForm(request.form)
         if helpers.validate_form_on_submit(form):
             user = form.get_user()
@@ -424,7 +424,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     """
     @expose('/logout/')
     def logout_view(self):
-        current_app.logger.debug("Logout  page")
+        current_app.logger.debug("%s Logout page" % (request.remote_addr))
         login.logout_user()
         return redirect(url_for('.index'))
 

@@ -73,7 +73,7 @@ def build_url_rules(app):
   from view import ShowIntroPage, \
     MyrtleBeachPage, \
     SarasotaPage, \
-    CharlestonBeachPage, \
+    CharlestonPage, \
     PredictionsAPI, \
     BacteriaDataAPI, \
     StationDataAPI

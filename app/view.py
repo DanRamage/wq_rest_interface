@@ -28,6 +28,10 @@ SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
 SC_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
 SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
+SC_CHS_PREDICTIONS_FILE='/home/xeniaprod/feeds/charleston/Predictions.json'
+SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beachAdvisoryResults.json'
+SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
+
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 #SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
 #SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
@@ -99,6 +103,9 @@ class SitePage(View):
       elif self.site_name == 'sarasota':
         prediction_data, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
         advisory_data,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
+      elif self.site_name == 'charleston':
+        prediction_data, ret_code = get_data_file(SC_CHS_PREDICTIONS_FILE)
+        advisory_data,ret_code = get_data_file(SC_CHS_ADVISORIES_FILE)
 
       data = {
         'prediction_data': simplejson.loads(prediction_data),
@@ -146,6 +153,11 @@ class SarasotaPage(SitePage):
     current_app.logger.debug('SarasotaPage __init__')
     SitePage.__init__(self, 'sarasota')
 
+class CharlestonPage(SitePage):
+  def __init__(self):
+    current_app.logger.debug('CharlestonPage __init__')
+    SitePage.__init__(self, 'charleston')
+
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
 
@@ -184,6 +196,9 @@ class PredictionsAPI(MethodView):
       results, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
     elif sitename == 'sarasota':
       results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
+    elif sitename == 'charleston':
+      results, ret_code = get_data_file(SC_CHS_PREDICTIONS_FILE)
+
     else:
       results = simplejson.dumps({'status': {'http_code': ret_code},
                     'contents': None
@@ -213,6 +228,14 @@ class BacteriaDataAPI(MethodView):
       json_ret = {'status' : {'http_code': ret_code},
                   'contents': simplejson.loads(results)}
       results = simplejson.dumps(json_ret)
+
+    elif sitename == 'charleston':
+      results,ret_code = get_data_file(SC_CHS_ADVISORIES_FILE)
+      #Wrap the results in the status and contents keys. The app expects this format.
+      json_ret = {'status' : {'http_code': ret_code},
+                  'contents': simplejson.loads(results)}
+      results = simplejson.dumps(json_ret)
+
     else:
       results = simplejson.dumps({'status': {'http_code': ret_code},
                     'contents': None
@@ -238,6 +261,11 @@ class StationDataAPI(MethodView):
     elif sitename == 'sarasota':
       results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
       ret_code = 200
+
+    elif sitename == 'sarasota':
+      results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
+      ret_code = 200
+
     else:
       results = simplejson.dumps({'status': {'http_code': ret_code},
                     'contents': None

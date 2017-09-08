@@ -29,7 +29,7 @@ SC_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults
 SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
 SC_CHS_PREDICTIONS_FILE='/home/xeniaprod/feeds/charleston/Predictions.json'
-SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beachAdvisoryResults.json'
+SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
 SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
 
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'

@@ -820,7 +820,8 @@ if(onlineStatus != 'off'){
 
   $('#mapPage').bind('pageshow', function(event) {
 
-    var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight*2)+2;
+    var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight) - (document.getElementById('mainfooter').offsetHeight) + 2;
+    //var mapHeight = getScreenSize('height') - (document.getElementById('mainheader').offsetHeight*2)+2;
 
     $('#map_canvas').css( "height", mapHeight );
 

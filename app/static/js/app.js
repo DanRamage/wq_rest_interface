@@ -48,7 +48,7 @@ function initialize_app(site_name, data, limits) {
     $.each(stations.properties.test, function(i,j){
 
       //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
-      if(('advisory' in j) == false)
+      if(('advisory' in stations.properties) == false)
       {
         if (parseInt(j.value, 10) >= limits['High'].min_limit || permanentAdvisory === true) {
           if (permanentAdvisory === true) {
@@ -63,7 +63,7 @@ function initialize_app(site_name, data, limits) {
         }
       }
       else {
-        advisoryText = j.advisory;
+        advisoryText = stations.properties.advisory;
       }
 
       currentEtcoc[stations.properties.station] = {

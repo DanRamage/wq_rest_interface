@@ -40,6 +40,11 @@ SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
 SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
 SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
+class MaintenanceMode(View):
+  def dispatch_request(self):
+    current_app.logger.debug('IP: %s MaintenanceMode rendered' % (request.remote_addr))
+    return render_template("MaintenanceMode.html")
+
 class ShowIntroPage(View):
   def dispatch_request(self):
     current_app.logger.debug('IP: %s intro_page rendered' % (request.remote_addr))

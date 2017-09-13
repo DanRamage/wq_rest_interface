@@ -9,6 +9,8 @@ DATABASE_FILE = 'wq_db.sqlite'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
 SQLALCHEMY_ECHO = False
 
+IS_MAINTENANCE_MODE = False
+
 if PYCHARM_DEBUG:
   LOGFILE='/Users/danramage/tmp/log/flask_plug_view_site.log'
 else:

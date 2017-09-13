@@ -144,18 +144,18 @@ class SitePage(View):
 
 class MyrtleBeachPage(SitePage):
   def __init__(self):
-    current_app.logger.debug('MyrtleBeachPage __init__')
+    current_app.logger.debug('IP: %s MyrtleBeachPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'myrtlebeach')
 
 
 class SarasotaPage(SitePage):
   def __init__(self):
-    current_app.logger.debug('SarasotaPage __init__')
+    current_app.logger.debug('IP: %s SarasotaPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'sarasota')
 
 class CharlestonPage(SitePage):
   def __init__(self):
-    current_app.logger.debug('CharlestonPage __init__')
+    current_app.logger.debug('IP: %s CharlestonPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'charleston')
 
 def get_data_file(filename):

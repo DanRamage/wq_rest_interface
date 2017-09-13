@@ -62,8 +62,9 @@ function initialize_app(site_name, data, limits) {
           advisoryText = 'None';
         }
       }
-      else:
+      else {
         advisoryText = j.advisory;
+      }
 
       currentEtcoc[stations.properties.station] = {
         "desc" : stations.properties.desc,

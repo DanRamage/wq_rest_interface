@@ -431,25 +431,55 @@ class MyAdminIndexView(admin.AdminIndexView):
         return redirect(url_for('.index'))
 
 
+class base_view(sqla.ModelView):
+  def create_model(self, form):
+    try:
+      model = self.model()
+      form.populate_obj(model)
+      model.user = login.current_user
+      entry_time = datetime.utcnow()
+      model.row_entry_date = entry_time.strftime("%Y-%m-%d %H:%M:%S")
+      self.session.add(model)
+      self._on_model_change(form, model, True)
+      self.session.commit()
+    except Exception as ex:
+      current_app.logger.exception(ex)
+      self.session.rollback()
+      return False
+    else:
+      self.after_model_change(form, model, True)
 
-class project_type_view(sqla.ModelView):
+    return model
+
+  def update_model(self, form, model):
+    try:
+      update_time = datetime.utcnow()
+      if model.row_entry_date is None:
+        model.row_entry_date = update_time.strftime("%Y-%m-%d %H:%M:%S")
+      model.row_update_date = update_time.strftime("%Y-%m-%d %H:%M:%S")
+    except Exception as ex:
+      current_app.logger.exception(ex)
+      self.session.rollback()
+    return sqla.ModelView.update_model(self, form, model)
+
+class project_type_view(base_view):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class project_area_view(sqla.ModelView):
+class project_area_view(base_view):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class site_message_view(sqla.ModelView):
+class site_message_view(base_view):
   column_list = ('site', 'message')
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class project_info_view(sqla.ModelView):
+class project_info_view(base_view):
   def is_accessible(self):
     return login.current_user.is_authenticated
 
-class advisory_limits_view(sqla.ModelView):
+class advisory_limits_view(base_view):
   def is_accessible(self):
     return login.current_user.is_authenticated
   """

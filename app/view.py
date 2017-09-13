@@ -42,7 +42,7 @@ SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
 class ShowIntroPage(View):
   def dispatch_request(self):
-    current_app.logger.debug('intro_page rendered')
+    current_app.logger.debug('IP: %s intro_page rendered' % (request.remote_addr))
     return render_template("intro_page.html")
 
 class SitePage(View):
@@ -51,7 +51,7 @@ class SitePage(View):
     self.site_name = site_name
 
   def get_site_message(self):
-    current_app.logger.debug('get_site_message started')
+    current_app.logger.debug('IP: %s get_site_message started' % (request.remote_addr))
     start_time = time.time()
     rec = db.session.query(Site_Message)\
       .join(Project_Area, Project_Area.id == Site_Message.site_id)\
@@ -118,7 +118,7 @@ class SitePage(View):
 
   def dispatch_request(self):
     start_time = time.time()
-    current_app.logger.debug('dispatch_request started')
+    current_app.logger.debug('IP: %s dispatch_request started' % (request.remote_addr))
     site_message = self.get_site_message()
     program_info = self.get_program_info()
     data = self.get_data()
@@ -188,7 +188,7 @@ class SiteBaseAPI(MethodView):
 class PredictionsAPI(MethodView):
   def get(self, sitename=None):
     start_time = time.time()
-    current_app.logger.debug('PredictionsAPI get for site: %s' % (sitename))
+    current_app.logger.debug('IP: %s PredictionsAPI get for site: %s' % (request.remote_addr, sitename))
     ret_code = 404
     results = None
 
@@ -211,7 +211,7 @@ class PredictionsAPI(MethodView):
 class BacteriaDataAPI(MethodView):
   def get(self, sitename=None):
     start_time = time.time()
-    current_app.logger.debug('BacteriaDataAPI get for site: %s' % (sitename))
+    current_app.logger.debug('IP: %s BacteriaDataAPI get for site: %s' % (request.remote_addr, sitename))
     ret_code = 404
     results = None
 
@@ -251,7 +251,7 @@ class StationDataAPI(MethodView):
     if 'startdate' in request.args:
       start_date = request.args['startdate']
 
-    current_app.logger.debug('StationDataAPI get for site: %s station: %s date: %s' % (sitename, station_name, start_date))
+    current_app.logger.debug('IP: %s StationDataAPI get for site: %s station: %s date: %s' % (request.remote_addr, sitename, station_name, start_date))
     ret_code = 404
 
     if sitename == 'myrtlebeach':
@@ -380,7 +380,7 @@ class MyAdminIndexView(admin.AdminIndexView):
 
     @expose('/')
     def index(self):
-        current_app.logger.debug("Admin index page")
+        current_app.logger.debug("IP: %s Admin index page" % (request.remote_addr))
         if not login.current_user.is_authenticated:
           current_app.logger.debug("User: %s is not authenticated" % (login.current_user))
           return redirect(url_for('.login_view'))
@@ -389,12 +389,13 @@ class MyAdminIndexView(admin.AdminIndexView):
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
         # handle user login
-        current_app.logger.debug("Login  page")
+        current_app.logger.debug("IP: %s Login page" % (request.remote_addr))
         form = LoginForm(request.form)
         if helpers.validate_form_on_submit(form):
             user = form.get_user()
             login.login_user(user)
-
+        else:
+          current_app.logger.debug("IP: %s User: %s is not authenticated" % (request.remote_addr, form.login.data))
         if login.current_user.is_authenticated:
             return redirect(url_for('.index'))
         #link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
@@ -426,7 +427,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     """
     @expose('/logout/')
     def logout_view(self):
-        current_app.logger.debug("Logout  page")
+        current_app.logger.debug("IP: %s Logout page" % (request.remote_addr))
         login.logout_user()
         return redirect(url_for('.index'))
 
@@ -463,15 +464,27 @@ class base_view(sqla.ModelView):
     return sqla.ModelView.update_model(self, form, model)
 
 class project_type_view(base_view):
+  column_list = ['name', 'row_entry_date', 'row_update_date']
+  form_columns = ['name']
   def is_accessible(self):
     return login.current_user.is_authenticated
 
 class project_area_view(base_view):
+  column_list = ['area_name', 'display_name', 'row_entry_date', 'row_update_date']
+  form_columns = ['area_name', 'display_name']
+
   def is_accessible(self):
     return login.current_user.is_authenticated
 
 class site_message_view(base_view):
-  column_list = ('site', 'message')
+  column_list = ['site', 'message', 'row_entry_date', 'row_update_date']
+  form_columns = ['site', 'message']
+  def is_accessible(self):
+    return login.current_user.is_authenticated
+
+class site_message_level_view(base_view):
+  column_list = ['message_level', 'row_entry_date', 'row_update_date']
+  form_columns = ['message_level']
   def is_accessible(self):
     return login.current_user.is_authenticated
 
@@ -480,6 +493,8 @@ class project_info_view(base_view):
     return login.current_user.is_authenticated
 
 class advisory_limits_view(base_view):
+  column_list = ['site', 'min_limit', 'max_limit', 'icon', 'limit_type', 'row_entry_date', 'row_update_date']
+  form_columns = ['site', 'min_limit', 'max_limit', 'icon', 'limit_type']
   def is_accessible(self):
     return login.current_user.is_authenticated
   """

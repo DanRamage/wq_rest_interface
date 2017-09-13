@@ -19,18 +19,24 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from admin_models import User
 from wq_models import Project_Area, Site_Message, Project_Info_Page, Advisory_Limits
+from config import PYCHARM_DEBUG
 
-FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
-FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
-FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
+if not PYCHARM_DEBUG:
+  FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
+  FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
+  FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
 
-SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
-SC_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
-SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
+  SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
+  SC_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
+  SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
 
-SC_CHS_PREDICTIONS_FILE='/home/xeniaprod/feeds/charleston/Predictions.json'
-SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
-SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
+  SC_CHS_PREDICTIONS_FILE='/home/xeniaprod/feeds/charleston/Predictions.json'
+  SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
+  SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
+else:
+  SC_CHS_PREDICTIONS_FILE='/Users/danramage/tmp/Predictions.json'
+  SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/beach_advisories.json'
+  SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp'
 
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 #SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
@@ -267,7 +273,7 @@ class StationDataAPI(MethodView):
       results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
       ret_code = 200
 
-    elif sitename == 'sarasota':
+    elif sitename == 'charleston':
       results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
       ret_code = 200
 

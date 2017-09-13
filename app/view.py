@@ -489,6 +489,8 @@ class site_message_level_view(base_view):
     return login.current_user.is_authenticated
 
 class project_info_view(base_view):
+  column_list = ['site', 'sampling_program', 'url', 'description', 'swim_advisory_info', 'row_entry_date', 'row_update_date']
+  form_columns = ['site', 'sampling_program', 'url', 'description', 'swim_advisory_info']
   def is_accessible(self):
     return login.current_user.is_authenticated
 

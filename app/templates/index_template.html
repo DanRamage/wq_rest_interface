@@ -96,12 +96,21 @@ $(document).bind("mobileinit", function() {
                $('#advisoriesButton').removeClass('ui-state-persist');
                $('#dataButton').removeClass('ui-state-persist');">Forecast</a>
         </li>
-        <li><a id="advisoriesButton"
-               onclick="changeMapMarker('advisories');
-               $('#advisoriesButton').addClass('ui-state-persist');
-               $('#forecastButton').removeClass('ui-state-persist');
-               $('#dataButton').removeClass('ui-state-persist');">Swim Advisory</a>
-        </li>
+        {% if issues_swim_advisories %}
+          <li><a id="advisoriesButton"
+                 onclick="changeMapMarker('advisories');
+                 $('#advisoriesButton').addClass('ui-state-persist');
+                 $('#forecastButton').removeClass('ui-state-persist');
+                 $('#dataButton').removeClass('ui-state-persist');">Swim Advisory</a>
+          </li>
+        {% else %}
+          <li><a id="advisoriesButton"
+                 onclick="changeMapMarker('advisories');
+                 $('#advisoriesButton').addClass('ui-state-persist');
+                 $('#forecastButton').removeClass('ui-state-persist');
+                 $('#dataButton').removeClass('ui-state-persist');">Water Quality Data</a>
+          </li>
+        {% endif %}
         <!--
         <li><a id="dataButton"
                onclick="changeMapMarker('data');

@@ -60,6 +60,10 @@ class SitePage(View):
   def __init__(self, site_name):
     current_app.logger.debug('__init__')
     self.site_name = site_name
+    #Temporary fix until we get the base templating done. This is used to set the
+    #text for the Swim Advisory button, by default it says Swim Advisories, if
+    #False it will say Water Quality Data.
+    self.issues_swim_advisories = True
 
   def get_site_message(self):
     current_app.logger.debug('IP: %s get_site_message started' % (request.remote_addr))
@@ -140,7 +144,8 @@ class SitePage(View):
                              site_name=self.site_name,
                              wq_site_bbox='',
                              sampling_program_info=program_info,
-                             data=data)
+                             data=data,
+                             issues_swim_advisories=self.issues_swim_advisories)
     except Exception as e:
       current_app.logger.exception(e)
       rendered_template = render_template('index_template.html',
@@ -148,7 +153,8 @@ class SitePage(View):
                                site_name=self.site_name,
                                wq_site_bbox='',
                                sampling_program_info={},
-                               data={})
+                               data={},
+                               issues_swim_advisories=self.issues_swim_advisories)
 
     current_app.logger.debug('dispatch_request finished in %f seconds' % (time.time()-start_time))
     return rendered_template
@@ -168,6 +174,7 @@ class CharlestonPage(SitePage):
   def __init__(self):
     current_app.logger.debug('IP: %s CharlestonPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'charleston')
+    self.issues_swim_advisories = False
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

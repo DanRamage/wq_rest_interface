@@ -177,7 +177,7 @@ class CharlestonPage(SitePage):
   def __init__(self):
     current_app.logger.debug('IP: %s CharlestonPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'charleston')
-    self.issues_swim_advisories = False
+    self.page_template = 'chs_index_page.html'
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

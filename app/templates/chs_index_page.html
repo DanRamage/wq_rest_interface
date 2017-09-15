@@ -4,7 +4,7 @@
   </script>
 {% endblock %}
 
-{% block title %}How's Myrtle Beach{% endblock %}
+{% block title %}How's Charleston Harbor{% endblock %}
 
 
 {% block site_message_block %}
@@ -99,4 +99,22 @@
 {% endblock %}
 
 {% block mainfooter_block %}
+  <div id="mainfooter" data-role="footer" data-position="fixed" data-id="mainfooter" data-tap-toggle="false" data-theme="a">
+  <div data-role="navbar">
+      <ul id="navItems">
+        <li><a id="forecastButton" class="ui-state-persist ui-btn-active"
+               onclick="changeMapMarker('forecast');
+               $('#forecastButton').addClass('ui-state-persist');
+               $('#advisoriesButton').removeClass('ui-state-persist');
+               $('#dataButton').removeClass('ui-state-persist');">Forecast</a>
+        </li>
+        <li><a id="advisoriesButton"
+               onclick="changeMapMarker('advisories');
+               $('#advisoriesButton').addClass('ui-state-persist');
+               $('#forecastButton').removeClass('ui-state-persist');
+               $('#dataButton').removeClass('ui-state-persist');">Water Quality Data</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 {% endblock %}

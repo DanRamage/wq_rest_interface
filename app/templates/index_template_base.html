@@ -57,7 +57,17 @@
   <script type="text/javascript" src="static/js/tinysort.min.js"></script>
 
   <link rel="stylesheet" href="static/css/styles.css" />
-    {% block post_css_block %}{%  endblock %}
+    {% block post_css_block %}
+      <style>
+        .message_area_text {
+          color: #FF5858;
+          background-color: #FFFFFF;
+        }
+        .message_text {
+          text-align: center;
+        }
+      </style>
+    {%  endblock %}
   {%  endblock %}
 </head>
 
@@ -90,20 +100,26 @@
 		<div id="map_canvas" style="width:100%"></div>
 	</div>
 
+  {% block mainfooter_block %}
 	<div id="mainfooter" data-role="footer" data-position="fixed" data-id="mainfooter" data-tap-toggle="false" data-theme="a">
-    {% block mainfooter_block %}
-  		<div data-role="navbar">
-			<ul id="navItems">
-        <li><a id="advisoriesButton"
-               onclick="changeMapMarker('advisories');
-               $('#advisoriesButton').addClass('ui-state-persist');
-               $('#forecastButton').removeClass('ui-state-persist');
-               $('#dataButton').removeClass('ui-state-persist');">Advisories</a>
-        </li>
-      </ul>
-		</div>
-    {% endblock %}
-	</div>
+    <div data-role="navbar">
+        <ul id="navItems">
+          <li><a id="forecastButton" class="ui-state-persist ui-btn-active"
+                 onclick="changeMapMarker('forecast');
+                 $('#forecastButton').addClass('ui-state-persist');
+                 $('#advisoriesButton').removeClass('ui-state-persist');
+                 $('#dataButton').removeClass('ui-state-persist');">Forecast</a>
+          </li>
+          <li><a id="advisoriesButton"
+                 onclick="changeMapMarker('advisories');
+                 $('#advisoriesButton').addClass('ui-state-persist');
+                 $('#forecastButton').removeClass('ui-state-persist');
+                 $('#dataButton').removeClass('ui-state-persist');">Swim Advisory</a>
+          </li>
+        </ul>
+      </div>
+  	</div>
+  {% endblock %}
 </div>
 
 {%  block beachListPage %}

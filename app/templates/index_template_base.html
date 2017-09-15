@@ -107,7 +107,48 @@
 </div>
 
 <div id="beachListPage" data-role="page">
-  {%  block beachListPage %}{% endblock %}
+  {%  block beachListPage %}
+    <div data-role="header" data-id="mainheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
+      <div data-role="navbar">
+        <ul id="navItems">
+          <li><a href="#mapPage">Map</a></li>
+          <li><a href="#beachListPage" class="ui-state-persist ui-btn-active">Search</a></li>
+          <li><a href="#moreInformation">Info</a></li>
+        </ul>
+      </div>
+      <ul id="beachListHeadings" data-role="listview">
+        <li data-theme="d" style="padding:0 0 5px 0;border:none;">
+					<span onclick="sortBy(1)" class="list-table-heading" style="text-align:left;padding-left:25px;">
+						<div id="arrows_1" class="arrow-asc"></div>
+						<div style="display:inline-block">Location</div>
+					</span>
+          <span onclick="sortBy(3)" class="list-table-heading">
+						<div id="arrows_3"></div>
+						<div id="forecast_column" style="display:inline-block">Forecast<br/></div>
+					</span>
+          <span onclick="sortBy(4)" class="list-table-heading">
+						<div id="arrows_4"></div>
+						<div style="display:inline-block">Swim<br/>Advisory</div>
+					</span>
+          <span onclick="sortBy(5)" class="list-table-heading"><div id="arrows_5"></div>
+						<div style="display:inline-block">Bacteria<br/>Data</div>
+					</span>
+        </li>
+      </ul>
+
+    </div>
+
+
+
+
+
+    <div data-role="content" style="padding-top:0">
+      <ul id="beachList" data-divider-theme="c" data-role="listview" data-filter="true"
+          data-filter-placeholder="Search Beaches (name or forecast, eg low)"></ul>
+    </div>
+
+
+  {% endblock %}
 
 </div>
 

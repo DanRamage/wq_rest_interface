@@ -199,3 +199,39 @@
     </div>
   </div>
 {% endblock %}
+
+{% block mainfooter_block %}
+  <div data-role="navbar">
+			<ul id="navItems">
+        <li><a id="forecastButton" class="ui-state-persist ui-btn-active"
+               onclick="changeMapMarker('forecast');
+               $('#forecastButton').addClass('ui-state-persist');
+               $('#advisoriesButton').removeClass('ui-state-persist');
+               $('#dataButton').removeClass('ui-state-persist');">Forecast</a>
+        </li>
+        {% if issues_swim_advisories %}
+          <li><a id="advisoriesButton"
+                 onclick="changeMapMarker('advisories');
+                 $('#advisoriesButton').addClass('ui-state-persist');
+                 $('#forecastButton').removeClass('ui-state-persist');
+                 $('#dataButton').removeClass('ui-state-persist');">Swim Advisory</a>
+          </li>
+        {% else %}
+          <li><a id="advisoriesButton"
+                 onclick="changeMapMarker('advisories');
+                 $('#advisoriesButton').addClass('ui-state-persist');
+                 $('#forecastButton').removeClass('ui-state-persist');
+                 $('#dataButton').removeClass('ui-state-persist');">Water Quality Data</a>
+          </li>
+        {% endif %}
+        <!--
+        <li><a id="dataButton"
+               onclick="changeMapMarker('data');
+               $('#dataButton').addClass('ui-state-persist');
+               $('#advisoriesButton').removeClass('ui-state-persist');
+               $('#forecastButton').removeClass('ui-state-persist');">Data</a>
+        </li>
+        -->
+      </ul>
+		</div>
+{% endblock %}

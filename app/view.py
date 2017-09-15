@@ -60,6 +60,8 @@ class SitePage(View):
   def __init__(self, site_name):
     current_app.logger.debug('__init__')
     self.site_name = site_name
+    self.page_template = 'index_template.html'
+
     #Temporary fix until we get the base templating done. This is used to set the
     #text for the Swim Advisory button, by default it says Swim Advisories, if
     #False it will say Water Quality Data.
@@ -139,7 +141,7 @@ class SitePage(View):
     data = self.get_data()
     try:
       current_app.logger.debug('Site: %s rendered.' % (self.site_name))
-      rendered_template = render_template('index_template.html',
+      rendered_template = render_template(self.page_template,
                              site_message=site_message,
                              site_name=self.site_name,
                              wq_site_bbox='',
@@ -148,7 +150,7 @@ class SitePage(View):
                              issues_swim_advisories=self.issues_swim_advisories)
     except Exception as e:
       current_app.logger.exception(e)
-      rendered_template = render_template('index_template.html',
+      rendered_template = render_template(self.page_template,
                                site_message='',
                                site_name=self.site_name,
                                wq_site_bbox='',
@@ -163,6 +165,7 @@ class MyrtleBeachPage(SitePage):
   def __init__(self):
     current_app.logger.debug('IP: %s MyrtleBeachPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'myrtlebeach')
+    self.page_template = 'mb_index_page.html'
 
 
 class SarasotaPage(SitePage):

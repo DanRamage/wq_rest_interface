@@ -1,5 +1,5 @@
 import os
-from flask import Flask, current_app, redirect, url_for, request
+from flask import Flask, current_app, redirect, url_for, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import flask_admin as flask_admin
 import flask_login as flask_login
@@ -105,6 +105,9 @@ def build_url_rules(app):
       current_app.logger.exception(exception)
       #return render_template('500.html'), 500
 
+  @app.errorhandler(404)
+  def page_not_found(e):
+    return render_template('404_page.html'), 404
 
   """
   @app.route('/<sitename>/rest/info')

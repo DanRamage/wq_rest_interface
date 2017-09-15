@@ -151,9 +151,68 @@
 {% endblock %}
 
 
-<div id="beachDetailsPage" data-role="page">
-  {% block beachDetailsPage %}{% endblock %}
+
+{% block beachDetailsPage %}
+  <div id="beachDetailsPage" data-role="page" data-title="HowstheBeach">
+
+	<div id="detailsheader" data-role="header" data-add-back-btn="true" data-id="detailsheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
+		<h1 id="beachName" style="font-size:12px;height:25px;"></h1>
+		<div data-role="navbar">
+			<div id="detail_page_tabs" data-role="tabs">
+		        <ul>
+		            <li><a id="details_data_tab_link" href="#data_panel">Data</a></li>
+		            <li><a id="details_map_tab_link" href="#map_panel" class="detail_map_button">Aerial view</a></li>
+		        </ul>
+	    	</div>
+    	</div>
+	</div>
+
+  <div data-role="content" style="padding-left:0;padding-right:0;padding-bottom:0">
+
+  	<div id="data_panel" data-role="tab-content">
+
+    	<div id="beachDetailsContainer">
+
+	    	<ul id="beachDetailsHeadings" data-role="listview">
+				<li data-theme="d" style="padding:0;border:none;">
+					<span id="details_forecast_column" class="details-table-heading">Forecast<br /></span>
+					<span class="details-table-heading">Swim<br />Advisory</span>
+					<span id="details_data_column" class="details-table-heading">Bacteria<br />Data<br /></span>
+				</li>
+			</ul>
+		    <ul id="beachDetails" data-divider-theme="c" data-role="listview"></ul>
+		    <hr style="clear: both;visibility: hidden;" />
+
+			<fieldset id="dayRangeSelector" style="padding-left:10px;" data-role="controlgroup" data-mini="true" data-type="horizontal">
+
+		         	<input type="radio" name="num-days" id="num-days-30" value="30" onclick="monitoringChart.xAxis[0].setExtremes(Date.parse(date_by_subtracting_days(current_date, 30)),Date.parse(current_date));" />
+		         	<label for="num-days-30">30 days</label>
+
+		         	<input type="radio" name="num-days" id="num-days-60" value="60" onclick="monitoringChart.xAxis[0].setExtremes(Date.parse(date_by_subtracting_days(current_date, 60)),Date.parse(current_date));" />
+		         	<label for="num-days-60">60 days</label>
+
+		         	<input type="radio" name="num-days" id="num-days-180" value="180" onclick="monitoringChart.xAxis[0].setExtremes(Date.parse(date_by_subtracting_days(current_date, 180)),Date.parse(current_date));"  />
+		         	<label for="num-days-180">180 days</label>
+
+		         	<input type="radio" name="num-days" id="num-days-365" value="365" onclick="monitoringChart.xAxis[0].setExtremes(Date.parse(date_by_subtracting_days(current_date, 365)),Date.parse(current_date));" checked="checked" />
+		         	<label for="num-days-365">365 days</label>
+
+			</fieldset>
+
+		</div>
+
+		<div id="monitoring_data_graph" style="padding:0;width:99%"></div>
+	</div>
+
+	<div id="map_panel" data-role="tab-content" style="padding:0">
+		<div id="detail_map_canvas" style="width:100%"></div>
+	</div>
+
+  </div>
+
 </div>
+
+{% endblock %}
 
 <div id="moreInformation" data-role="page">
 <div>

@@ -106,8 +106,8 @@
 	</div>
 </div>
 
-<div id="beachListPage" data-role="page">
-  {%  block beachListPage %}
+{%  block beachListPage %}
+  <div id="beachListPage" data-role="page" data-title="HowstheBeach">
     <div data-role="header" data-id="mainheader" data-theme="c" data-position="fixed" data-tap-toggle="false">
       <div data-role="navbar">
         <ul id="navItems">
@@ -147,10 +147,8 @@
           data-filter-placeholder="Search Beaches (name or forecast, eg low)"></ul>
     </div>
 
-
-  {% endblock %}
-
-</div>
+  </div>
+{% endblock %}
 
 
 <div id="beachDetailsPage" data-role="page">

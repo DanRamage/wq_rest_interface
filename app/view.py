@@ -367,7 +367,47 @@ class RegistrationForm(form.Form):
         raise validators.ValidationError('Duplicate username')
 """
 # Create customized model view class
-class MyModelView(sqla.ModelView):
+class UserModelView(sqla.ModelView):
+  def create_model(self, form):
+    try:
+      start_time = time.time()
+      current_app.logger.debug('IP: %s UserModelView create_model started.' % (request.remote_addr))
+
+      model = self.model()
+      form.populate_obj(model)
+      pwd = model.password
+      model.password = generate_password_hash(pwd)
+      self.session.add(model)
+      self._on_model_change(form, model, True)
+      self.session.commit()
+    except Exception as ex:
+      current_app.logger.exception(ex)
+      self.session.rollback()
+      return False
+    else:
+      self.after_model_change(form, model, True)
+
+    current_app.logger.debug('IP: %s UserModelView create_model finished in %f seconds.' % (request.remote_addr, time.time() - start_time))
+    return model
+  def update_model(self, form, model):
+    try:
+      start_time = time.time()
+      current_app.logger.debug('IP: %s UserModelView create_model started.' % (request.remote_addr))
+
+      form.populate_obj(model)
+      pwd = model.password
+      model.password = generate_password_hash(pwd)
+      self.session.add(model)
+      self._on_model_change(form, model, True)
+      self.session.commit()
+    except Exception as ex:
+      current_app.logger.exception(ex)
+      self.session.rollback()
+      return False
+    else:
+      self.after_model_change(form, model, True)
+
+    current_app.logger.debug('IP: %s UserModelView create_model finished in %f seconds.' % (request.remote_addr, time.time() - start_time))
 
   def is_accessible(self):
     return login.current_user.is_authenticated
@@ -383,6 +423,7 @@ class MyAdminIndexView(admin.AdminIndexView):
           current_app.logger.debug("User: %s is not authenticated" % (login.current_user))
           return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
+
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
@@ -428,7 +469,6 @@ class MyAdminIndexView(admin.AdminIndexView):
         current_app.logger.debug("IP: %s Logout page" % (request.remote_addr))
         login.logout_user()
         return redirect(url_for('.index'))
-
 
 class base_view(sqla.ModelView):
   def create_model(self, form):

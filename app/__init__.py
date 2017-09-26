@@ -45,7 +45,7 @@ def create_app(config_file):
 def build_flask_admin(app):
 
   from view import MyAdminIndexView, \
-    MyModelView, \
+    UserModelView, \
     project_area_view, \
     site_message_view, \
     project_type_view, \
@@ -61,7 +61,7 @@ def build_flask_admin(app):
   admin = flask_admin.Admin(app, 'River WQ Administation', index_view=MyAdminIndexView(), base_template='my_master.html')
 
   # Add view
-  admin.add_view(MyModelView(User, db.session))
+  admin.add_view(UserModelView(User, db.session))
   admin.add_view(project_type_view(Project_Type, db.session, name="Site Type"))
   admin.add_view(project_area_view(Project_Area, db.session, name="Area"))
   admin.add_view(site_message_view(Site_Message, db.session, name="Message"))
@@ -159,54 +159,3 @@ def build_init_db(user, password):
   db.session.add(test_user)
   db.session.commit()
   return
-
-#init_logging()
-"""
-from view import *
-
-init_login()
-# Create admin
-admin = admin.Admin(app, 'Water Quality Administation', index_view=MyAdminIndexView(), base_template='my_master.html')
-
-# Add view
-admin.add_view(MyModelView(User, db.session))
-admin.add_view(wq_area_page(WQ_Area, db.session, name="Area"))
-admin.add_view(wq_site_message_page(WQ_Site_Message, db.session, name="Area Message"))
-
-"""
-"""
-#Page rules
-app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
-app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
-app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
-
-#REST rules
-app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])
-app.add_url_rule('/sample_data/current_results/<string:sitename>', view_func=BacteriaDataAPI.as_view('sample_data_view'), methods=['GET'])
-app.add_url_rule('/station_data/<string:sitename>/<string:station_name>', view_func=StationDataAPI.as_view('station_data_view'), methods=['GET'])
-
-
-@app.route('/<sitename>/rest/info')
-def info_page(sitename):
-  app.logger.debug("info_page for site: %s" % (sitename))
-
-  if sitename == 'myrtlebeach':
-    return send_from_directory('/var/www/flaskhowsthebeach/sites/myrtlebeach', 'info.html')
-  elif sitename == 'sarasota':
-    return send_from_directory('/var/www/flaskhowsthebeach/sites/sarasota', 'info.html')
-
-@app.errorhandler(500)
-def internal_error(exception):
-    current_app.logger.exception(exception)
-    #return render_template('500.html'), 500
-"""
-"""
-@app.route('/rest/help', methods = ['GET'])
-def help():
-  current_app.logger.debug("help started")
-  func_list = {}
-  for rule in app.url_map.iter_rules():
-      if rule.endpoint != 'static':
-          func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
-  return jsonify(func_list)
-"""

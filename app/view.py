@@ -392,7 +392,7 @@ class UserModelView(sqla.ModelView):
   def update_model(self, form, model):
     try:
       start_time = time.time()
-      current_app.logger.debug('IP: %s UserModelView create_model started.' % (request.remote_addr))
+      current_app.logger.debug('IP: %s UserModelView update_model started.' % (request.remote_addr))
 
       form.populate_obj(model)
       pwd = model.password
@@ -407,7 +407,7 @@ class UserModelView(sqla.ModelView):
     else:
       self.after_model_change(form, model, True)
 
-    current_app.logger.debug('IP: %s UserModelView create_model finished in %f seconds.' % (request.remote_addr, time.time() - start_time))
+    current_app.logger.debug('IP: %s UserModelView update_model finished in %f seconds.' % (request.remote_addr, time.time() - start_time))
 
   def is_accessible(self):
     return login.current_user.is_authenticated

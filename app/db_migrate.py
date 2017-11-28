@@ -1,4 +1,45 @@
-from app import db
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
+#from config import *
+
+DATABASE_FILE = 'wq_db.sqlite'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
+SQLALCHEMY_ECHO = False
+
+app = Flask(__name__)
+# Create in-memory database
+app.config['DATABASE_FILE'] = DATABASE_FILE
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
+
+db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
+"""
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+"""
+"""
+def create_app():
+  app = Flask(__name__)
+
+  from app import db
+  db.app = app
+  db.init_app(app)
+
+  # Create in-memory database
+  app.config['DATABASE_FILE'] = DATABASE_FILE
+  app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+  app.config['SQLALCHEMY_ECHO'] = SQLALCHEMY_ECHO
+  migrate.init_app(app, db)
+
+  return app
+"""
 
 class Project_Type(db.Model):
   __tablename__ = 'project_type'
@@ -42,20 +83,20 @@ class Site_Message_Level(db.Model):
   def __str__(self):
     return self.message_level
 
+
 class Site_Message(db.Model):
   __tablename__ = 'site_message'
   id = db.Column(db.Integer, primary_key=True)
   row_entry_date = db.Column(db.String(32))
   row_update_date = db.Column(db.String(32))
   site_id = db.Column(db.Integer, db.ForeignKey('project_area.id'), unique=True)
-  message_lvl_id = db.Column(db.Integer, db.ForeignKey('site_message_level.id'))
+  message_lvl_id = db.Column(db.Integer, db.ForeignKey(Site_Message_Level.id))
   message = db.Column(db.String(512))
 
   site = db.relationship('Project_Area', backref='site_message')
   site_message_level = db.relationship('Site_Message_Level', backref='site_message')
   def __str__(self):
     return self.message
-
 
 class Project_Info_Page(db.Model):
   __tablename__ = 'project_info_page'
@@ -82,8 +123,6 @@ class Advisory_Limits(db.Model):
 
   site = db.relationship('Project_Area', backref='advisory_limits')
 
-
-
 class Boundary(db.Model):
   __table_name__ = 'boundary'
   id = db.Column(db.Integer, primary_key=True)
@@ -104,7 +143,6 @@ class Boundary_Mapper(db.Model):
   boundary_id = db.Column(db.Integer, db.ForeignKey('boundary.id'), primary_key=True)
 
 
-
 class Sample_Site(db.Model):
   __table_name__ = "sample_site"
   id = db.Column(db.Integer, primary_key=True)
@@ -122,23 +160,17 @@ class Sample_Site(db.Model):
   description = db.Column(db.Text, nullable=True)
   epa_id = db.Column(db.String(32), nullable=True)
   county = db.Column(db.String(32), nullable=True)
-  # Some stations may measure water quality but can't issue a swim advisory.
   issues_advisories = db.Column(db.Boolean, nullable=True)
-  #Station currently has an advisory on going.This is normally taken care of in the prediction engine, but when we have popup
-  #stations, we want to be able to set that the staiton has an advisory so the map shows the appropriate icon.
   has_current_advisory = db.Column(db.Boolean, nullable=True)
-  #This is a unique per station message.
   advisory_text = db.Column(db.Text, nullable=True)
-  #This is used internally(not used on the map) for the most part. Helps denote the site is not permanent. We use this to filter
-  #on for the basic user view to allow a non superuser to enter popup sites while not being able to modify permanent sites.
-  temporary_site = db.Column(db.Boolean, nullable=False)
-  boundaries = db.relationship(Boundary,
+  temporary_site = db.Column(db.Boolean, nullable=True)
+
+  boundary = db.relationship("Boundary",
                              secondary='boundary__mapper',
                              primaryjoin=(Boundary_Mapper.sample_site_id == id),
                              backref='sample_site')
   extents = db.relationship("Site_Extent", backref='sample_site')
-  site_data = db.relationship("Sample_Site_Data", backref='sample_site',
-                              order_by="desc(Sample_Site_Data.sample_date)")
+
   def __str__(self):
     return self.site_name
 
@@ -153,10 +185,6 @@ class Sample_Site_Data(db.Model):
   site_id = db.Column(db.Integer, db.ForeignKey(Sample_Site.id))
   sample_site_name = db.relationship('Sample_Site', backref='sample_site_data', foreign_keys=[site_id])
 
-  def __str__(self):
-    return '%s: %.2f' % (self.sample_date, self.sample_value)
-
-
 
 class Site_Extent(db.Model):
   __table_name__ = 'site_extent'
@@ -169,3 +197,55 @@ class Site_Extent(db.Model):
   site_id = db.Column(db.Integer, db.ForeignKey(Sample_Site.id))
   sample_site_name = db.relationship('Sample_Site', backref='site_extents', foreign_keys=[site_id])
 
+
+# Define models
+roles_users = db.Table(
+    'roles_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+)
+
+
+class Role(db.Model):
+  id = db.Column(db.Integer(), primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
+  name = db.Column(db.String(80), unique=True)
+  description = db.Column(db.String(255))
+
+  def __str__(self):
+        return self.name
+
+# Create user model.
+class User(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
+  first_name = db.Column(db.String(100))
+  last_name = db.Column(db.String(100))
+  active = db.Column(db.Boolean())
+  login = db.Column(db.String(80), unique=True)
+  email = db.Column(db.String(120))
+  password = db.Column(db.Text)
+  roles = db.relationship('Role',
+                          secondary=roles_users,
+                          backref=db.backref('user', lazy='dynamic'))
+
+  # Flask-Login integration
+  def is_authenticated(self):
+    return True
+
+  def is_active(self):
+    return True
+
+  def is_anonymous(self):
+    return False
+
+  def get_id(self):
+    return self.id
+
+  # Required for administrative interface
+  def __unicode__(self):
+    return self.username
+if __name__ == '__main__':
+  manager.run()

@@ -636,6 +636,7 @@ class sample_site_view(base_view):
   """
   column_list = ['project_site', 'site_name', 'latitude', 'longitude', 'description', 'epa_id', 'county', 'issues_advisories', 'has_current_advisory', 'advisory_text', 'boundaries', 'temporary_site', 'site_data', 'row_entry_date', 'row_update_date']
   form_columns = ['project_site', 'site_name', 'latitude', 'longitude', 'description', 'epa_id', 'county', 'site_data','issues_advisories', 'has_current_advisory', 'advisory_text', 'boundaries', 'temporary_site']
+  column_filters = ['project_site']
 
   def on_model_change(self, form, model, is_created):
     """
@@ -671,6 +672,7 @@ class sample_site_view(base_view):
 class boundary_view(base_view):
   column_list = ['project_site', 'boundary_name', 'wkt_boundary', 'row_entry_date', 'row_update_date']
   form_columns = ['project_site', 'boundary_name', 'wkt_boundary']
+  column_filters = ['project_site']
 
 
 class site_extent_view(base_view):
@@ -681,6 +683,7 @@ class popup_site_view(base_view):
 
   column_list = ['project_site', 'site_name', 'latitude', 'longitude', 'description', 'advisory_text']
   form_columns = ['project_site', 'site_name', 'latitude', 'longitude', 'description', 'advisory_text']
+  column_filters = ['project_site']
 
   def on_model_change(self, form, model, is_created):
     start_time = time.time()
@@ -704,4 +707,5 @@ class popup_site_view(base_view):
 class sample_site_data_view(base_view):
   column_list=['sample_site_name', 'sample_date', 'sample_value', 'row_entry_date', 'row_update_date']
   form_columns=['sample_site_name', 'sample_date', 'sample_value']
+  column_filters = ['sample_site_name']
 

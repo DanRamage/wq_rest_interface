@@ -1,5 +1,5 @@
 import os
-from flask import Flask, current_app, redirect, url_for, request
+from flask import Flask, current_app, redirect, url_for, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import flask_admin as flask_admin
 import flask_login as flask_login

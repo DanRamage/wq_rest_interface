@@ -1,5 +1,5 @@
 import os
-from flask import request, redirect, render_template, current_app, url_for, g
+from flask import request, redirect, render_template, current_app, url_for
 from flask.views import View, MethodView
 import flask_admin as admin
 import flask_login as login
@@ -13,6 +13,8 @@ import geojson
 from datetime import datetime
 from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
+from shapely.wkb import loads as wkb_loads
+from shapely.wkt import loads as wkt_loads
 
 from config import PYCHARM_DEBUG
 from admin_models import User
@@ -21,7 +23,6 @@ from app import db
 from admin_models import User
 from wq_models import Project_Area, \
   Site_Message, \
-  Project_Info_Page, \
   Advisory_Limits, \
   Sample_Site,\
   Site_Extent,\
@@ -669,10 +670,46 @@ class sample_site_view(base_view):
 
     current_app.logger.debug('IP: %s User: %s popup_site_view on_model_change finished in %f seconds.' % (request.remote_addr, current_user.login, time.time() - start_time))
 
+class wktTextField(fields.TextAreaField):
+  def process_data(self, value):
+    self.data = wkb_loads(value)
+
 class boundary_view(base_view):
-  column_list = ['project_site', 'boundary_name', 'wkt_boundary', 'row_entry_date', 'row_update_date']
-  form_columns = ['project_site', 'boundary_name', 'wkt_boundary']
+  #Instead of showing the binary of the wkb_boundary field, we convert to the wkt
+  #and diplay it.
+  #Formatter to convert the wkb to wkt for display.
+  def _wkb_to_wkt(view, context, model, name):
+    wkt = wkb_loads(model.wkb_boundary)
+    return wkt
+
+  form_extra_fields = {
+    'wkb_boundary': wktTextField('Boundary Polygon')
+  }
+  column_formatters = {
+    'wkb_boundary': _wkb_to_wkt
+  }
+  column_list = ['project_site', 'boundary_name', 'wkb_boundary', 'row_entry_date', 'row_update_date']
+  form_columns = ['project_site', 'boundary_name', 'wkb_boundary']
   column_filters = ['project_site']
+
+  def on_model_change(self, form, model, is_created):
+    """
+    Handle the wkt to wkb to store in the database.
+    :param form:
+    :param model:
+    :param is_created:
+    :return:
+    """
+    start_time = time.time()
+    current_app.logger.debug(
+      'IP: %s User: %s boundary_view on_model_change started.' % (request.remote_addr, current_user.login))
+    geom = wkt_loads(form.wkb_boundary.data)
+    model.wkb_boundary = geom.wkb
+
+    base_view.on_model_change(self, form, model, is_created)
+
+    current_app.logger.debug('IP: %s User: %s boundary_view create_model finished in %f seconds.' % (
+    request.remote_addr, current_user.login, time.time() - start_time))
 
 
 class site_extent_view(base_view):

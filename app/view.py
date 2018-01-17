@@ -656,7 +656,7 @@ class sample_site_view(base_view):
       model.row_entry_date = entry_time.strftime("%Y-%m-%d %H:%M:%S")
 
     model.user = login.current_user
-
+    """
     if len(model.wkt_location) and form.longitude.data is None and form.latitude.data is None:
       points = model.wkt_location.replace('POINT(', '').replace(')', '')
       longitude,latitude = points.split(' ')
@@ -665,7 +665,7 @@ class sample_site_view(base_view):
     else:
       wkt_location = "POINT(%s %s)" % (form.longitude.data, form.latitude.data)
       model.wkt_location = wkt_location
-
+    """
     base_view.on_model_change(self, form, model, is_created)
 
     current_app.logger.debug('IP: %s User: %s popup_site_view on_model_change finished in %f seconds.' % (request.remote_addr, current_user.login, time.time() - start_time))

@@ -43,8 +43,8 @@ def build_sites(params):
   output_file = params[1]
   current_app.logger.debug("build_sites started Site: %s Outfile: %s" % (site_name, output_file))
   try:
-    sample_sites = db.session.query(Sample_Site) \
-      .join(Boundary, Sample_Site.boundaries) \
+    #.join(Boundary, Sample_Site.boundaries) \
+      sample_sites = db.session.query(Sample_Site) \
       .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
       .filter(Project_Area.area_name == site_name).all()
   except Exception as e:
@@ -64,7 +64,7 @@ def build_sites(params):
           wkt_extent = ""
           for extent in site_extents:
             wkt_extent = extent.wkt_extent
-          row = '\"%s\",%s,%s,\"%s\",%s,\"%s\",\"%s\"\n' % (wkt_location,
+          row = '\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n' % (wkt_location,
                                        site.epa_id,
                                        site.site_name,
                                        site.description,

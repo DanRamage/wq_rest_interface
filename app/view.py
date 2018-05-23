@@ -41,9 +41,10 @@ if not PYCHARM_DEBUG:
   SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
   SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
 else:
-  SC_CHS_PREDICTIONS_FILE='/Users/danramage/tmp/Predictions.json'
-  SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/beach_advisories.json'
+  SC_CHS_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/charleston/Predictions.json'
+  SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json'
   SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp'
+
 
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
 #SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
@@ -172,6 +173,19 @@ class SitePage(View):
         'prediction_data': simplejson.loads(prediction_data),
         'advisory_data': simplejson.loads(advisory_data)
       }
+      #Query the Sample_Site table to get any specific settings we need for the map.
+      #Currently for the Charleston site, we want to disable the Advisory in the site popup
+      #since they do not issue advisories.
+      sample_sites = db.session.query(Sample_Site) \
+        .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
+        .filter(Project_Area.area_name == self.site_name).all()
+      for site in sample_sites:
+        advisory_data = data['advisory_data']['features']
+        for site_data in advisory_data:
+          if site_data['properties']['desc'] == site.site_name:
+            site_data['properties']['issues_advisories'] = site.issues_advisories
+
+
       #Query the database to see if we have any temporary popup sites.
       popup_sites = db.session.query(Sample_Site) \
         .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \

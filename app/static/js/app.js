@@ -72,7 +72,8 @@ function initialize_app(site_name, data, limits) {
         "lat" : stations.geometry.coordinates[1],
         "lng" : stations.geometry.coordinates[0],
         "value" : j.value,
-        "advisory" : advisoryText
+        "advisory" : advisoryText,
+        "issues_advisories": stations.properties.issues_advisories
       };
 
     });
@@ -744,6 +745,24 @@ if(onlineStatus != 'off'){
               popup_label_class = "popup_label_" + calcDataRating(data, station);
             }
             */
+            var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>'];
+            popup_content.push('<div>');
+            popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
+            //If the station does not issue advisories, do not add the field. A station
+            //may collect data but advisories not issued by the governmental agency.
+            if(station.issues_advisories) {
+              popup_content.push('<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">')
+            }
+            popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) +'">' + data + '</span></div></div>')
+            popup_content.push('<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>');
+            popup_content.push('<div style="clear:both;white-space:normal;">' + station_message + '</div>');
+            popup_content.push('</div>');
+            popup_content.push('</div>');
+            $('#map_canvas').gmap('openInfoWindow', {
+              'content': popup_content.join('')
+            },
+            this);
+            /*
             $('#map_canvas').gmap('openInfoWindow', {
               'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
               '<div>' +
@@ -755,6 +774,7 @@ if(onlineStatus != 'off'){
               '</div>' +
               '</div>'
             }, this);
+            */
           });
         }
       });

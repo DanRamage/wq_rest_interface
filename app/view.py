@@ -41,9 +41,13 @@ if not PYCHARM_DEBUG:
   SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
   SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
 else:
+  SC_MB_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/Predictions.json'
+  SC_MB_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/monitorstations/beachAdvisoryResults.json'
+  SC_MB_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/sc_mb'
+
   SC_CHS_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/charleston/Predictions.json'
   SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json'
-  SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp'
+  SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/charleston'
 
 
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
@@ -182,7 +186,7 @@ class SitePage(View):
       for site in sample_sites:
         advisory_data = data['advisory_data']['features']
         for site_data in advisory_data:
-          if site_data['properties']['desc'] == site.site_name:
+          if site_data['properties']['station'] == site.site_name:
             site_data['properties']['issues_advisories'] = site.issues_advisories
 
 

@@ -146,11 +146,17 @@ class Sample_Site_Data(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   row_entry_date = db.Column(db.String(32))
   row_update_date = db.Column(db.String(32))
-  sample_date = db.Column(db.String(32), unique=True)
+  sample_date = db.Column(db.String(32))
   sample_value = db.Column(db.Float)
 
   site_id = db.Column(db.Integer, db.ForeignKey(Sample_Site.id))
   sample_site_name = db.relationship('Sample_Site', backref='sample_site_data', foreign_keys=[site_id])
+
+  #We want the combo of the site_id(foreign key) and sample_date to be the unique keys.
+  __table_args__ = (db.UniqueConstraint('site_id', 'sample_date', name='sample_site_data_uc1'),)
+
+  def __init__(self, **kwargs):
+    super(Sample_Site_Data, self).__init__(**kwargs)
 
   def __str__(self):
     return '%s: %.2f' % (self.sample_date, self.sample_value)

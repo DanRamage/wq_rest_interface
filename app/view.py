@@ -7,6 +7,7 @@ from flask_admin.contrib import sqla
 from flask_admin import helpers, expose
 from flask_security import Security, SQLAlchemyUserDatastore, \
     login_required, current_user
+from sqlalchemy import exc
 import time
 import simplejson
 import geojson
@@ -16,7 +17,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from shapely.wkb import loads as wkb_loads
 from shapely.wkt import loads as wkt_loads
 
-from config import PYCHARM_DEBUG
+from config import PYCHARM_DEBUG, CURRENT_SITE_LIST, VALID_UPDATE_ADDRESSES
 from admin_models import User
 
 from app import db
@@ -25,6 +26,7 @@ from wq_models import Project_Area, \
   Site_Message, \
   Advisory_Limits, \
   Sample_Site,\
+  Sample_Site_Data,\
   Site_Extent,\
   Boundary
 
@@ -343,30 +345,106 @@ class BacteriaDataAPI(MethodView):
 
 
 class StationDataAPI(MethodView):
-  def get(self, sitename=None, station_name=None):
-    start_date = ''
-    if 'startdate' in request.args:
-      start_date = request.args['startdate']
+  def post(self, sitename=None, station_name=None):
 
-    current_app.logger.debug('IP: %s StationDataAPI get for site: %s station: %s date: %s' % (request.remote_addr, sitename, station_name, start_date))
+    results = ""
     ret_code = 404
+    #Only allow IP addresses that are approved to update/insert data into the database.
+    if request.remote_addr in VALID_UPDATE_ADDRESSES:
+      #Is the site a valid on?
+      if sitename in CURRENT_SITE_LIST:
+        sampledate = None
+        if 'sampledate' in request.args:
+          sampledate = request.args['sampledate']
+          try:
+            start_date = datetime.strptime(sampledate, '%Y-%m-%d %H:%M:%S')
+          except (ValueError, Exception) as e:
+            current_app.logger.exception(e)
+            sampledate = None
+            ret_code = 400
+        value = None
+        if 'value' in request.args:
+          try:
+            value = float(request.args['value'])
+          except (ValueError, Exception) as e:
+            current_app.logger.exception(e)
+            value = None
+            ret_code = 400
 
-    if sitename == 'myrtlebeach':
-      results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
-      ret_code = 200
+        if sampledate is not None and value is not None:
+          current_app.logger.debug('IP: %s StationDataAPI post data for site: %s station: %s date: %s value: %f' % \
+                                   (request.remote_addr, sitename, station_name, sampledate, value))
+          ret_code = 200
+          sample_site_id = db.session.query(Sample_Site.id)\
+            .filter(Sample_Site.site_name==station_name)\
+            .scalar()
+          #Check if the entry date exists, if it doesn't we add new record, otherwise
+          #update.
+          sample_data = db.session.query(Sample_Site_Data)\
+            .filter(Sample_Site_Data.sample_date == sampledate)\
+            .filter(Sample_Site_Data.site_id==sample_site_id).first()
+          if sample_data is None:
+            current_app.logger.debug("Adding record.")
+            sample_data = Sample_Site_Data(row_entry_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                           sample_date=sampledate,
+                                           sample_value=value,
+                                           site_id=sample_site_id)
+            db.session.add(sample_data)
+          else:
+            current_app.logger.debug("Updating record.")
+            sample_data.row_update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            sample_data.sample_value = value
+          db.session.commit()
+          results = simplejson.dumps({'status': {'http_code': ret_code},
+                        'contents': None
+                        })
+        else:
+          current_app.logger.error("IP: %s Site: %s Station: %s has one more invalid arguments. Args: %s"%\
+                                   (request.remote_addr, sitename, station_name, request.args))
+      else:
+        current_app.logger.warning(
+          'IP: %s Site: %s is invalid. Args: %s' % \
+          (request.remote_addr, sitename, request.args))
 
-    elif sitename == 'sarasota':
-      results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
-      ret_code = 200
-
-    elif sitename == 'charleston':
-      results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
-      ret_code = 200
 
     else:
-      results = simplejson.dumps({'status': {'http_code': ret_code},
-                    'contents': None
-                    })
+      current_app.logger.warning('IP: %s is not in the valid update list, request cancelled. Site: %s Station: %s Args: %s' %\
+                               (request.remote_addr, sitename, station_name, request.args))
+
+    return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+  def get(self, sitename=None, station_name=None):
+    start_date = None
+    ret_code = 404
+    results = ''
+    if 'startdate' in request.args:
+      start_date = request.args['startdate']
+      try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+      except (ValueError, Exception) as e:
+        current_app.logger.exception(e)
+        start_date = None
+        ret_code = 400
+    if start_date is not None:
+      current_app.logger.debug('IP: %s StationDataAPI get for site: %s station: %s date: %s' % (request.remote_addr, sitename, station_name, start_date))
+      ret_code = 404
+
+      if sitename == 'myrtlebeach':
+        results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
+        ret_code = 200
+
+      elif sitename == 'sarasota':
+        results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
+        ret_code = 200
+
+      elif sitename == 'charleston':
+        results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
+        ret_code = 200
+
+      else:
+        results = simplejson.dumps({'status': {'http_code': ret_code},
+                      'contents': None
+                      })
 
     return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
@@ -433,6 +511,50 @@ class StationDataAPI(MethodView):
     current_app.logger.debug("get_requested_station_data finished in %s seconds" % (time.time() - start_time))
     return results
 
+class StationDataUpdateAPI(MethodView):
+  def get(self, sitename=None, station_name=None):
+    start_date = ''
+    if 'startdate' in request.args:
+      start_date = request.args['startdate']
+
+    current_app.logger.debug('IP: %s StationDataAPI get for site: %s station: %s date: %s' % (request.remote_addr, sitename, station_name, start_date))
+    ret_code = 404
+
+    if sitename == 'myrtlebeach':
+      results = self.set_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
+      ret_code = 200
+
+    elif sitename == 'sarasota':
+      results = self.set_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
+      ret_code = 200
+
+    elif sitename == 'charleston':
+      results = self.set_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
+      ret_code = 200
+
+    else:
+      results = simplejson.dumps({'status': {'http_code': ret_code},
+                    'contents': None
+                    })
+
+    return (results, ret_code, {'Content-Type': 'Application-JSON'})
+
+  def set_station_data(self, station, request, station_directory):
+    start_time = time.time()
+    ret_code = 404
+    current_app.logger.debug("set_station_data Started")
+
+    json_data = {'status': {'http_code': 404},
+               'contents': {}}
+
+    start_date = None
+    if 'startdate' in request.args:
+      start_date = request.args['startdate']
+
+    current_app.logger.debug("Station: %s Test Date: %s Value: %f" % (station, start_date, value))
+
+    current_app.logger.debug("set_station_data finished in %f seconds" % (time.time()-start_time))
+    return
 
 # Define login and registration forms (for flask-login)
 class LoginForm(form.Form):

@@ -1,5 +1,6 @@
 import sys
 sys.path.append('../../commonfiles/python')
+import os
 import click
 from flask import Flask, current_app, redirect, url_for, request
 import logging.config
@@ -8,10 +9,11 @@ from logging import Formatter
 import time
 from app import db
 from config import *
-from wq_models import Project_Area, Sample_Site, Boundary, Site_Extent
+from wq_models import Project_Area, Sample_Site, Boundary, Site_Extent, Sample_Site_Data
 from datetime import datetime
 from shapely.wkb import loads as wkb_loads
 from wq_sites import wq_sample_sites
+import json
 
 app = Flask(__name__)
 db.app = app
@@ -172,3 +174,46 @@ def import_sample_sites(params):
 
 
   current_app.logger.debug("import_sample_sites finished in %f seconds" % (time.time()-start_time))
+
+
+#import_sample_sites --params sarasota /Users/danramage/Documents/workspace/WaterQuality/Florida_Water_Quality/config/sample_sites_boundary.csv /Users/danramage/Documents/workspace/WaterQuality/Florida_Water_Quality/config/sarasota_boundaries.csv
+#Given the project name, the sample site csv and boundary csv, this populates the sample_site and boudnary tables.
+@app.cli.command()
+@click.option('--params', nargs=2)
+def import_sample_data(params):
+  start_time = time.time()
+  init_logging(app)
+  area_name = params[0]
+  sample_sites_data_directory = params[1]
+  current_app.logger.debug("import_sample_data started.")
+
+  try:
+    row_entry_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    sample_sites = db.session.query(Sample_Site) \
+      .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
+      .filter(Project_Area.area_name == area_name).all()
+    for site in sample_sites:
+      sample_site_data_file = os.path.join(sample_sites_data_directory, "%s.json" % (site.site_name.upper()))
+      current_app.logger.debug("Opening file: %s" % (sample_site_data_file))
+      try:
+        with open(sample_site_data_file, 'r') as data_file:
+          sample_data = json.load(data_file)
+          props = sample_data['properties']
+          results_data = props['test']['beachadvisories']
+          for result in results_data:
+            try:
+              sample_data_rec = Sample_Site_Data(row_entry_date=row_entry_date,
+                                             sample_date=result['date'],
+                                             sample_value=float(result['value']),
+                                             site_id=site.id)
+              db.session.add(sample_data_rec)
+              db.session.commit()
+            except Exception as e:
+              current_app.logger.exception(e)
+              db.session.rollback()
+      except(IOError, Exception) as e:
+        current_app.logger.exception(e)
+  except (Exception, IOError) as e:
+    current_app.logger.exception(e)
+
+  current_app.logger.debug("import_sample_data finished in %f seconds." % (time.time() - start_time))

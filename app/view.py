@@ -45,11 +45,11 @@ if not PYCHARM_DEBUG:
 else:
   SC_MB_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/Predictions.json'
   SC_MB_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/monitorstations/beachAdvisoryResults.json'
-  SC_MB_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/sc_mb'
+  SC_MB_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/sc_mb/monitorstations'
 
   SC_CHS_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/charleston/Predictions.json'
   SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json'
-  SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/charleston'
+  SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/charleston/monitorstations'
 
 
 #SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
@@ -478,7 +478,13 @@ class StationDataAPI(MethodView):
           try:
             tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d")
           except ValueError, e:
-            tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d %H:%M:%S")
+            try:
+              tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%d %H:%M:%S")
+            except ValueError, e:
+              try:
+                tst_date_obj = datetime.strptime(advisoryList[ndx]['date'], "%Y-%m-%dT%H:%M:%SZ")
+              except ValueError, e:
+                current_app.logger.exception(e)
 
           if tst_date_obj >= start_date_obj:
             resultList = advisoryList[ndx:]

@@ -359,9 +359,12 @@ class StationDataAPI(MethodView):
           try:
             start_date = datetime.strptime(sampledate, '%Y-%m-%d %H:%M:%S')
           except (ValueError, Exception) as e:
-            current_app.logger.exception(e)
-            sampledate = None
-            ret_code = 400
+            try:
+              start_date = datetime.strptime(sampledate, '%Y-%m-%dT%H:%M:%SZ')
+            except (ValueError, Exception) as e:
+              current_app.logger.exception(e)
+              sampledate = None
+              ret_code = 400
         value = None
         if 'value' in request.args:
           try:
@@ -378,26 +381,30 @@ class StationDataAPI(MethodView):
           sample_site_id = db.session.query(Sample_Site.id)\
             .filter(Sample_Site.site_name==station_name)\
             .scalar()
-          #Check if the entry date exists, if it doesn't we add new record, otherwise
-          #update.
-          sample_data = db.session.query(Sample_Site_Data)\
-            .filter(Sample_Site_Data.sample_date == sampledate)\
-            .filter(Sample_Site_Data.site_id==sample_site_id).first()
-          if sample_data is None:
-            current_app.logger.debug("Adding record.")
-            sample_data = Sample_Site_Data(row_entry_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                           sample_date=sampledate,
-                                           sample_value=value,
-                                           site_id=sample_site_id)
-            db.session.add(sample_data)
+          if sample_site_id is not None:
+            #Check if the entry date exists, if it doesn't we add new record, otherwise
+            #update.
+            sample_data = db.session.query(Sample_Site_Data)\
+              .filter(Sample_Site_Data.sample_date == sampledate)\
+              .filter(Sample_Site_Data.site_id==sample_site_id).first()
+            if sample_data is None:
+              current_app.logger.debug("Adding record.")
+              sample_data = Sample_Site_Data(row_entry_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                             sample_date=sampledate,
+                                             sample_value=value,
+                                             site_id=sample_site_id)
+              db.session.add(sample_data)
+            else:
+              current_app.logger.debug("Updating record.")
+              sample_data.row_update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+              sample_data.sample_value = value
+            db.session.commit()
+            results = simplejson.dumps({'status': {'http_code': ret_code},
+                          'contents': None
+                          })
           else:
-            current_app.logger.debug("Updating record.")
-            sample_data.row_update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            sample_data.sample_value = value
-          db.session.commit()
-          results = simplejson.dumps({'status': {'http_code': ret_code},
-                        'contents': None
-                        })
+            current_app.logger.error("Site: %s does not exist in database." % (station_name))
+
         else:
           current_app.logger.error("IP: %s Site: %s Station: %s has one more invalid arguments. Args: %s"%\
                                    (request.remote_addr, sitename, station_name, request.args))

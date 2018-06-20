@@ -232,7 +232,7 @@ class SitePage(View):
       if data['prediction_data']['contents'] is None:
         data['prediction_data']['contents'] = {
           'run_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-          'test_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+          'testDate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
           'stationData': {'features': []}
         }
         data['prediction_data']['status']['http_code'] = 200

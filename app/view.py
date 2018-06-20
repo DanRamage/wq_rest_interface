@@ -12,6 +12,7 @@ import time
 import simplejson
 import geojson
 from datetime import datetime
+from collections import OrderedDict
 from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
 from shapely.wkb import loads as wkb_loads
@@ -51,16 +52,12 @@ else:
   SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json'
   SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/charleston/monitorstations'
 
+  NC_KDH_PREDICTIONS_FILE = ''
+  NC_KDH_ADVISORIES_FILE = ''
+  NC_KDH_STATIONS_DATA_DIR = ''
 
-#SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/Predictions.json'
-#SC_MB_ADVISORIES_FILE='/mnt/sc_wq/monitorstations/beachAdvisoryResults.json'
-#SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/monitorstations'
 
-SC_DEV_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
-SC_DEV_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
-SC_DEV_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
-
-def build_feature(sample_site_rec, sample_date, values):
+def build_advisory_feature(sample_site_rec, sample_date, values):
   beachadvisories = {
     'date': '',
     'station': sample_site_rec.site_name,
@@ -98,6 +95,35 @@ def build_feature(sample_site_rec, sample_date, values):
     extents_json = geojson.Feature(geometry=sample_site_rec.extents[0].wkt_extent, properties={})
     feature['properties']['extents_geometry'] = extents_json
 
+  return feature
+def build_prediction_feature(sample_site_rec, sample_date, model_results):
+  tests = []
+  if len(model_results):
+    for model_result in model_results:
+      tests.append({
+        'data': model_results['data'],
+        'name': model_result['name'],
+        'p_level':model_result['p_level'],
+        'p_value': model_result['p_value'],
+      })
+  feature = {
+    "type": "Feature",
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [sample_site_rec.longitude, sample_site_rec.latitude]
+    },
+    "properties": {
+      "ensemble": "None",
+      'station': sample_site_rec.site_name,
+      'desc': sample_site_rec.description,
+      'has_advisory': sample_site_rec.has_current_advisory,
+      "site_message": {
+        "message": "",
+        "severity": ""
+      },
+      'tests': tests
+    }
+  }
   return feature
 
 class MaintenanceMode(View):
@@ -174,6 +200,9 @@ class SitePage(View):
       elif self.site_name == 'charleston':
         prediction_data, ret_code = get_data_file(SC_CHS_PREDICTIONS_FILE)
         advisory_data,ret_code = get_data_file(SC_CHS_ADVISORIES_FILE)
+      elif self.site_name == 'killdevilhill':
+        prediction_data, ret_code = get_data_file(NC_KDH_PREDICTIONS_FILE)
+        advisory_data,ret_code = get_data_file(NC_KDH_ADVISORIES_FILE)
 
       data = {
         'prediction_data': simplejson.loads(prediction_data),
@@ -185,12 +214,38 @@ class SitePage(View):
       sample_sites = db.session.query(Sample_Site) \
         .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
         .filter(Project_Area.area_name == self.site_name).all()
-      for site in sample_sites:
-        advisory_data = data['advisory_data']['features']
-        for site_data in advisory_data:
-          if site_data['properties']['station'] == site.site_name:
-            site_data['properties']['issues_advisories'] = site.issues_advisories
 
+      build_advisory_from_db = False
+      if data['advisory_data']['contents'] is None:
+        del(data['advisory_data']['contents'])
+        data['advisory_data']['type'] = "FeatureCollection"
+        data['advisory_data']['features'] = []
+        data['advisory_data']['status']['http_code'] = 200
+        build_advisory_from_db = True
+
+      build_blank_predictions = False
+      if data['prediction_data']['contents'] is None:
+        data['prediction_data']['contents'] = {
+          'run_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+          'test_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+          'stationData': {'features': []}
+        }
+        data['prediction_data']['status']['http_code'] = 200
+        build_blank_predictions = True
+
+      for site in sample_sites:
+        if not build_advisory_from_db:
+          advisory_data = data['advisory_data']['features']
+          for site_data in advisory_data:
+            if site_data['properties']['station'] == site.site_name:
+              site_data['properties']['issues_advisories'] = site.issues_advisories
+        else:
+          feature = build_advisory_feature(site, datetime.now(), [])
+          feature['issues_advisories'] = site.issues_advisories
+          data['advisory_data']['features'].append(feature)
+        if build_blank_predictions:
+          feature = build_prediction_feature(site, datetime.now(), [])
+          data['prediction_data']['contents']['stationData']['features'].append(feature)
 
       #Query the database to see if we have any temporary popup sites.
       popup_sites = db.session.query(Sample_Site) \
@@ -205,7 +260,7 @@ class SitePage(View):
           if len(site.site_data):
             sample_date = site.site_data[0].sample_date
             sample_value.append(site.site_data[0].sample_value)
-          feature = build_feature(site, sample_date, sample_value)
+          feature = build_advisory_feature(site, sample_date, sample_value)
           advisory_data_features.append(feature)
     except Exception as e:
       current_app.logger.exception(e)
@@ -257,13 +312,14 @@ class CharlestonPage(SitePage):
     SitePage.__init__(self, 'charleston')
     self.page_template = 'chs_index_page.html'
 
+class KillDevilHillsPage(SitePage):
+  def __init__(self):
+    current_app.logger.debug('IP: %s KillDevilHillsPage __init__' % (request.remote_addr))
+    SitePage.__init__(self, 'killdevilhill')
+    self.page_template = 'kdh_index_page.html'
+
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
-
-  ret_code = 404
-  results = {'status': {'http_code': ret_code},
-                'contents': None
-                }
 
   try:
     current_app.logger.debug("Opening file: %s" % (filename))
@@ -273,6 +329,12 @@ def get_data_file(filename):
 
   except (Exception, IOError) as e:
     current_app.logger.exception(e)
+
+    ret_code = 404
+    results = simplejson.dumps({'status': {'http_code': ret_code},
+                    'contents': None
+                    })
+
 
   current_app.logger.debug("get_data_file Finished.")
 

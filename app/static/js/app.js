@@ -28,19 +28,21 @@ var site;
 function initialize_app(site_name, data, limits) {
   site = site_name;
   advisory_limits = limits;
-  var forecast_date = data['prediction_data'].contents.testDate;
-  $.each( data['prediction_data'].contents.stationData.features, function(i, beach) {
-    predictionData[beach.properties.station] = {
-      "station" : beach.properties.station,
-      "desc" : beach.properties.desc,
-      "ensemble" : beach.properties.ensemble,
-      "forecast_date": forecast_date,
-      "message" : beach.properties.message,
-      "region" : beach.properties.region,
-      "lat" : beach.geometry.coordinates[1],
-      "lng" : beach.geometry.coordinates[0] };
-  });
-
+  if(data['prediction_data'].contents !== null ) {
+    var forecast_date = data['prediction_data'].contents.testDate;
+    $.each(data['prediction_data'].contents.stationData.features, function (i, beach) {
+      predictionData[beach.properties.station] = {
+        "station": beach.properties.station,
+        "desc": beach.properties.desc,
+        "ensemble": beach.properties.ensemble,
+        "forecast_date": forecast_date,
+        "message": beach.properties.message,
+        "region": beach.properties.region,
+        "lat": beach.geometry.coordinates[1],
+        "lng": beach.geometry.coordinates[0]
+      };
+    });
+  }
 
   $.each(data['advisory_data'].features, function(s,stations){
     permanentAdvisory = stations.properties.sign;

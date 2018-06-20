@@ -43,6 +43,11 @@ if not PYCHARM_DEBUG:
   SC_CHS_PREDICTIONS_FILE='/home/xeniaprod/feeds/charleston/Predictions.json'
   SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
   SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
+
+  NC_KDH_PREDICTIONS_FILE = ''
+  NC_KDH_ADVISORIES_FILE = ''
+  NC_KDH_STATIONS_DATA_DIR = ''
+
 else:
   SC_MB_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/Predictions.json'
   SC_MB_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/monitorstations/beachAdvisoryResults.json'

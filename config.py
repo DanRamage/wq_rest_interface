@@ -17,4 +17,4 @@ else:
   LOGFILE='/var/log/wq_rest/flask_plug_view_site.log'
 
 VALID_UPDATE_ADDRESSES = ['127.0.0.1', '129.252.139.113', '129.252.139.170']
-CURRENT_SITE_LIST = ['myrtlebeach', 'sarasota', 'charleston']
+CURRENT_SITE_LIST = ['myrtlebeach', 'sarasota', 'charleston', 'killdevilhill']

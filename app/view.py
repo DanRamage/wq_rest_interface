@@ -45,7 +45,7 @@ if not PYCHARM_DEBUG:
   SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
 
   NC_KDH_PREDICTIONS_FILE = '/mnt/wq_feeds/northcarolina/killdevilhills'
-  NC_KDH_ADVISORIES_FILE = '/mnt/wq_feeds/northcarolina/killdevilhills/monitorstations'
+  NC_KDH_ADVISORIES_FILE = '/mnt/wq_feeds/northcarolina/killdevilhills/monitorstations/kdh_beach_advisories.json'
   NC_KDH_STATIONS_DATA_DIR = '/mnt/wq_feeds/northcarolina/killdevilhills/monitorstations'
 
 else:

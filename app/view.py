@@ -57,9 +57,9 @@ else:
   SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json'
   SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/charleston/monitorstations'
 
-  NC_KDH_PREDICTIONS_FILE = ''
-  NC_KDH_ADVISORIES_FILE = ''
-  NC_KDH_STATIONS_DATA_DIR = ''
+  NC_KDH_PREDICTIONS_FILE = '/Users/danramage/tmp/wq_feeds/kdh/Predictions.json'
+  NC_KDH_ADVISORIES_FILE = '/Users/danramage/tmp/wq_feeds/kdh/monitorstations/kdh_beach_advisories.json'
+  NC_KDH_STATIONS_DATA_DIR = '/Users/danramage/tmp/wq_feeds/kdh/monitorstations'
 
 
 def build_advisory_feature(sample_site_rec, sample_date, values):
@@ -206,8 +206,8 @@ class SitePage(View):
         prediction_data, ret_code = get_data_file(SC_CHS_PREDICTIONS_FILE)
         advisory_data,ret_code = get_data_file(SC_CHS_ADVISORIES_FILE)
       elif self.site_name == 'killdevilhill':
-        prediction_data, ret_code = get_data_file(NC_KDH_PREDICTIONS_FILE)
-        advisory_data,ret_code = get_data_file(NC_KDH_ADVISORIES_FILE)
+        prediction_data, pred_ret_code = get_data_file(NC_KDH_PREDICTIONS_FILE)
+        advisory_data,adv_ret_code = get_data_file(NC_KDH_ADVISORIES_FILE)
 
       data = {
         'prediction_data': simplejson.loads(prediction_data),
@@ -221,7 +221,7 @@ class SitePage(View):
         .filter(Project_Area.area_name == self.site_name).all()
 
       build_advisory_from_db = False
-      if data['advisory_data']['contents'] is None:
+      if adv_ret_code == 404:
         del(data['advisory_data']['contents'])
         data['advisory_data']['type'] = "FeatureCollection"
         data['advisory_data']['features'] = []
@@ -229,7 +229,7 @@ class SitePage(View):
         build_advisory_from_db = True
 
       build_blank_predictions = False
-      if data['prediction_data']['contents'] is None:
+      if pred_ret_code == 404:
         data['prediction_data']['contents'] = {
           'run_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
           'testDate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -513,6 +513,10 @@ class StationDataAPI(MethodView):
 
       elif sitename == 'charleston':
         results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
+        ret_code = 200
+
+      elif sitename == 'killdevilhill':
+        results = self.get_requested_station_data(station_name, request, NC_KDH_STATIONS_DATA_DIR)
         ret_code = 200
 
       else:

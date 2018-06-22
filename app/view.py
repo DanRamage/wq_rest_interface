@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from shapely.wkb import loads as wkb_loads
 from shapely.wkt import loads as wkt_loads
 
-from config import PYCHARM_DEBUG, CURRENT_SITE_LIST, VALID_UPDATE_ADDRESSES
+from config import PYCHARM_DEBUG, CURRENT_SITE_LIST, VALID_UPDATE_ADDRESSES, SITES_CONFIG
 from admin_models import User
 
 from app import db
@@ -194,78 +194,69 @@ class SitePage(View):
     start_time = time.time()
     data = {}
     try:
-      if self.site_name == 'myrtlebeach':
-        #Get prediction data
-        prediction_data, ret_code = get_data_file(SC_MB_PREDICTIONS_FILE)
-        advisory_data, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
-      elif self.site_name == 'sarasota':
-        prediction_data, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
-        advisory_data,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
-      elif self.site_name == 'charleston':
-        prediction_data, ret_code = get_data_file(SC_CHS_PREDICTIONS_FILE)
-        advisory_data,ret_code = get_data_file(SC_CHS_ADVISORIES_FILE)
-      elif self.site_name == 'killdevilhill':
-        prediction_data, pred_ret_code = get_data_file(NC_KDH_PREDICTIONS_FILE)
-        advisory_data,adv_ret_code = get_data_file(NC_KDH_ADVISORIES_FILE)
-
-      data = {
-        'prediction_data': simplejson.loads(prediction_data),
-        'advisory_data': simplejson.loads(advisory_data)
-      }
-      #Query the Sample_Site table to get any specific settings we need for the map.
-      #Currently for the Charleston site, we want to disable the Advisory in the site popup
-      #since they do not issue advisories.
-      sample_sites = db.session.query(Sample_Site) \
-        .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
-        .filter(Project_Area.area_name == self.site_name).all()
-
-      build_advisory_from_db = False
-      if adv_ret_code == 404:
-        del(data['advisory_data']['contents'])
-        data['advisory_data']['type'] = "FeatureCollection"
-        data['advisory_data']['features'] = []
-        data['advisory_data']['status']['http_code'] = 200
-        build_advisory_from_db = True
-
-      build_blank_predictions = False
-      if pred_ret_code == 404:
-        data['prediction_data']['contents'] = {
-          'run_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-          'testDate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-          'stationData': {'features': []}
+      if self.site_name in SITES_CONFIG:
+        prediction_data, pred_ret_code = get_data_file(SITES_CONFIG[self.site_name]['prediction_file'])
+        advisory_data, adv_ret_code = get_data_file(SITES_CONFIG[self.site_name]['advisory_file'])
+        data = {
+          'prediction_data': simplejson.loads(prediction_data),
+          'advisory_data': simplejson.loads(advisory_data)
         }
-        data['prediction_data']['status']['http_code'] = 200
-        build_blank_predictions = True
+        #Query the Sample_Site table to get any specific settings we need for the map.
+        #Currently for the Charleston site, we want to disable the Advisory in the site popup
+        #since they do not issue advisories.
+        sample_sites = db.session.query(Sample_Site) \
+          .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
+          .filter(Project_Area.area_name == self.site_name).all()
 
-      for site in sample_sites:
-        if not build_advisory_from_db:
-          advisory_data = data['advisory_data']['features']
-          for site_data in advisory_data:
-            if site_data['properties']['station'] == site.site_name:
-              site_data['properties']['issues_advisories'] = site.issues_advisories
-        else:
-          feature = build_advisory_feature(site, datetime.now(), [])
-          feature['issues_advisories'] = site.issues_advisories
-          data['advisory_data']['features'].append(feature)
-        if build_blank_predictions:
-          feature = build_prediction_feature(site, datetime.now(), [])
-          data['prediction_data']['contents']['stationData']['features'].append(feature)
+        build_advisory_from_db = False
+        if adv_ret_code == 404:
+          del(data['advisory_data']['contents'])
+          data['advisory_data']['type'] = "FeatureCollection"
+          data['advisory_data']['features'] = []
+          data['advisory_data']['status']['http_code'] = 200
+          build_advisory_from_db = True
 
-      #Query the database to see if we have any temporary popup sites.
-      popup_sites = db.session.query(Sample_Site) \
-        .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
-        .filter(Project_Area.area_name == self.site_name)\
-        .filter(Sample_Site.temporary_site == True).all()
-      if len(popup_sites):
-        advisory_data_features = data['advisory_data']['features']
-        for site in popup_sites:
-          sample_date = site.row_entry_date
-          sample_value = []
-          if len(site.site_data):
-            sample_date = site.site_data[0].sample_date
-            sample_value.append(site.site_data[0].sample_value)
-          feature = build_advisory_feature(site, sample_date, sample_value)
-          advisory_data_features.append(feature)
+        build_blank_predictions = False
+        if pred_ret_code == 404:
+          data['prediction_data']['contents'] = {
+            'run_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'testDate': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'stationData': {'features': []}
+          }
+          data['prediction_data']['status']['http_code'] = 200
+          build_blank_predictions = True
+
+        for site in sample_sites:
+          if not build_advisory_from_db:
+            advisory_data = data['advisory_data']['features']
+            for site_data in advisory_data:
+              if site_data['properties']['station'] == site.site_name:
+                site_data['properties']['issues_advisories'] = site.issues_advisories
+          else:
+            feature = build_advisory_feature(site, datetime.now(), [])
+            feature['issues_advisories'] = site.issues_advisories
+            data['advisory_data']['features'].append(feature)
+          if build_blank_predictions:
+            feature = build_prediction_feature(site, datetime.now(), [])
+            data['prediction_data']['contents']['stationData']['features'].append(feature)
+
+        #Query the database to see if we have any temporary popup sites.
+        popup_sites = db.session.query(Sample_Site) \
+          .join(Project_Area, Project_Area.id == Sample_Site.project_site_id) \
+          .filter(Project_Area.area_name == self.site_name)\
+          .filter(Sample_Site.temporary_site == True).all()
+        if len(popup_sites):
+          advisory_data_features = data['advisory_data']['features']
+          for site in popup_sites:
+            sample_date = site.row_entry_date
+            sample_value = []
+            if len(site.site_data):
+              sample_date = site.site_data[0].sample_date
+              sample_value.append(site.site_data[0].sample_value)
+            feature = build_advisory_feature(site, sample_date, sample_value)
+            advisory_data_features.append(feature)
+      else:
+        current_app.logger.error("Site: %s does not exist" % (self.site_name))
     except Exception as e:
       current_app.logger.exception(e)
     current_app.logger.debug('get_data finished in %f seconds' % (time.time()-start_time))
@@ -501,23 +492,25 @@ class StationDataAPI(MethodView):
     if start_date is not None:
       current_app.logger.debug('IP: %s StationDataAPI get for site: %s station: %s date: %s' % (request.remote_addr, sitename, station_name, start_date))
       ret_code = 404
-
-      if sitename == 'myrtlebeach':
-        results = self.get_requested_station_data(station_name, request, SC_MB_STATIONS_DATA_DIR)
+      if sitename in SITES_CONFIG:
+        results = self.get_requested_station_data(station_name, request, SITES_CONFIG[sitename]['stations_directory'])
         ret_code = 200
+        """
+        if sitename == 'myrtlebeach':
+          ret_code = 200
 
-      elif sitename == 'sarasota':
-        results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
-        ret_code = 200
+        elif sitename == 'sarasota':
+          results = self.get_requested_station_data(station_name, request, FL_SARASOTA_STATIONS_DATA_DIR)
+          ret_code = 200
 
-      elif sitename == 'charleston':
-        results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
-        ret_code = 200
+        elif sitename == 'charleston':
+          results = self.get_requested_station_data(station_name, request, SC_CHS_STATIONS_DATA_DIR)
+          ret_code = 200
 
-      elif sitename == 'killdevilhill':
-        results = self.get_requested_station_data(station_name, request, NC_KDH_STATIONS_DATA_DIR)
-        ret_code = 200
-
+        elif sitename == 'killdevilhill':
+          results = self.get_requested_station_data(station_name, request, NC_KDH_STATIONS_DATA_DIR)
+          ret_code = 200
+        """
       else:
         results = simplejson.dumps({'status': {'http_code': ret_code},
                       'contents': None

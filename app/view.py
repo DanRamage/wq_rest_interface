@@ -18,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from shapely.wkb import loads as wkb_loads
 from shapely.wkt import loads as wkt_loads
 
-from config import PYCHARM_DEBUG, CURRENT_SITE_LIST, VALID_UPDATE_ADDRESSES, SITES_CONFIG
+from config import CURRENT_SITE_LIST, VALID_UPDATE_ADDRESSES, SITES_CONFIG
 from admin_models import User
 
 from app import db
@@ -30,36 +30,6 @@ from wq_models import Project_Area, \
   Sample_Site_Data,\
   Site_Extent,\
   Boundary
-
-if not PYCHARM_DEBUG:
-  FL_SARASOTA_PREDICTIONS_FILE='/mnt/fl_wq/Predictions.json'
-  FL_SARASOTA_ADVISORIES_FILE='/mnt/fl_wq/monitorstations/beachAdvisoryResults.json'
-  FL_SARASOTA_STATIONS_DATA_DIR='/mnt/fl_wq/monitorstations'
-
-  SC_MB_PREDICTIONS_FILE='/mnt/sc_wq/vb_engine/Predictions.json'
-  SC_MB_ADVISORIES_FILE='/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json'
-  SC_MB_STATIONS_DATA_DIR='/mnt/sc_wq/vb_engine/monitorstations'
-
-  SC_CHS_PREDICTIONS_FILE='/home/xeniaprod/feeds/charleston/Predictions.json'
-  SC_CHS_ADVISORIES_FILE='/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json'
-  SC_CHS_STATIONS_DATA_DIR='/home/xeniaprod/feeds/charleston/monitorstations'
-
-  NC_KDH_PREDICTIONS_FILE = '/home/xeniaprod/feeds/northcarolina/killdevilhills/Predictions.json'
-  NC_KDH_ADVISORIES_FILE = '/home/xeniaprod/feeds/northcarolina/killdevilhills/monitorstations/kdh_beach_advisories.json'
-  NC_KDH_STATIONS_DATA_DIR = '/home/xeniaprod/feeds/northcarolina/killdevilhills/monitorstations'
-else:
-  SC_MB_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/Predictions.json'
-  SC_MB_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/sc_mb/monitorstations/beachAdvisoryResults.json'
-  SC_MB_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/sc_mb/monitorstations'
-
-  SC_CHS_PREDICTIONS_FILE='/Users/danramage/tmp/wq_feeds/charleston/Predictions.json'
-  SC_CHS_ADVISORIES_FILE='/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json'
-  SC_CHS_STATIONS_DATA_DIR='/Users/danramage/tmp/wq_feeds/charleston/monitorstations'
-
-  NC_KDH_PREDICTIONS_FILE = '/Users/danramage/tmp/wq_feeds/kdh/Predictions.json'
-  NC_KDH_ADVISORIES_FILE = '/Users/danramage/tmp/wq_feeds/kdh/monitorstations/kdh_beach_advisories.json'
-  NC_KDH_STATIONS_DATA_DIR = '/Users/danramage/tmp/wq_feeds/kdh/monitorstations'
-
 
 def build_advisory_feature(sample_site_rec, sample_date, values):
   beachadvisories = {

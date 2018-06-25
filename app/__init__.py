@@ -108,7 +108,7 @@ def build_url_rules(app):
   app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
   app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
   app.add_url_rule('/charleston', view_func=CharlestonPage.as_view('charleston'))
-  app.add_url_rule('/killdevilhill', view_func=KillDevilHillsPage.as_view('killdevilhill'))
+  app.add_url_rule('/killdevilhills', view_func=KillDevilHillsPage.as_view('killdevilhills'))
 
   #REST rules
   app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])

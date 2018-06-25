@@ -39,7 +39,7 @@ if not PYCHARM_DEBUG:
         'advisory_file': '/home/xeniaprod/feeds/charleston/monitorstations/beach_advisories.json',
         'stations_directory': '/home/xeniaprod/feeds/charleston/monitorstations'
       },
-      'killdevilhill':
+      'killdevilhills':
       {
         'prediction_file': '/home/xeniaprod/feeds/northcarolina/killdevilhills/Predictions.json',
         'advisory_file': '/home/xeniaprod/feeds/northcarolina/killdevilhills/monitorstations/kdh_beach_advisories.json',
@@ -60,7 +60,7 @@ else:
         'advisory_file': '/Users/danramage/tmp/wq_feeds/charleston/monitorstations/beach_advisories.json',
         'stations_directory': '/Users/danramage/tmp/wq_feeds/charleston/monitorstations'
       },
-      'killdevilhill':
+      'killdevilhills':
       {
         'prediction_file': '/Users/danramage/tmp/wq_feeds/kdh/Predictions.json',
         'advisory_file': '/Users/danramage/tmp/wq_feeds/kdh/monitorstations/kdh_beach_advisories.json',

@@ -280,7 +280,7 @@ class CharlestonPage(SitePage):
 class KillDevilHillsPage(SitePage):
   def __init__(self):
     current_app.logger.debug('IP: %s KillDevilHillsPage __init__' % (request.remote_addr))
-    SitePage.__init__(self, 'killdevilhill')
+    SitePage.__init__(self, 'killdevilhills')
     self.page_template = 'kdh_index_page.html'
 
 def get_data_file(filename):

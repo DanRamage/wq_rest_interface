@@ -19,15 +19,215 @@ var current_date = new Date();
 var markerType = 'forecast'; //Initial markers set to show forecast results
 
 var advisory_limits;
-var predictionData = {};
-var currentEtcoc = {};
+//var predictionData = {};
+//var currentEtcoc = {};
 var wq_site_name = "";
 var wq_site_bbox;
 var site;
+var stations_records;
+
+/*
+This object is to consolidate the prediction and sample data into one place and provide
+a common interface. Want to move away from using the 2 json objects in the code and simply
+use them to construct one object.
+ */
+function stationData()
+{
+  var self = this;
+  self.station = undefined;
+  self.latitude = undefined;
+  self.longitude = undefined;
+  self.description = undefined;
+  self.region = undefined;
+  //Prediction related vars
+  self.forecast_date = undefined;
+  self.station_message = undefined;
+  self.ensemble_result = undefined;
+  //Sample related vars
+  self.sample_date = undefined;
+  self.sample_value = undefined;
+  self.issues_advisories = undefined;
+  self.advisory_message = undefined;
+  /*
+  self.set_prediction_data = function(station_name, prediction_data)
+  {
+
+  };
+  self.set_advisory_data = function(station_name, advisory_data)
+  {
+
+  };
+  */
+  self.Station = function()
+  {
+    return self.station;
+  };
+  self.Location = function()
+  {
+    return([self.longitude, self.latitude]);
+  };
+  self.Description = function()
+  {
+    return(self.description);
+  };
+  self.Region = function()
+  {
+    return(self.region);
+  };
+  self.ForecastDate = function()
+  {
+    return(self.forecast_date);
+  };
+  self.EnsembleResult = function()
+  {
+    return(self.ensemble_result);
+  };
+  self.ForecastStationMessage = function()
+  {
+    return(self.station_message);
+  };
+  self.SampleDate = function()
+  {
+    return(self.sample_date);
+  };
+  self.SampleValue = function()
+  {
+    return(self.sample_value);
+  };
+  self.IssuesAdvisories = function()
+  {
+    return(self.issues_adivisories);
+  };
+  self.SampleStationMessage = function()
+  {
+    return(self.advisory_message);
+  };
+
+};
+
+function stationsData()
+{
+  var self = this;
+
+  self.station_data_records = {};
+
+  self.build_records = function(data_records)
+  {
+    var advistory_data = data_records['advisory_data'];
+    var prediction_data = data_records['prediction_data'];
+
+    $.each(advistory_data.features, function(data_ndx, feature)
+    {
+      var data_rec = new stationData();
+      var station = String(feature.properties.station);
+      data_rec.station = station;
+      data_rec.latitude = feature.geometry.coordinates[1];
+      data_rec.longitude = feature.geometry.coordinates[0];
+      data_rec.description = feature.properties.desc;
+      data_rec.sample_date = feature.properties.test.beachadvisories.date;
+      data_rec.sample_value = feature.properties.test.beachadvisories.value[0];
+      data_rec.issues_adivisories = feature.properties.issues_advisories;
+      data_rec.advisory_message = 'None';
+      if(feature.properties.advisory !== undefined && feature.properties.advisory.length)
+      {
+        data_rec.advisory_message = feature.properties.advisory;
+      }
+      self.station_data_records[station] = data_rec;
+    });
+
+    $.each(prediction_data.contents.stationData.features, function(data_ndx, feature)
+    {
+      var station = feature.properties.station;
+      var data_rec = self.station_data_records[station];
+      if(data_rec !== undefined)
+      {
+        if(data_rec.forecast_date === undefined)
+        {
+          data_rec.forecast_date = prediction_data.contents.run_date;
+        }
+        data_rec.station_message = feature.properties.site_message;
+        data_rec.ensemble_result = 'None';
+        if(feature.ensemble !== undefined && feature.ensemble.length)
+        {
+          data_rec.ensemble_result = feature.ensemble;
+        }
+      }
+      //We've got a station that has predictions but no sampling data.
+      else
+      {
+        var data_rec = new stationData();
+        data_rec.station = feature.properties.station;
+        data_rec.latitude = feature.geometry.coordinates[1];
+        data_rec.longitude = feature.geometry.coordinates[0];
+        data_rec.description = feature.properties.desc;
+        self.station_data_records[data_rec.station] = data_rec;
+        if(data_rec.forecast_date === undefined)
+        {
+          data_rec.forecast_date = prediction_data.contents.run_date;
+        }
+        data_rec.station_message = feature.properties.site_message;
+        data_rec.ensemble_result = 'None';
+        if(feature.ensemble !== undefined && feature.ensemble.length)
+        {
+          data_rec.ensemble_result = feature.ensemble;
+        }
+      }
+    });
+  };
+  self.StationData = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec);
+  };
+  self.Location = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.Location());
+  };
+  self.Description = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.Description());
+  };
+  self.Region = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.Region());
+  };
+  self.SampleValue = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.SampleValue())
+  };
+  self.SampleDate = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.SampleDate());
+  };
+  self.IssuesAdvisories = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.IssuesAdvisories());
+
+  }
+  self.EnsembleResult = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.EnsembleResult());
+  };
+  self.ForecastDate = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.ForecastDate());
+  };
+}
 
 function initialize_app(site_name, data, limits) {
   site = site_name;
   advisory_limits = limits;
+  stations_records = new stationsData();
+  stations_records.build_records(data);
+  /*
   if(data['prediction_data'].contents !== null ) {
     var forecast_date = data['prediction_data'].contents.testDate;
     $.each(data['prediction_data'].contents.stationData.features, function (i, beach) {
@@ -43,7 +243,8 @@ function initialize_app(site_name, data, limits) {
       };
     });
   }
-
+  */
+  /*
   $.each(data['advisory_data'].features, function(s,stations){
     permanentAdvisory = stations.properties.sign;
 
@@ -79,8 +280,9 @@ function initialize_app(site_name, data, limits) {
       };
 
     });
-  });
 
+  });
+  */
   return;
 }
 
@@ -443,8 +645,10 @@ if(onlineStatus != 'off'){
 
   function calcDataRating(etcoc, station_data) {
     var rating = 'none';
-    var station_sample_date = station_data.date;
-    var advisory = station_data.advisory;
+    //var station_sample_date = station_data.date;
+    //var advisory = station_data.advisory;
+    var station_sample_date = station_data.SampleDate();
+    var advisory = station_data.SampleStationMessage();
 
     if(advisory=='Yes' || advisory=='Long Term')
     {
@@ -488,15 +692,17 @@ if(onlineStatus != 'off'){
 
   function calcAdvisoryRating(station){
     var rating = 'none';
-    var advisory = station.advisory;
+    //var advisory = station.advisory;
+    var advisory = station.SampleStationMessage();
     if(advisory == 'Long Term')
     {
       rating = 'high';
     }
     else
     {
-      if(station.date.length) {
-        var date = station.date;
+      //if(station.date.length) {
+      if(station.SampleDate() !== undefined && station.SampleDate().length) {
+        var date = station.SampleDate();
         var data_age_days = days_between(new Date(), new Date(date));
         if (data_age_days > 30) {
           rating = 'none';
@@ -517,7 +723,8 @@ if(onlineStatus != 'off'){
   function get_bacteria_style(station, etcoc)
   {
     var css_class = 'popup_label_none';
-    var station_sample_date = station.date;
+    //var station_sample_date = station.date;
+    var station_sample_date = station.SampleDate();
 
     if (station_sample_date !== undefined && station_sample_date.length)
     {
@@ -551,15 +758,18 @@ if(onlineStatus != 'off'){
   function get_advisory_style(station)
   {
     var css_class = 'popup_label_none';
-    var advisory = station.advisory;
+    //var advisory = station.advisory;
+    var advisory = station.SampleStationMessage();
     if(advisory == 'Long Term')
     {
       css_class = 'popup_label_high';
     }
     else
     {
-      if(station.date.length) {
-        var date = station.date;
+      //if(station.date.length) {
+      if(station.SampleDate() !== undefined && station.SampleDate().length) {
+        //var date = station.date;
+        var date = station.SampleDate();
         var data_age_days = days_between(new Date(), new Date(date));
         if (data_age_days > 30) {
           css_class = 'popup_label_nodata';
@@ -669,119 +879,103 @@ if(onlineStatus != 'off'){
   //Function for populating main overview map with markers
   function populateMarkers(bounds){
 
-      $.each( currentEtcoc, function(i, station) {
+      //$.each( currentEtcoc, function(i, station) {
+      $.each( stations_records.station_data_records, function(i, station) {
         var forecast = 'None';
         var station_message = '';
-        if(i in predictionData)
-        {
-          //Map markers
-          if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {
-            forecast = 'None';
-          }
-          else {
-            forecast = predictionData[i].ensemble;
-          }
-
-          if (typeof predictionData[i].message !== 'undefined') {
-            station_message = predictionData[i].message;
-          }
-          else {
-            station_message = '';
-          }
-          var dateIcon = '';
-
-          var sample_date = '';
-          if (typeof station.date === "undefined" || station.date.length === 0) {
-            dateIcon = '';
-            var data = 'None';
-          }
-          else {
-            var sample_date = new Date(parseDate(station.date));
-            //dateIcon = ' (' + new Date(parseDate(station.date)).getDate() + ' ' + month[new Date(parseDate(station.date)).getMonth()] + ' \'' + new Date(parseDate(station.date)).getFullYear().toString().substr(2, 2) + ')';
-            dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
-            var data = station.value;
-          }
-
-          /*
-          if (markerType == 'data') {
-            markerRating = calcDataRating(data, station.date);
-          }
-          */
-          if (markerType == 'forecast') {
-            markerRating = forecast;
-          }
-
-          if (markerType == 'advisories') {
-            //markerRating = calcAdvisoryRating(station.advisory);
-            markerRating = calcDataRating(data, station);
-
-          }
-
-
-          //https://developers.google.com/maps/documentation/javascript/reference#MapTypeControlStyle for options to disable other elements on the map
-          var myStyles = [
-            {
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [
-                {visibility: "off"}
-              ]
-            }
-          ];
-
-          $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.MAP);
-          $('#map_canvas').gmap('option', 'styles', myStyles);
-          $('#map_canvas').gmap('option', 'disableDefaultUI', true); //disable all controls then add in what we want
-          $('#map_canvas').gmap('option', 'mapTypeControl', true);
-          $('#map_canvas').gmap('option', 'streetViewControl', true);
-          $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
-
-          $('#map_canvas').gmap('addMarker', {
-            'position': new google.maps.LatLng(station.lat, station.lng),
-            'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
-            'bounds': bounds
-          }).click(function () {
-            /*
-            var popup_label_class = 'popup_label_none';
-            if(dateIcon.length) {
-              popup_label_class = "popup_label_" + calcDataRating(data, station);
-            }
-            */
-            var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>'];
-            popup_content.push('<div>');
-            popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
-            //If the station does not issue advisories, do not add the field. A station
-            //may collect data but advisories not issued by the governmental agency.
-            if(station.issues_advisories) {
-              popup_content.push('<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">')
-            }
-            popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) +'">' + data + '</span></div></div>')
-            popup_content.push('<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>');
-            popup_content.push('<div style="clear:both;white-space:normal;">' + station_message + '</div>');
-            popup_content.push('</div>');
-            popup_content.push('</div>');
-            $('#map_canvas').gmap('openInfoWindow', {
-              'content': popup_content.join('')
-            },
-            this);
-            /*
-            $('#map_canvas').gmap('openInfoWindow', {
-              'content': '<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>' +
-              '<div>' +
-              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>' +
-              '<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">' +
-              '<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, data) +'">' + data + '</span></div></div>' +
-              '<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>' +
-              '<div style="clear:both;white-space:normal;">' + station_message + '</div>' +
-              '</div>' +
-              '</div>'
-            }, this);
-            */
-          });
+        var sample_value = 'None';
+        //if(i in predictionData)
+      //{
+        //Map markers
+        //if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {
+        if (typeof station.EnsembleResult() === "undefined" || station.EnsembleResult() == "NO TEST") {
+          forecast = 'None';
         }
-      });
+        else {
+          //forecast = predictionData[i].ensemble;
+          forecast = station.EnsembleResult();
+        }
 
-    $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM); //Add legend back in with text for new marker type
+        //if (typeof predictionData[i].message !== 'undefined') {
+        if (typeof station.ForecastStationMessage() !== 'undefined') {
+          station_message = station.ForecastStationMessage();
+        }
+        else {
+          station_message = '';
+        }
+        var dateIcon = '';
+        var sample_date = '';
+        //if (typeof station.date === "undefined" || station.date.length === 0) {
+        if (station.SampleDate() === "undefined" || station.SampleDate().length === 0) {
+          dateIcon = '';
+        }
+        else {
+          //var sample_date = new Date(parseDate(station.date));
+          var sample_date = new Date(parseDate(station.SampleDate()));
+          dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
+          //var data = station.value;
+          sample_value = station.SampleValue();
+        }
+
+        if (markerType == 'forecast') {
+          markerRating = forecast;
+        }
+
+        if (markerType == 'advisories') {
+          markerRating = calcDataRating(sample_value, station);
+
+        }
+
+
+        //https://developers.google.com/maps/documentation/javascript/reference#MapTypeControlStyle for options to disable other elements on the map
+        var myStyles = [
+          {
+            featureType: "poi",
+            elementType: "labels",
+            stylers: [
+              {visibility: "off"}
+            ]
+          }
+        ];
+
+        $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.MAP);
+        $('#map_canvas').gmap('option', 'styles', myStyles);
+        $('#map_canvas').gmap('option', 'disableDefaultUI', true); //disable all controls then add in what we want
+        $('#map_canvas').gmap('option', 'mapTypeControl', true);
+        $('#map_canvas').gmap('option', 'streetViewControl', true);
+        $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
+
+        var site_location = station.Location();
+        $('#map_canvas').gmap('addMarker', {
+          'position': new google.maps.LatLng(site_location[1], site_location[0]),
+          'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
+          'bounds': bounds
+        }).click(function () {
+          //var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>'];
+          var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.Description() + '</strong>'];
+          popup_content.push('<div>');
+          popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
+          //If the station does not issue advisories, do not add the field. A station
+          //may collect data but advisories not issued by the governmental agency.
+          //if(station.issues_advisories) {
+          if(station.IssuesAdvisories()) {
+            //popup_content.push('<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">')
+            popup_content.push('<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.SampleStationMessage().replace("<br />", " ") + '</span></div></div><br style="clear:both">')
+          }
+          popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, sample_value) +'">' + sample_value + '</span></div></div>')
+          popup_content.push('<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>');
+          popup_content.push('<div style="clear:both;white-space:normal;">' + station_message + '</div>');
+          popup_content.push('</div>');
+          popup_content.push('</div>');
+          $('#map_canvas').gmap('openInfoWindow', {
+            'content': popup_content.join('')
+          },
+          this);
+        });
+      //}
+      });
+    //Add legend back in with text for new marker type
+    $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM);
   }
 
 
@@ -920,8 +1114,6 @@ if(onlineStatus != 'off'){
 
   $('#beachListPage').bind('pageinit', function(event) {
 
-    var trans = {'Gardcty' : 'Garden City - 3rd Ave S to Azalea Ace', 'NMB2' : 'North Myrtle Beach - 16th Ave N to 17th Ave S', 'NMB3' : 'North Myrtle Beach - 33rd Ave S to 2m N of Wyndham Hotel', 'MB1' : 'Myrtle Beach - Lands End Resort, Arcadia to 77th Ave N', 'MB2' : 'Myrtle Beach - Cane Patch Swatch to 34th Ave N', 'MB3' : 'Myrtle Beach - 24th Ave N to Withers Swash', 'MB4' : 'Myrtle Beach - 23rd Ave S to Myrtle Beach State Park', 'Surfside' : 'Surfside - Pirateland Swash to 3rd Ave N'};
-
     if(typeof dateSet === 'undefined'){
       $( "#forecast_column" ).append(' ('+new Date().getDate()+' '+month[new Date().getMonth()]+')');
       dateSet = 1;
@@ -930,30 +1122,34 @@ if(onlineStatus != 'off'){
     $('#beachList li').remove();
     var currentSection;
 
-    $.each(currentEtcoc, function(i,station){
-
-      if(typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST"){
+    //$.each(currentEtcoc, function(i,station){
+    $.each( stations_records.station_data_records, function(i, station) {
+      var sample_value = 'None';
+      //if(typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST"){
+      if(station.EnsembleResult() === undefined || station.EnsembleResult() == "NO TEST"){
         var forecast = 'None';
       }
       else{
-        var forecast = predictionData[i].ensemble;
+        var forecast = station.EnsembleResult();
       }
 
       var dateIcon = '';
 
-      if(typeof station.date === "undefined" || station.date.length === 0){
+      //if(typeof station.date === "undefined" || station.date.length === 0){
+      if(station.SampleDate() === undefined || station.SampleDate().length === 0){
         dateIcon = '<span>&nbsp;</span>'; //need to keep number of spans consistent which is important for column sorting and was being affected if no data available and hence no date span being displayed
-        var data = 'None';
       }
       else{
-        var sample_date = new Date(parseDate(station.date));
+        //var sample_date = new Date(parseDate(station.date));
+        var sample_date = new Date(parseDate(station.SampleDate()));
         dateIcon = ' ('+sample_date.getDate()+'&nbsp;'+month[sample_date.getMonth()]+' \''+sample_date.getFullYear().toString().substr(2,2)+')';
         //dateIcon = ' ('+new Date(parseDate(station.date)).getDate()+'&nbsp;'+month[new Date(parseDate(station.date)).getMonth()]+' \''+new Date(parseDate(station.date)).getFullYear().toString().substr(2,2)+')';
-        var data = station.value;
+        sample_value = station.SampleValue();
       }
 
       if(typeof userLat !== 'undefined'){
-        distance = calcDistance(userLat,userLng,station.lat,station.lng)*0.621371;
+        var site_location = station.Location();
+        distance = calcDistance(userLat,userLng,site_location[1],site_location[0])*0.621371;
         if(distance <100){
           round = 2;
         }
@@ -971,7 +1167,8 @@ if(onlineStatus != 'off'){
         distanceUnits = '';
       }
 
-      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
+      //$('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
+      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.Region() + ' ' + station.Description() + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.Description()).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.SampleStationMessage()) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.SampleStationMessage()+'</span><span id="' + numerizeNone(sample_value) + '" class="'+calcDataRating(sample_value, station)+' rating">'+sample_value+'<br />'+dateIcon+'</span></a></li>');
 
     });
 
@@ -1005,11 +1202,15 @@ if(onlineStatus != 'off'){
 
     $( "#details_forecast_column" ).append(' ('+new Date().getDate()+' '+month[new Date().getMonth()]+')');
 
-    if(currentEtcoc[$.mobile.pageData.id].date.length == 0 || typeof currentEtcoc[$.mobile.pageData.id].date === "undefined"){
+    var station = stations_records.StationData($.mobile.pageData.id)
+    //if(currentEtcoc[$.mobile.pageData.id].date.length == 0 || typeof currentEtcoc[$.mobile.pageData.id].date === "undefined"){
+    var sample_date = station.SampleDate();
+    if(sample_date === undefined || sample_date.length == 0 ){
       $( "#details_data_column" ).append('<span>&nbsp;</span>'); //need to keep number of spans consistent - maybe not necessary here like it is on the beach list page
     }
     else{
-      $( "#details_data_column" ).append(' ('+new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getDate()+' '+month[new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getMonth()]+' \''+new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getFullYear().toString().substr(2,2)+')');
+      //$( "#details_data_column" ).append(' ('+new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getDate()+' '+month[new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getMonth()]+' \''+new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date)).getFullYear().toString().substr(2,2)+')');
+      $( "#details_data_column" ).append(' ('+new Date(parseDate(sample_date)).getDate()+' '+month[new Date(parseDate(sample_date)).getMonth()]+' \''+new Date(parseDate(sample_date)).getFullYear().toString().substr(2,2)+')');
     }
 
     dateSet = 1;
@@ -1141,32 +1342,47 @@ if(onlineStatus != 'off'){
     $('#beachDetails li').remove();
 
 
-      //Populate details at top of graph
-    var sampling_date = new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date));
+    //Populate details at top of graph
+    var station = stations_records.StationData($.mobile.pageData.id)
+    var sample_date = station.SampleDate();
+    //var sampling_date = new Date(parseDate(currentEtcoc[$.mobile.pageData.id].date));
+    var sampling_date = new Date(parseDate(sample_date));
 
+    var forecast = 'None';
+    /*
     if(typeof predictionData[$.mobile.pageData.id] === "undefined" || predictionData[$.mobile.pageData.id].ensemble == "NO TEST"){
       var forecast = 'None';
     }
     else{
-      var forecast = predictionData[$.mobile.pageData.id].ensemble;
+    */
+    if(station.EnsembleResult() !== undefined && station.EnsembleResult() != 'NO TEST')
+    {
+      //var forecast = predictionData[$.mobile.pageData.id].ensemble;
+      forecast = station.EnsembleResult();
     }
 
-    var shortName = $.trim(currentEtcoc[$.mobile.pageData.id].desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1");
+    //var shortName = $.trim(currentEtcoc[$.mobile.pageData.id].desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1");
+    var shortName = $.trim(station.Description()).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1");
     $('#beachName').text(shortName);
 
-    if(typeof currentEtcoc[$.mobile.pageData.id].value === "undefined"){
+    var data = 'None';
+    /*if(typeof currentEtcoc[$.mobile.pageData.id].value === "undefined"){
       data = 'None';
-    }
-    else{
-      data = currentEtcoc[$.mobile.pageData.id].value;
+    }*/
+    if(station.SampleValue() !== undefined){
+      //data = currentEtcoc[$.mobile.pageData.id].value;
+      data = station.SampleValue();
     }
 
-    $('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(currentEtcoc[$.mobile.pageData.id])+ ' details-rating">'+currentEtcoc[$.mobile.pageData.id].advisory+'</span><span class="'+calcDataRating(data, currentEtcoc[$.mobile.pageData.id])+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
+    //$('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(currentEtcoc[$.mobile.pageData.id])+ ' details-rating">'+currentEtcoc[$.mobile.pageData.id].advisory+'</span><span class="'+calcDataRating(data, currentEtcoc[$.mobile.pageData.id])+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
+    $('#beachDetails').append('<li data-theme="d" style="padding:0"><span class="'+forecast.toLowerCase().replace(' ','')+' details-rating">' + capitalize(forecast) + '</span><span class="' +calcAdvisoryRating(station)+ ' details-rating">'+station.SampleStationMessage()+'</span><span class="'+calcDataRating(data, station)+' details-rating">'+data+'&nbsp;&nbsp;</em></span></span></a></li>');
 
   });
 
 
-  $('#beachDetailsPage').bind('pageshow', function(event) { //graph generation needs to be on pageshow, else x-axis labels are cut off
+  //graph generation needs to be on pageshow, else x-axis labels are cut off
+  $('#beachDetailsPage').bind('pageshow', function(event) {
+    var station = stations_records.StationData($.mobile.pageData.id);
 
     var graphHeight = getScreenSize('height') - document.getElementById('detailsheader').offsetHeight - document.getElementById('beachDetailsContainer').offsetHeight;
     //If phone size screen gets rotated to landscape, graph height is not enough for effective viewing of graph so set it to getScreenSize('height') - user can then scroll down to see the rest of the graph which is fullscreen
@@ -1174,11 +1390,14 @@ if(onlineStatus != 'off'){
       graphHeight = getScreenSize('height')-30;
     }
 
-    if(typeof predictionData[$.mobile.pageData.id] === "undefined" || predictionData[$.mobile.pageData.id].ensemble == "NO TEST"){
-      var forecast = 'None';
+    //if(typeof predictionData[$.mobile.pageData.id] === "undefined" || predictionData[$.mobile.pageData.id].ensemble == "NO TEST"){
+    var forecast = 'None';
+    if(station.EnsembleResult() == "NO TEST"){
+      forecast = 'None';
     }
     else{
-      var forecast = predictionData[$.mobile.pageData.id].ensemble;
+      //forecast = predictionData[$.mobile.pageData.id].ensemble;
+      forecast = station.EnsembleResult();
     }
 
     $('#monitoring_data_graph').css( "height", graphHeight );
@@ -1190,8 +1409,10 @@ if(onlineStatus != 'off'){
     //Create the beach details map
     $('#detail_map_canvas').gmap('clear', 'markers'); //clear the marker from the last beach details view
 
+    var location = station.Location();
     $('#detail_map_canvas').gmap('addMarker', {
-      'position': new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng),
+      //'position': new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng),
+      'position': new google.maps.LatLng(location[1],location[0]),
       'icon': 'static/images/'+forecast.toLowerCase()+'_marker.png',
       'bounds': false
 
@@ -1206,7 +1427,8 @@ if(onlineStatus != 'off'){
       initializeGeoDetail();
     }
 
-    $('#detail_map_canvas').gmap('option', 'center', new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng));
+    //$('#detail_map_canvas').gmap('option', 'center', new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng));
+    $('#detail_map_canvas').gmap('option', 'center', new google.maps.LatLng(location[0],location[1]));
     $('#detail_map_canvas').gmap('option', 'zoom', 19);
 
     $('#detail_map_canvas').gmap('refreshCenter');

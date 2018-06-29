@@ -917,7 +917,7 @@ if(onlineStatus != 'off'){
         }
         else {
           //var sample_date = new Date(parseDate(station.date));
-          var sample_date = new Date(parseDate(station.SampleDate()));
+          sample_date = new Date(parseDate(station.SampleDate()));
           dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
           //var data = station.value;
           sample_value = station.SampleValue();

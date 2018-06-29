@@ -87,6 +87,10 @@ function stationData()
   {
     return(self.station_message);
   };
+  self.ForecastStationMessageSeverity = function()
+  {
+    return(self.message_severity);
+  };
   self.SampleDate = function()
   {
     return(self.sample_date);

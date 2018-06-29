@@ -130,7 +130,12 @@ function stationsData()
       data_rec.longitude = feature.geometry.coordinates[0];
       data_rec.description = feature.properties.desc;
       data_rec.sample_date = feature.properties.test.beachadvisories.date;
-      data_rec.sample_value = feature.properties.test.beachadvisories.value[0];
+      if(typeof(feature.properties.test.beachadvisories.value) == 'array') {
+        data_rec.sample_value = feature.properties.test.beachadvisories.value[0];
+      }
+      else {
+        data_rec.sample_value = feature.properties.test.beachadvisories.value;
+      }
       data_rec.issues_adivisories = feature.properties.issues_advisories;
       data_rec.advisory_message = 'None';
       if(feature.properties.advisory !== undefined && feature.properties.advisory.length)

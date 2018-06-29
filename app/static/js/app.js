@@ -42,6 +42,7 @@ function stationData()
   //Prediction related vars
   self.forecast_date = undefined;
   self.station_message = undefined;
+  self.message_severity = undefined;
   self.ensemble_result = undefined;
   //Sample related vars
   self.sample_date = undefined;
@@ -145,7 +146,8 @@ function stationsData()
         {
           data_rec.forecast_date = prediction_data.contents.run_date;
         }
-        data_rec.station_message = feature.properties.site_message;
+        data_rec.station_message = feature.properties.site_message.message;
+        data_rec.message_severity = feature.properties.site_message.severity;
         data_rec.ensemble_result = 'None';
         if(feature.ensemble !== undefined && feature.ensemble.length)
         {

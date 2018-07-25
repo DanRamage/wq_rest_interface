@@ -155,14 +155,16 @@ function stationsData()
         {
           data_rec.forecast_date = prediction_data.contents.run_date;
         }
+        data_rec.station_message = "";
+        data_rec.message_severity = "";
         if(feature.properties.site_message !== undefined) {
           data_rec.station_message = feature.properties.site_message.message;
           data_rec.message_severity = feature.properties.site_message.severity;
         }
         data_rec.ensemble_result = 'None';
-        if(feature.ensemble !== undefined && feature.ensemble.length)
+        if(feature.properties.ensemble !== undefined && feature.properties.ensemble.length)
         {
-          data_rec.ensemble_result = feature.ensemble;
+          data_rec.ensemble_result = feature.properties.ensemble;
         }
       }
       //We've got a station that has predictions but no sampling data.
@@ -178,11 +180,16 @@ function stationsData()
         {
           data_rec.forecast_date = prediction_data.contents.run_date;
         }
-        data_rec.station_message = feature.properties.site_message;
+        data_rec.station_message = "";
+        data_rec.message_severity = "";
+        if(feature.properties.site_message !== undefined) {
+          data_rec.station_message = feature.properties.site_message.message;
+          data_rec.message_severity = feature.properties.site_message.severity;
+        }
         data_rec.ensemble_result = 'None';
-        if(feature.ensemble !== undefined && feature.ensemble.length)
+        if(feature.properties.ensemble !== undefined && feature.properties.ensemble.length)
         {
-          data_rec.ensemble_result = feature.ensemble;
+          data_rec.ensemble_result = feature.properties.ensemble;
         }
       }
     });

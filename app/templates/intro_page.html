@@ -1,77 +1,42 @@
-<!DOCTYPE html>
-<html lang="en" class="full">
-
-  <head>
+{% extends "intro_page_base.html" %}
+{% block head %}
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!--
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>How's the Beach: Water Quality and You!</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <!-- Bootstrap -->
-    <link href="static/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <title>How's the Beach</title>
+
+    <link href="static/css/bootstrap/bootstrap-4.1.3-dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/styles.css" rel="stylesheet">
+    <link href="static/css/intro_page.css" rel="stylesheet">
+    <link href="static/css/cover.css" rel="stylesheet">
+
     <style>
-      .row-buffer-20px
-      {
-        margin-top:20px;
+
+      body {
+        background: url("static/images/Flickr_Allison_M.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
       }
 
-      html {
-        background: transparent;
-        font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+      .text-background{
+          /*display:inline;
+          background-color: #000000;*/
+          color:#FFFFFF;
       }
-      .full {
-          /*background: rgba(0, 0, 0, 0) url("images/howsthebeachbg.svg") no-repeat fixed center center / cover;*/
-          font-family: "Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
-          min-height: 100%;
-          background-size:cover;
-      }
-      .header_text {
-        color: #626567;
-        /*color: RGB(255, 255, 255);*/
-        font-family: "Lato",sans-serif;
-        /*font-family: "Arial Rounded MT Bold","Helvetica Rounded",Arial,sans-serif;*/
-      }
-      .header_text h1 {
-        font-size: 36px;
-      }
-      .header_text h2 {
-        font-size: 24px;
-      }
-      .button_background
-      {
-          background: rgba(0, 0, 0, 0) url("static/images/howsthebeachbg.svg") no-repeat fixed center center / cover;
-          min-height: 100%;
-          background-size:cover;
-      }
-      body { background: transparent;}
-      .marketing {
-        background-color: #43b4c1;
-        font-family: "Lato",sans-serif;
-      }
-      .marketing-header {
-        color: #FFFFFF;
-      }
-      .marketing-disclaimer {
-        color: #FFFFFF;
-      }
-      .marketing .col-lg-4 {
-          margin-bottom: 20px;
-          text-align: center;
-      }
-      .marketing h2 {
-          font-weight: normal;
-      }
-      .marketing .col-lg-4 p {
-          margin-left: 10px;
-          margin-right: 10px;
-      }
+    .row-background {
+      background-color: #2F71AA;
+      opacity: 0.7;
+      height: 50%;
+    }
       .logos {
-        width: 75%;
+        fill: #ffffff;
       }
       .logo_row {
         /*background-color: #94c83d;*/
@@ -93,112 +58,85 @@
         #background-color: #94c83d;
 
       }
-      .entry_col {
-        color: RGB(255, 255, 255);
-        /*font-family: "Arial Rounded MT Bold","Helvetica Rounded",Arial,sans-serif;*/
-      }
-      .details-btn {
-        color: #43b4c1;
-        background-color: #FFFFFF;
-      }
+
     </style>
-  </head>
-  <body>
+{% endblock %}
 
-    <div class="container-fluid">
-      <div class="row row-buffer-20px"></div>
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <img class="img-rounded" src="static/images/swimmer_icon.png"  style="width: 80px; height: 80px;">
+{% block body %}
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-md-12">
+        <div class="row align-items-center">
+          <div class="col">
+            <img src="static/images/se_outline_sized.png"  usemap="#se-image-map">
+            <map name="se-image-map">
+                <area target="" alt="Kill Devil Hills" title="Kill Devil Hills" href="killdevilhills" coords="388,18,12" shape="circle">
+                <area target="" alt="Myrtle Beach" title="Myrtle Beach" href="myrtlebeach" coords="295,114,12" shape="circle">
+                <area target="" alt="Charleston" title="Charleston" href="charleston" coords="267,150,13" shape="circle">
+                <area target="" alt="Sarasota" title="Sarasota" href="sarasota" coords="197,352,13" shape="circle">
+            </map>
+          </div>
+          <div class="col">
+            <p><h1 class="text-left text-background">HOW'S THE BEACH?</h1></p>
+            <span class="text-left text-background">
+              <p class="lead text-background">
+              Headed to the beach? Use this app to see if the water quality is healthy before going in!
+              </p>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-12 header_text">
-          <h1 class="text-center">HOW'S THE BEACH?</h1>
-          <h2 class="text-center">Headed to the beach? Use the How's the Beach? app to see if the water quality is healthy before diving in!</h2>
-        </div>
-      </div>
-      <div class="marketing">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h3 class="marketing-header">Choose a location to explore</h3>
+      <footer class="footer">
+        <div class="row no-gutters">
+          <div class="col-md-6">
+            <img class="float-left" src="static/images/swimmer_icon_white.png" style="width: 40px; height: 40px;">
           </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-2 entry_col">
-          </div>
-          <div class="col-lg-2 entry_col">
-            <a class="btn" href="/killdevilhills" role="button">
-              <img class="img-rounded" src="static/images/nc_kdh_button.png"  style="width: 140px; height: 140px;">
+          <div class="col">
+            <a target="_blank"  style="width: 40px; height: 40px; href="http://secoora.org/">
+              <img src="static/images/secoora-logo-blk_white.png" class="logos">
             </a>
-            <p><a class="btn btn-default details-btn" href="/killdevilhills" role="button">Kill Devil Hills</br>North Carolina &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-
-          <div class="col-lg-2 entry_col">
-            <a class="btn" href="/myrtlebeach" role="button">
-              <img class="img-rounded" src="static/images/sc_button.png"  style="width: 140px; height: 140px;">
+          </div>
+          <div class="col">
+            <a target="_blank"  style="width: 40px; height: 40px; href="http://www.sc.edu/">
+              <img src="static/images/usc-logo-blk_white.png" class="logos">
             </a>
-            <p><a class="btn btn-default details-btn" href="/myrtlebeach" role="button">Myrtle Beach</br>South Carolina &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-
-          <div class="col-lg-2 entry_col">
-            <a class="btn" href="/charleston" role="button">
-              <img class="img-rounded" src="static/images/chs_button.png"  style="width: 140px; height: 140px;">
-            </a>
-            <p><a class="btn btn-default details-btn" href="/charleston" role="button">Charleston</br>South Carolina &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-
-          <div class="col-lg-2 entry_col">
-            <a class="btn" href="/sarasota" role="button">
-              <img class="img-rounded" src="static/images/fl_button.png"  style="width: 140px; height: 140px;">
-            </a>
-            <p><a class="btn btn-default details-btn" href="/sarasota" role="button">Sarasota Beaches</br>Florida &raquo;</a></p>
-          </div><!-- /.col-lg-4 -->
-          <div class="col-lg-2 entry_col">
           </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-1"></div>
-          <div class="col-lg-10 marketing-disclaimer">
-            <p>
-              <h5><em>Disclaimer: This product is for informational purposes only. Please consult your state and local health departments for official beach advisory information.</em></h5>
-            </p>
-          </div>
-          <div class="col-lg-1"></div>
-        </div>
-
-      </div>
-      <footer class="footer footer_text">
-        <div class="row row-buffer-20px"></div>
-        <div class="row">
-          <div class="col-xs-2 col-md-1">
-            <img class="img-rounded center-block" src="static/images/swimmer_icon.png" style="width: 40px; height: 40px;">
-          </div>
-          <div class="col-xs-10 col-md-11 partners">
-            <h2>Partners</h2>
-          </div>
-        </div>
-        <div class="row logo_row">
-          <div class="col-xs-4">
-            <a target="_blank" href="http://secoora.org/">
-              <img src="static//images/secoora-logo-blk.svg" class="logos">
-            </a>
-            <!--<img class="logos" src="/images/secoora-logo.svg">-->
-          </div>
-          <div class="col-xs-4">
-            <a target="_blank" href="http://www.sc.edu/">
-              <img src="static//images/usc-logo-blk.svg" class="logos">
-            </a>
-            <!--<img class="logos" src="/images/usc-logo.svg">-->
-          </div>
-          <div class="col-xs-4">
-            <a target="_blank" href="http://www.umces.edu/">
-              <img src="static//images/umces-logo-blk.svg" class="logos">
+          <div class="col">
+            <a target="_blank"  style="width: 40px; height: 40px; href="http://www.umces.edu/">
+              <img src="static/images/umces-logo-blk_white.png" class="logos">
             </a>
             <!--<img class="logos" src="/images/umces-logo.svg">-->
           </div>
         </div>
       </footer>
     </div>
-  </body>
-</html>
+  </div>
+
+  <script src="static/js/jquery-1.10.2.min.js"></script>
+  <script src="static/js/imageMapResizer.min.js"></script>
+
+  <script>
+    $('se_map').imageMapResize();
+  </script>
+
+  <!--
+  <div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+      <div class="cover-container">
+        <div class="inner cover">
+          <h1 class="cover-heading"><span class="text-background">HOW'S THE BEACH?</span></h1>
+          <span class="text-background">
+            <p class="lead text-background">
+              Headed to the beach? Use this app to see if the water quality is healthy before going in!
+            </p>
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  -->
+{% endblock %}

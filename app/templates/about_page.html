@@ -15,17 +15,25 @@
     <link href="static/css/cover.css" rel="stylesheet">
 
     <style>
+      body {
+        background: url("static/images/Flickr_Allison_M.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      }
 
-    body {
-      background-color: #2F71AA;
-    }
+      .row-background {
+        background-color: #2F71AA;
+        opacity: 0.8;
+      }
 
     </style>
 {% endblock %}
 `
 {% block body %}
   <div class="container h-100">
-    <div class="row text-left">
+    <div class="row text-left row-background">
       <div class="col">
         <p class="lead">
           What is How's The Beach?
@@ -35,7 +43,7 @@
         </p>
       </div>
     </div>
-    <div class="row text-left">
+    <div class="row text-left row-background">
       <div class="col">
         <p class="lead">
           What are we forecasting?
@@ -45,7 +53,7 @@
         </p>
       </div>
     </div>
-    <div class="row text-left">
+    <div class="row text-left row-background">
       <div class="col">
         <p class="lead">
           What is Enterococci?
@@ -55,32 +63,34 @@
         </p>
       </div>
     </div>
-    <footer class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="col text-left">
-            <p class="lead">Partners</p>
+    <div class="row">
+      <footer class="footer">
+        <div class="container">
+          <div class="row row-background">
+            <div class="col text-left">
+              <p class="lead">Partners</p>
+            </div>
+          </div>
+          <div class="row row-background">
+            <div class="col">
+              <a target="_blank" href="http://secoora.org/">
+                <img src="static/images/secoora_logo_white.svg" style="height: 70px;">
+              </a>
+            </div>
+            <div class="col">
+              <a target="_blank" href="http://www.sc.edu/">
+                <img src="static/images/usc_log_white.svg"  style="height: 70px;">
+              </a>
+            </div>
+            <div class="col">
+              <a target="_blank" href="http://www.umces.edu/">
+                <img src="static/images/ian_umces_logo_white.svg" style="height: 70px;">
+              </a>
+              <!--<img class="logos" src="/images/umces-logo.svg">-->
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <a target="_blank" href="http://secoora.org/">
-              <img src="static/images/secoora_logo_white.svg" style="height: 70px;">
-            </a>
-          </div>
-          <div class="col">
-            <a target="_blank" href="http://www.sc.edu/">
-              <img src="static/images/usc_log_white.svg"  style="height: 70px;">
-            </a>
-          </div>
-          <div class="col">
-            <a target="_blank" href="http://www.umces.edu/">
-              <img src="static/images/ian_umces_logo_white.svg" style="height: 70px;">
-            </a>
-            <!--<img class="logos" src="/images/umces-logo.svg">-->
-          </div>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   </div>
 {% endblock %}

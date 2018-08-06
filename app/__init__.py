@@ -101,10 +101,12 @@ def build_url_rules(app):
     BacteriaDataAPI, \
     StationDataAPI, \
     MaintenanceMode, \
-    KillDevilHillsPage
+    KillDevilHillsPage, \
+    ShowAboutPage
 
     #Page rules
   app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
+  app.add_url_rule('/about', view_func=ShowAboutPage.as_view('about_page'))
   app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
   app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
   app.add_url_rule('/charleston', view_func=CharlestonPage.as_view('charleston'))

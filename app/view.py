@@ -110,6 +110,13 @@ class ShowIntroPage(View):
     current_app.logger.debug('IP: %s intro_page rendered' % (request.remote_addr))
     return render_template("intro_page.html")
 
+class ShowAboutPage(View):
+  def dispatch_request(self):
+    current_app.logger.debug('IP: %s about_page rendered' % (request.remote_addr))
+    return render_template("about_page.html")
+
+
+
 class SitePage(View):
   def __init__(self, site_name):
     current_app.logger.debug('__init__')

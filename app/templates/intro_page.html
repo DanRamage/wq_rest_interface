@@ -45,8 +45,8 @@
     <div class="row align-items-center">
       <div class="col-md-12">
         <div class="row align-items-center row-background">
-          <div class="col mt-5">
-            <img src="static/images/se_outline_sized.png" usemap="#se-image-map">
+          <div class="col" style="height: 250px; width: 100%; display: block;">
+            <img class="img-fluid"  src="static/images/se_outline_sized.png" usemap="#se-image-map">
             <map name="se-image-map">
               <area target="" alt="Kill Devil Hills" title="Kill Devil Hills" href="killdevilhills" coords="470,8,495,30" shape="rect">
               <area target="" alt="Myrtle Beach" title="Myrtle Beach" href="myrtlebeach" coords="358,129,391,155" shape="rect">
@@ -103,7 +103,7 @@
   <script src="static/js/imageMapResizer.min.js"></script>
 
   <script>
-    $('se_map').imageMapResize();
+    $('map').imageMapResize();
   </script>
 
 {% endblock %}

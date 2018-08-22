@@ -102,15 +102,25 @@ def build_url_rules(app):
     StationDataAPI, \
     MaintenanceMode, \
     KillDevilHillsPage, \
-    ShowAboutPage
+    ShowAboutPage, \
+    SCAboutPage, \
+    FLAboutPage, \
+    NCAboutPage
 
     #Page rules
   app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
   app.add_url_rule('/about', view_func=ShowAboutPage.as_view('about_page'))
+  #SC sites
   app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))
-  app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
+  app.add_url_rule('/myrtlebeach/about', view_func=SCAboutPage.as_view('mb_about'))
   app.add_url_rule('/charleston', view_func=CharlestonPage.as_view('charleston'))
+  app.add_url_rule('/charleston/about', view_func=SCAboutPage.as_view('chs_about'))
+  #FL Sites
+  app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
+  app.add_url_rule('/sarasota/about', view_func=FLAboutPage.as_view('fl_about'))
+  #NC Sites
   app.add_url_rule('/killdevilhills', view_func=KillDevilHillsPage.as_view('killdevilhills'))
+  app.add_url_rule('/killdevilhills/about', view_func=NCAboutPage.as_view('nc_about'))
 
   #REST rules
   app.add_url_rule('/predictions/current_results/<string:sitename>', view_func=PredictionsAPI.as_view('predictions_view'), methods=['GET'])

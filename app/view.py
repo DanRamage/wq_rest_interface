@@ -271,12 +271,23 @@ class MyrtleBeachPage(SitePage):
     SitePage.__init__(self, 'myrtlebeach')
     self.page_template = 'mb_index_page.html'
 
+class SCAboutPage(SitePage):
+  def __init__(self):
+    current_app.logger.debug('IP: %s SCAboutPage __init__' % (request.remote_addr))
+    SitePage.__init__(self, 'myrtlebeach')
+    self.page_template = 'sc_about_page.html'
 
 class SarasotaPage(SitePage):
   def __init__(self):
     current_app.logger.debug('IP: %s SarasotaPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'sarasota')
     self.page_template = 'sarasota_index_page.html'
+
+class FLAboutPage(SitePage):
+  def __init__(self):
+    current_app.logger.debug('IP: %s FLAboutPage __init__' % (request.remote_addr))
+    SitePage.__init__(self, 'sarasota')
+    self.page_template = 'fl_about_page.html'
 
 class CharlestonPage(SitePage):
   def __init__(self):
@@ -289,6 +300,12 @@ class KillDevilHillsPage(SitePage):
     current_app.logger.debug('IP: %s KillDevilHillsPage __init__' % (request.remote_addr))
     SitePage.__init__(self, 'killdevilhills')
     self.page_template = 'kdh_index_page.html'
+
+class NCAboutPage(SitePage):
+  def __init__(self):
+    current_app.logger.debug('IP: %s NCAboutPage __init__' % (request.remote_addr))
+    SitePage.__init__(self, 'killdevilhills')
+    self.page_template = 'nc_about_page.html'
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

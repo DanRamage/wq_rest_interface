@@ -15,12 +15,15 @@
     <link href="static/css/cover.css" rel="stylesheet">
 
     <style>
-      html,
-      body {
-        height: 100%
-      }
       body {
         background: url("static/images/Flickr_Allison_M.jpg") no-repeat center center fixed;
+      }
+      .vertical-center {
+        min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+        min-height: 100vh; /* These two lines are counted as one :-)       */
+
+        display: flex;
+        align-items: center;
       }
       .text-background{
           /*display:inline;
@@ -39,7 +42,7 @@
 {% endblock %}
 `
 {% block body %}
-  <div class="container-fluid">
+  <div class="container-fluid vertical-center">
     <div class="h-100 row align-items-center">
       <div class="col-lg-12 col-md-12 col-xs-12">
         <div class="row align-items-center row-background mt-5">

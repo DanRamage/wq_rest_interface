@@ -302,8 +302,8 @@ class SarasotaPage(SitePage):
 
 class SarasotaAboutPage(ShowAboutPage):
   def __init__(self):
-    current_app.logger.debug('IP: %s FLAboutPage __init__' % (request.remote_addr))
-    SitePage.__init__(self, 'sarasota', 'fl_about_page.html')
+    current_app.logger.debug('IP: %s SarasotaAboutPage __init__' % (request.remote_addr))
+    ShowAboutPage.__init__(self, 'sarasota', 'fl_about_page.html')
 
 class CharlestonPage(SitePage):
   def __init__(self):

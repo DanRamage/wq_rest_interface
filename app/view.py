@@ -325,7 +325,7 @@ class KillDevilHillsPage(SitePage):
 class KDHAboutPage(ShowAboutPage):
   def __init__(self):
     current_app.logger.debug('IP: %s NCAboutPage __init__' % (request.remote_addr))
-    SitePage.__init__(self, 'killdevilhills', 'nc_about_page.html')
+    ShowAboutPage.__init__(self, 'killdevilhills', 'nc_about_page.html')
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

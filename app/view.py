@@ -111,7 +111,7 @@ class ShowIntroPage(View):
     return render_template("intro_page.html")
 
 class ShowAboutPage(View):
-  def __init__(self, site_name="/", page_template='about_page.html'):
+  def __init__(self, site_name="./", page_template='about_page.html'):
     current_app.logger.debug('__init__')
     self.site_name = site_name
     self.page_template = page_template

@@ -303,6 +303,12 @@ function initialize_app(site_name, data, limits) {
 
   });
   */
+
+  $("#about_page").on("click", function() {
+      var i = 0;
+  });
+
+
   return;
 }
 
@@ -1448,7 +1454,7 @@ if(onlineStatus != 'off'){
     }
 
     //$('#detail_map_canvas').gmap('option', 'center', new google.maps.LatLng(currentEtcoc[$.mobile.pageData.id].lat,currentEtcoc[$.mobile.pageData.id].lng));
-    $('#detail_map_canvas').gmap('option', 'center', new google.maps.LatLng(location[0],location[1]));
+    $('#detail_map_canvas').gmap('option', 'center', new google.maps.LatLng(location[1],location[0]));
     $('#detail_map_canvas').gmap('option', 'zoom', 19);
 
     $('#detail_map_canvas').gmap('refreshCenter');

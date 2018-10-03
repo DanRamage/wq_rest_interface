@@ -1002,7 +1002,7 @@ if(onlineStatus != 'off'){
             hitType: 'event',
             eventCategory: 'SampleSiteClick',
             eventAction: 'click',
-            eventLabel: station.Description()
+            eventLabel: station.Station()
           });
 
         });

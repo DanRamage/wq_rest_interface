@@ -997,7 +997,7 @@ if(onlineStatus != 'off'){
             'content': popup_content.join('')
           },
           this);
-
+          //SEnd google analytic event that reflects the station the user clicked on.
           ga('send', {
             hitType: 'event',
             eventCategory: 'SampleSiteClick',

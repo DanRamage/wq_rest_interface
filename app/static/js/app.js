@@ -997,6 +997,14 @@ if(onlineStatus != 'off'){
             'content': popup_content.join('')
           },
           this);
+
+          ga('send', {
+            hitType: 'event',
+            eventCategory: 'SampleSiteClick',
+            eventAction: 'click',
+            eventLabel: station.Description()
+          });
+
         });
       //}
       });

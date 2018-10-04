@@ -23,15 +23,15 @@ if not PYCHARM_DEBUG:
   SITES_CONFIG = {
     'myrtlebeach':
       {
-        'prediction_file': '/mnt/sc_wq/vb_engine/Predictions.json',
-        'advisory_file': '/mnt/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json',
-        'stations_directory': '/mnt/sc_wq/vb_engine/monitorstations'
+        'prediction_file': '/home/xeniaprod/feeds/sc_wq/vb_engine/Predictions.json',
+        'advisory_file': '/home/xeniaprod/feeds/sc_wq/vb_engine/monitorstations/beachAdvisoryResults.json',
+        'stations_directory': '/home/xeniaprod/feeds/sc_wq/vb_engine/monitorstations'
       },
     'sarasota':
       {
-        'prediction_file': '/mnt/fl_wq/Predictions.json',
-        'advisory_file': '/mnt/fl_wq/monitorstations/beachAdvisoryResults.json',
-        'stations_directory': '/mnt/fl_wq/monitorstations'
+        'prediction_file': '/home/xeniaprod/feeds/fl_wq/Predictions.json',
+        'advisory_file': '/home/xeniaprod/feeds/fl_wq/monitorstations/beachAdvisoryResults.json',
+        'stations_directory': '/home/xeniaprod/feeds/fl_wq/monitorstations'
       },
     'charleston':
       {

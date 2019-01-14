@@ -93,10 +93,7 @@ function stationData()
   };
   self.SampleDate = function()
   {
-    if(self.sample_date !== undefined) {
-        return (self.sample_date);
-    }
-    return undefined;
+    return (self.sample_date);
   };
   self.SampleValue = function()
   {
@@ -935,7 +932,7 @@ if(onlineStatus != 'off'){
         var dateIcon = '';
         var sample_date = '';
         //if (typeof station.date === "undefined" || station.date.length === 0) {
-        if (station.SampleDate() === "undefined" || station.SampleDate().length === 0) {
+        if (station.SampleDate() === undefined || station.SampleDate().length === 0) {
           dateIcon = '';
         }
         else {

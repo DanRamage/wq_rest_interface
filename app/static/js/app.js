@@ -93,7 +93,10 @@ function stationData()
   };
   self.SampleDate = function()
   {
-    return(self.sample_date);
+    if(self.sample_date !== undefined) {
+        return (self.sample_date);
+    }
+    return undefined;
   };
   self.SampleValue = function()
   {

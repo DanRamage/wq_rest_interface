@@ -914,7 +914,7 @@ if(onlineStatus != 'off'){
       //{
         //Map markers
         //if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {
-        if (typeof station.EnsembleResult() === "undefined" || station.EnsembleResult() == "NO TEST") {
+        if (typeof station.EnsembleResult() === undefined || station.EnsembleResult() == "NO TEST") {
           forecast = 'None';
         }
         else {

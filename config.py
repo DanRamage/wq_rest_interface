@@ -1,5 +1,5 @@
-FLASK_DEBUG = False
-PYCHARM_DEBUG=False
+FLASK_DEBUG = True
+PYCHARM_DEBUG=True
 # Create dummy secrey key so we can use sessions
 SECRET_KEY = '123456790'
 SECRET_KEY_FILE = 'secret_key'
@@ -44,7 +44,13 @@ if not PYCHARM_DEBUG:
         'prediction_file': '/home/xeniaprod/feeds/northcarolina/killdevilhills/Predictions.json',
         'advisory_file': '/home/xeniaprod/feeds/northcarolina/killdevilhills/monitorstations/kdh_beach_advisories.json',
         'stations_directory': '/home/xeniaprod/feeds/northcarolina/killdevilhills/monitorstations'
-      }
+      },
+    'follybeach':
+      {
+        'prediction_file': '/home/xeniaprod/feeds/follybeach/Predictions.json',
+        'advisory_file': '/home/xeniaprod/feeds/follybeach/monitorstations/beach_advisories.json',
+        'stations_directory': '/home/xeniaprod/feeds/follybeach/monitorstations'
+      },
   }
 else:
   SITES_CONFIG = {
@@ -65,5 +71,11 @@ else:
         'prediction_file': '/Users/danramage/tmp/wq_feeds/kdh/Predictions.json',
         'advisory_file': '/Users/danramage/tmp/wq_feeds/kdh/monitorstations/kdh_beach_advisories.json',
         'stations_directory': '/Users/danramage/tmp/wq_feeds/kdh/monitorstations'
+      },
+    'follybeach':
+      {
+        'prediction_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/Predictions.json',
+        'advisory_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/follybeach_beach_advisories.json',
+        'stations_directory': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/'
       }
   }

@@ -1,3 +1,8 @@
+"""
+To use the command line interface you have to:
+Load the python venv(source /path/to/python/venv/bin/activate
+export FLASK_APP=<fullpathto>/manage.py
+"""
 import sys
 sys.path.append('../../commonfiles/python')
 import os

@@ -9,7 +9,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
     login_required, current_user
 from sqlalchemy import exc
 import time
-import simplejson
+import json
 import geojson
 from datetime import datetime
 from collections import OrderedDict
@@ -191,8 +191,8 @@ class SitePage(View):
         prediction_data, pred_ret_code = get_data_file(SITES_CONFIG[self.site_name]['prediction_file'])
         advisory_data, adv_ret_code = get_data_file(SITES_CONFIG[self.site_name]['advisory_file'])
         data = {
-          'prediction_data': simplejson.loads(prediction_data),
-          'advisory_data': simplejson.loads(advisory_data)
+          'prediction_data': json.loads(prediction_data),
+          'advisory_data': json.loads(advisory_data)
         }
         #Query the Sample_Site table to get any specific settings we need for the map.
         #Currently for the Charleston site, we want to disable the Advisory in the site popup
@@ -327,6 +327,18 @@ class KDHAboutPage(ShowAboutPage):
     current_app.logger.debug('IP: %s NCAboutPage __init__' % (request.remote_addr))
     ShowAboutPage.__init__(self, 'killdevilhills', 'nc_about_page.html')
 
+class FollyBeachPage(SitePage):
+  def __init__(self):
+    current_app.logger.debug('IP: %s FollyBeachPage __init__' % (request.remote_addr))
+    SitePage.__init__(self, 'follybeach')
+    self.page_template = 'follybeach_index_page.html'
+
+class FollyBeachAboutPage(ShowAboutPage):
+  def __init__(self):
+    current_app.logger.debug('IP: %s FollyBeachAboutPage __init__' % (request.remote_addr))
+    ShowAboutPage.__init__(self, 'follybeach', 'sc_about_page.html')
+
+
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")
 
@@ -340,7 +352,7 @@ def get_data_file(filename):
     current_app.logger.exception(e)
 
     ret_code = 404
-    results = simplejson.dumps({'status': {'http_code': ret_code},
+    results = json.dumps({'status': {'http_code': ret_code},
                     'contents': None
                     })
 
@@ -368,9 +380,11 @@ class PredictionsAPI(MethodView):
       results, ret_code = get_data_file(FL_SARASOTA_PREDICTIONS_FILE)
     elif sitename == 'charleston':
       results, ret_code = get_data_file(SC_CHS_PREDICTIONS_FILE)
+    elif sitename == 'follybeach':
+      results, ret_code = get_data_file(SC_FOLLYBEACH_PREDICTIONS_FILE)
 
     else:
-      results = simplejson.dumps({'status': {'http_code': ret_code},
+      results = json.dumps({'status': {'http_code': ret_code},
                     'contents': None
                     })
 
@@ -389,25 +403,25 @@ class BacteriaDataAPI(MethodView):
       results, ret_code = get_data_file(SC_MB_ADVISORIES_FILE)
       #Wrap the results in the status and contents keys. The app expects this format.
       json_ret = {'status': {'http_code': ret_code},
-                  'contents': simplejson.loads(results)}
-      results = simplejson.dumps(json_ret)
+                  'contents': json.loads(results)}
+      results = json.dumps(json_ret)
 
     elif sitename == 'sarasota':
       results,ret_code = get_data_file(FL_SARASOTA_ADVISORIES_FILE)
       #Wrap the results in the status and contents keys. The app expects this format.
       json_ret = {'status' : {'http_code': ret_code},
-                  'contents': simplejson.loads(results)}
-      results = simplejson.dumps(json_ret)
+                  'contents': json.loads(results)}
+      results = json.dumps(json_ret)
 
     elif sitename == 'charleston':
       results,ret_code = get_data_file(SC_CHS_ADVISORIES_FILE)
       #Wrap the results in the status and contents keys. The app expects this format.
       json_ret = {'status' : {'http_code': ret_code},
-                  'contents': simplejson.loads(results)}
-      results = simplejson.dumps(json_ret)
+                  'contents': json.loads(results)}
+      results = json.dumps(json_ret)
 
     else:
-      results = simplejson.dumps({'status': {'http_code': ret_code},
+      results = json.dumps({'status': {'http_code': ret_code},
                     'contents': None
                     })
 
@@ -470,7 +484,7 @@ class StationDataAPI(MethodView):
               sample_data.row_update_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
               sample_data.sample_value = value
             db.session.commit()
-            results = simplejson.dumps({'status': {'http_code': ret_code},
+            results = json.dumps({'status': {'http_code': ret_code},
                           'contents': None
                           })
           else:
@@ -526,7 +540,7 @@ class StationDataAPI(MethodView):
           ret_code = 200
         """
       else:
-        results = simplejson.dumps({'status': {'http_code': ret_code},
+        results = json.dumps({'status': {'http_code': ret_code},
                       'contents': None
                       })
 
@@ -623,7 +637,7 @@ class StationDataUpdateAPI(MethodView):
       ret_code = 200
 
     else:
-      results = simplejson.dumps({'status': {'http_code': ret_code},
+      results = json.dumps({'status': {'http_code': ret_code},
                     'contents': None
                     })
 

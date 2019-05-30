@@ -106,7 +106,10 @@ def build_url_rules(app):
     MBAboutPage, \
     CHSAboutPage, \
     SarasotaAboutPage, \
-    KDHAboutPage
+    KDHAboutPage, \
+    FollyBeachPage, \
+    FollyBeachAboutPage
+
 
     #Page rules
   app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
@@ -116,6 +119,9 @@ def build_url_rules(app):
   app.add_url_rule('/myrtlebeach/about', view_func=MBAboutPage.as_view('mb_about'))
   app.add_url_rule('/charleston', view_func=CharlestonPage.as_view('charleston'))
   app.add_url_rule('/charleston/about', view_func=CHSAboutPage.as_view('chs_about'))
+  app.add_url_rule('/follybeach', view_func=FollyBeachPage.as_view('follybeach'))
+  app.add_url_rule('/follybeach/about', view_func=FollyBeachAboutPage.as_view('follybeach_about'))
+
   #FL Sites
   app.add_url_rule('/sarasota', view_func=SarasotaPage.as_view('sarasota'))
   app.add_url_rule('/sarasota/about', view_func=SarasotaAboutPage.as_view('sarasota_about'))

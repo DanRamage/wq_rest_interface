@@ -75,7 +75,7 @@ else:
     'follybeach':
       {
         'prediction_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/Predictions.json',
-        'advisory_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/follybeach_beach_advisories.json',
+        'advisory_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/beach_advisories.json',
         'stations_directory': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/'
       }
   }

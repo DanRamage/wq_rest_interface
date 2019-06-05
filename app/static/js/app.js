@@ -1426,7 +1426,7 @@ if(onlineStatus != 'off'){
 
     //if(typeof predictionData[$.mobile.pageData.id] === "undefined" || predictionData[$.mobile.pageData.id].ensemble == "NO TEST"){
     var forecast = 'None';
-    if(station.EnsembleResult() == "NO TEST" || station.EnsembleResult() == "NO TEST" === undefined){
+    if(station.EnsembleResult() == "NO TEST" || station.EnsembleResult() === undefined){
       forecast = 'None';
     }
     else{

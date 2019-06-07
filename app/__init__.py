@@ -57,7 +57,8 @@ def build_flask_admin(app):
     boundary_view, \
     site_extent_view, \
     popup_site_view, \
-    sample_site_data_view
+    sample_site_data_view, \
+    site_type_view
 
   from admin_models import User, Role
   from wq_models import Project_Area, \
@@ -68,7 +69,8 @@ def build_flask_admin(app):
     Sample_Site, \
     Boundary, \
     Site_Extent, \
-    Sample_Site_Data
+    Sample_Site_Data,\
+    Site_Type
 
   login_manager.init_app(app)
   # Create admin
@@ -78,11 +80,12 @@ def build_flask_admin(app):
   admin.add_view(AdminUserModelView(User, db.session, endpoint="admin_user_view"))
   admin.add_view(BasicUserModelView(User, db.session, endpoint="basic_user_view"))
   admin.add_view(RolesView(Role, db.session))
-  admin.add_view(project_type_view(Project_Type, db.session, name="Site Type"))
+  admin.add_view(project_type_view(Project_Type, db.session, name="Project Site Type"))
   admin.add_view(project_area_view(Project_Area, db.session, name="Area"))
   admin.add_view(site_message_view(Site_Message, db.session, name="Message"))
   admin.add_view(site_message_level_view(Site_Message_Level, db.session, name="Message Level"))
   admin.add_view(advisory_limits_view(Advisory_Limits, db.session, name="Advisory Limits"))
+  admin.add_view(site_type_view(Site_Type, db.session, name="Site Type"))
   admin.add_view(sample_site_view(Sample_Site, db.session, name="Sample Sites"))
   admin.add_view(boundary_view(Boundary, db.session, name="Boundaries"))
   admin.add_view(site_extent_view(Site_Extent, db.session, name="Site Extents"))

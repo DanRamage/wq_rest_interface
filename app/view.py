@@ -15,6 +15,7 @@ from datetime import datetime
 from collections import OrderedDict
 from wtforms import form, fields, validators
 from werkzeug.security import generate_password_hash, check_password_hash
+
 from shapely.wkb import loads as wkb_loads
 from shapely.wkt import loads as wkt_loads
 
@@ -30,6 +31,24 @@ from wq_models import Project_Area, \
   Sample_Site_Data,\
   Site_Extent,\
   Boundary
+
+class SiteGeometry:
+  def __init__(self, geom):
+    self._geometry = geom
+
+class SiteProperties:
+  def __init__(self, **kwargs):
+    for key, value in kwargs.items():
+      setattr(self, "_{}".format(key), value)
+
+
+class SiteFeature:
+  def __init__(self, geometry, properties):
+    self._geometry = SiteGeometry(geometry)
+    self._properties = SiteProperties(properties)
+
+
+
 
 def build_advisory_feature(sample_site_rec, sample_date, values):
   beachadvisories = {
@@ -70,6 +89,27 @@ def build_advisory_feature(sample_site_rec, sample_date, values):
     feature['properties']['extents_geometry'] = extents_json
 
   return feature
+
+def build_site_feature(site_rec):
+  feature = {
+    'type': 'Feature',
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [site_rec.longitude, site_rec.latitude]
+    },
+    'properties': {
+      'locale': site_rec.description,
+      'station': site_rec.site_name,
+      'beach': site_rec.county,
+      'desc': site_rec.description,
+      'station_message': site_rec.advisory_text,
+    }
+  }
+  if site_rec.site_type is not None:
+    feature['properties']['site_type'] = site_rec.site_type.name
+  return feature
+
+
 def build_prediction_feature(sample_site_rec, sample_date, model_results):
   tests = []
   if len(model_results):
@@ -99,6 +139,13 @@ def build_prediction_feature(sample_site_rec, sample_date, model_results):
     }
   }
   return feature
+
+def build_feature_collection(features):
+  feature_collection = {
+    'features': features,
+    'type': 'FeatureCollection'
+  }
+  return feature_collection
 
 class MaintenanceMode(View):
   def dispatch_request(self):
@@ -192,7 +239,8 @@ class SitePage(View):
         advisory_data, adv_ret_code = get_data_file(SITES_CONFIG[self.site_name]['advisory_file'])
         data = {
           'prediction_data': json.loads(prediction_data),
-          'advisory_data': json.loads(advisory_data)
+          'advisory_data': json.loads(advisory_data),
+          'sites': None
         }
         #Query the Sample_Site table to get any specific settings we need for the map.
         #Currently for the Charleston site, we want to disable the Advisory in the site popup
@@ -220,18 +268,25 @@ class SitePage(View):
           build_blank_predictions = True
 
         for site in sample_sites:
-          if not build_advisory_from_db:
-            advisory_data = data['advisory_data']['features']
-            for site_data in advisory_data:
-              if site_data['properties']['station'] == site.site_name:
-                site_data['properties']['issues_advisories'] = site.issues_advisories
+          #If the site doesn't have a type, or it's Default(water quality site).
+          if site.site_type is None or site.site_type.name == 'Default':
+            if not build_advisory_from_db:
+              advisory_data = data['advisory_data']['features']
+              for site_data in advisory_data:
+                if site_data['properties']['station'] == site.site_name:
+                  site_data['properties']['issues_advisories'] = site.issues_advisories
+            else:
+              feature = build_advisory_feature(site, datetime.now(), [])
+              feature['issues_advisories'] = site.issues_advisories
+              data['advisory_data']['features'].append(feature)
+            if build_blank_predictions:
+              feature = build_prediction_feature(site, datetime.now(), [])
+              data['prediction_data']['contents']['stationData']['features'].append(feature)
           else:
-            feature = build_advisory_feature(site, datetime.now(), [])
-            feature['issues_advisories'] = site.issues_advisories
-            data['advisory_data']['features'].append(feature)
-          if build_blank_predictions:
-            feature = build_prediction_feature(site, datetime.now(), [])
-            data['prediction_data']['contents']['stationData']['features'].append(feature)
+            if data['sites'] is None:
+              data['sites'] = build_feature_collection([])
+            feature = build_site_feature(site)
+            data['sites']['features'].append(feature)
 
         #Query the database to see if we have any temporary popup sites.
         popup_sites = db.session.query(Sample_Site) \
@@ -879,8 +934,8 @@ class sample_site_view(base_view):
   """
   View for the Sample_Site table.
   """
-  column_list = ['project_site', 'site_name', 'latitude', 'longitude', 'description', 'epa_id', 'county', 'issues_advisories', 'has_current_advisory', 'advisory_text', 'boundaries', 'temporary_site', 'site_data', 'row_entry_date', 'row_update_date']
-  form_columns = ['project_site', 'site_name', 'latitude', 'longitude', 'description', 'epa_id', 'county', 'site_data','issues_advisories', 'has_current_advisory', 'advisory_text', 'boundaries', 'temporary_site']
+  column_list = ['project_site', 'site_name', 'site_type', 'latitude', 'longitude', 'description', 'epa_id', 'county', 'issues_advisories', 'has_current_advisory', 'advisory_text', 'boundaries', 'temporary_site', 'site_data', 'row_entry_date', 'row_update_date']
+  form_columns = ['project_site', 'site_name', 'site_type', 'latitude', 'longitude', 'description', 'epa_id', 'county', 'site_data','issues_advisories', 'has_current_advisory', 'advisory_text', 'boundaries', 'temporary_site']
   column_filters = ['project_site']
 
   def on_model_change(self, form, model, is_created):
@@ -913,6 +968,11 @@ class sample_site_view(base_view):
     base_view.on_model_change(self, form, model, is_created)
 
     current_app.logger.debug('IP: %s User: %s popup_site_view on_model_change finished in %f seconds.' % (request.remote_addr, current_user.login, time.time() - start_time))
+
+class site_type_view(base_view):
+  column_list = ['name', 'row_entry_date', 'row_update_date']
+  form_columns = ['name']
+
 
 class wktTextField(fields.TextAreaField):
   def process_data(self, value):

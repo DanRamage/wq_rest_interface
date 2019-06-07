@@ -119,6 +119,7 @@ class Sample_Site(db.Model):
 
   site_name = db.Column(db.String(128), nullable=False)
   description = db.Column(db.Text, nullable=True)
+
   epa_id = db.Column(db.String(32), nullable=True)
   county = db.Column(db.String(32), nullable=True)
   # Some stations may measure water quality but can't issue a swim advisory.
@@ -138,8 +139,23 @@ class Sample_Site(db.Model):
   extents = db.relationship("Site_Extent", backref='sample_site')
   site_data = db.relationship("Sample_Site_Data", backref='sample_site',
                               order_by="desc(Sample_Site_Data.sample_date)")
+
+  site_type_id = db.Column('site_type_id', db.Integer, db.ForeignKey('site_type.id'))
+  site_type = db.relationship('Site_Type', backref='sample_site')
+
   def __str__(self):
     return self.site_name
+
+class Site_Type(db.Model):
+  __tablename__ = 'site_type'
+  id = db.Column(db.Integer, primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
+  name = db.Column(db.String(100))
+
+  #Use the __str__ for the foreign key relationships.
+  def __str__(self):
+    return self.name
 
 class Sample_Site_Data(db.Model):
   __table_name__ = 'sample_site_data'

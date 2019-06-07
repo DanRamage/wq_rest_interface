@@ -35,6 +35,7 @@ function stationData()
 {
   var self = this;
   self.station = undefined;
+  self.site_type = undefined;
   self.latitude = undefined;
   self.longitude = undefined;
   self.description = undefined;
@@ -62,6 +63,10 @@ function stationData()
   self.Station = function()
   {
     return self.station;
+  };
+  self.SiteType = function()
+  {
+    return self.site_type;
   };
   self.Location = function()
   {
@@ -120,6 +125,7 @@ function stationsData()
   {
     var advistory_data = data_records['advisory_data'];
     var prediction_data = data_records['prediction_data'];
+    var other_sites = data_records['sites']
 
     $.each(advistory_data.features, function(data_ndx, feature)
     {
@@ -193,12 +199,30 @@ function stationsData()
         }
       }
     });
+
+    $.each(other_sites.features, function(data_ndx, feature)
+    {
+      var data_rec = new stationData();
+      var station = String(feature.properties.station);
+      data_rec.station = station;
+      data_rec.site_type = feature.properties.site_type;
+      data_rec.latitude = feature.geometry.coordinates[1];
+      data_rec.longitude = feature.geometry.coordinates[0];
+      data_rec.description = feature.properties.desc;
+      self.station_data_records[station] = data_rec;
+    });
+
   };
   self.StationData = function(station_name)
   {
     var data_rec = self.station_data_records[station_name];
     return(data_rec);
   };
+  self.SiteType = function(station_name)
+  {
+    var data_rec = self.station_data_records[station_name];
+    return(data_rec.SiteType());
+  }
   self.Location = function(station_name)
   {
     var data_rec = self.station_data_records[station_name];
@@ -901,28 +925,149 @@ if(onlineStatus != 'off'){
   var homeButton = new Button("Home");
 
 
+  function add_default_site_marker(i, station, bounds)
+  {
+      var forecast = 'None';
+      var station_message = '';
+      var sample_value = 'None';
+      //Map markers
+      if (typeof station.EnsembleResult() === "undefined" || station.EnsembleResult() == "NO TEST") {
+        forecast = 'None';
+      }
+      else {
+        forecast = station.EnsembleResult();
+      }
 
+      if (typeof station.ForecastStationMessage() !== 'undefined') {
+        station_message = station.ForecastStationMessage();
+      }
+      else {
+        station_message = '';
+      }
+      var dateIcon = '';
+      var sample_date = '';
+      if (station.SampleDate() === undefined || station.SampleDate().length === 0) {
+        dateIcon = '';
+      }
+      else {
+        sample_date = new Date(parseDate(station.SampleDate()));
+        dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
+        sample_value = station.SampleValue();
+      }
+
+      if (markerType == 'forecast') {
+        markerRating = forecast;
+      }
+
+      if (markerType == 'advisories') {
+        markerRating = calcDataRating(sample_value, station);
+
+      }
+      //https://developers.google.com/maps/documentation/javascript/reference#MapTypeControlStyle for options to disable other elements on the map
+      var myStyles = [
+        {
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [
+            {visibility: "off"}
+          ]
+        }
+      ];
+
+      $('#map_canvas').gmap('option', 'mapTypeId', google.maps.MapTypeId.MAP);
+      $('#map_canvas').gmap('option', 'styles', myStyles);
+      $('#map_canvas').gmap('option', 'disableDefaultUI', true); //disable all controls then add in what we want
+      $('#map_canvas').gmap('option', 'mapTypeControl', true);
+      $('#map_canvas').gmap('option', 'streetViewControl', true);
+      $('#map_canvas').gmap('option', 'mapTypeControlOptions', {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU});
+
+      var site_location = station.Location();
+      $('#map_canvas').gmap('addMarker', {
+        'position': new google.maps.LatLng(site_location[1], site_location[0]),
+        'icon': 'static/images/' + markerRating.toLowerCase() + '_marker.png',
+        'bounds': bounds
+      }).click(function () {
+        //var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>'];
+        var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.Description() + '</strong>'];
+        popup_content.push('<div>');
+        popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
+        //If the station does not issue advisories, do not add the field. A station
+        //may collect data but advisories not issued by the governmental agency.
+        //if(station.issues_advisories) {
+        if(station.IssuesAdvisories()) {
+          //popup_content.push('<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.advisory.replace("<br />", " ") + '</span></div></div><br style="clear:both">')
+          popup_content.push('<div style="float:left;padding-top:15px;"><div style="text-align:right">Advisory&nbsp;&nbsp;&nbsp;<span class="' + get_advisory_style(station) + '">' + station.SampleStationMessage().replace("<br />", " ") + '</span></div></div><br style="clear:both">')
+        }
+        popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Bacteria Data' + dateIcon + '&nbsp;&nbsp;&nbsp;<span class="' + get_bacteria_style(station, sample_value) +'">' + sample_value + '</span></div></div>')
+        popup_content.push('<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="#beachDetailsPage?id=' + i + '" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>');
+        popup_content.push('<div style="clear:both;white-space:normal;">' + station_message + '</div>');
+        popup_content.push('</div>');
+        popup_content.push('</div>');
+        $('#map_canvas').gmap('openInfoWindow', {
+          'content': popup_content.join('')
+        },
+        this);
+        //SEnd google analytic event that reflects the station the user clicked on.
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'SampleSiteClick',
+          eventAction: 'click',
+          eventLabel: station.Station()
+        });
+
+      });
+  };
+  function add_camera_site(i, station, bounds)
+  {
+
+      var site_location = station.Location();
+      $('#map_canvas').gmap('addMarker', {
+        'position': new google.maps.LatLng(site_location[1], site_location[0]),
+        'icon': 'static/images/webcam_icon.png',
+        'bounds': bounds
+      }).click(function () {
+        var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.Description() + '</strong>'];
+        popup_content.push('<div>');
+        $('#map_canvas').gmap('openInfoWindow',
+            {
+              'content': popup_content.join('')
+            }, this);
+        //SEnd google analytic event that reflects the station the user clicked on.
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'SampleSiteClick',
+          eventAction: 'click',
+          eventLabel: station.Station()
+        });
+
+      });
+
+  };
   //Function for populating main overview map with markers
   function populateMarkers(bounds){
 
       //$.each( currentEtcoc, function(i, station) {
       $.each( stations_records.station_data_records, function(i, station) {
+        if(station.SiteType() == undefined || station.SiteType() == "Default")
+        {
+          add_default_site_marker(i, station, bounds);
+        }
+        else if(station.SiteType() == "Camera Site")
+        {
+          add_camera_site(i, station, bounds);
+        }
+        /*
         var forecast = 'None';
         var station_message = '';
         var sample_value = 'None';
-        //if(i in predictionData)
-      //{
         //Map markers
-        //if (typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST") {
         if (typeof station.EnsembleResult() === "undefined" || station.EnsembleResult() == "NO TEST") {
           forecast = 'None';
         }
         else {
-          //forecast = predictionData[i].ensemble;
           forecast = station.EnsembleResult();
         }
 
-        //if (typeof predictionData[i].message !== 'undefined') {
         if (typeof station.ForecastStationMessage() !== 'undefined') {
           station_message = station.ForecastStationMessage();
         }
@@ -931,15 +1076,12 @@ if(onlineStatus != 'off'){
         }
         var dateIcon = '';
         var sample_date = '';
-        //if (typeof station.date === "undefined" || station.date.length === 0) {
         if (station.SampleDate() === undefined || station.SampleDate().length === 0) {
           dateIcon = '';
         }
         else {
-          //var sample_date = new Date(parseDate(station.date));
           sample_date = new Date(parseDate(station.SampleDate()));
           dateIcon = ' (' + sample_date.getDate() + ' ' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
-          //var data = station.value;
           sample_value = station.SampleValue();
         }
 
@@ -951,8 +1093,6 @@ if(onlineStatus != 'off'){
           markerRating = calcDataRating(sample_value, station);
 
         }
-
-
         //https://developers.google.com/maps/documentation/javascript/reference#MapTypeControlStyle for options to disable other elements on the map
         var myStyles = [
           {
@@ -1007,7 +1147,7 @@ if(onlineStatus != 'off'){
 
         });
       //}
-      });
+      */});
     //Add legend back in with text for new marker type
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM);
   }

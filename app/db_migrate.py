@@ -142,6 +142,16 @@ class Boundary_Mapper(db.Model):
   sample_site_id = db.Column(db.Integer, db.ForeignKey('sample__site.id'), primary_key=True)
   boundary_id = db.Column(db.Integer, db.ForeignKey('boundary.id'), primary_key=True)
 
+class Site_Type(db.Model):
+  __tablename__ = 'site_type'
+  id = db.Column(db.Integer, primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
+  name = db.Column(db.String(100))
+
+  #Use the __str__ for the foreign key relationships.
+  def __str__(self):
+    return self.name
 
 class Sample_Site(db.Model):
   __table_name__ = "sample_site"
@@ -169,6 +179,9 @@ class Sample_Site(db.Model):
                              primaryjoin=(Boundary_Mapper.sample_site_id == id),
                              backref='sample_site')
   extents = db.relationship("Site_Extent", backref='sample_site')
+
+  site_type_id = db.Column('site_type_id', db.Integer, db.ForeignKey('site_type.id'))
+  site_type = db.relationship('Site_Type', backref='sample_site')
 
   def __str__(self):
     return self.site_name

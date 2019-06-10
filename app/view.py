@@ -179,6 +179,11 @@ class ShowAboutPage(View):
     return rendered_template
 
 
+class CameraPage(View):
+  def __init__(self, site_name):
+    current_app.logger.debug('__init__')
+    self.site_name = site_name
+    self.page_template = 'camera_page_template.html'
 
 class SitePage(View):
   def __init__(self, site_name):
@@ -393,6 +398,16 @@ class FollyBeachAboutPage(ShowAboutPage):
     current_app.logger.debug('IP: %s FollyBeachAboutPage __init__' % (request.remote_addr))
     ShowAboutPage.__init__(self, 'follybeach', 'sc_about_page.html')
 
+class FollyBeachCameraPage(CameraPage):
+  def __init__(self, **kwargs):
+    current_app.logger.debug('IP: %s FollyBeachCameraPage __init__' % (request.remote_addr))
+    CameraPage.__init__(self, 'follybeach')
+    self.page_template = 'camera_page_template.html'
+  def dispatch_request(self, cameraname):
+    start_time = time.time()
+    current_app.logger.debug('IP: %s FollyBeachPage dispatch_request for camera: %s' % (request.remote_addr, cameraname))
+
+    return render_template("camera_page_template.html", cameraname=cameraname)
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

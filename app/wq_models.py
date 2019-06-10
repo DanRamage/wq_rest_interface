@@ -103,8 +103,25 @@ class Boundary_Mapper(db.Model):
   sample_site_id = db.Column(db.Integer, db.ForeignKey('sample__site.id'), primary_key=True)
   boundary_id = db.Column(db.Integer, db.ForeignKey('boundary.id'), primary_key=True)
 
+'''
+class Camera_Site(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  row_entry_date = db.Column(db.String(32))
+  row_update_date = db.Column(db.String(32))
 
+  project_site_id = db.Column('project_site_id', db.Integer, db.ForeignKey('project_area.id'))
+  project_site = db.relationship('Project_Area', backref='sample_sites')
 
+  latitude = db.Column(db.Float, nullable=True)
+  longitude = db.Column(db.Float, nullable=True)
+
+  site_name = db.Column(db.String(), nullable=False)
+  site_alias = db.Column(db.String(), nullable=False)
+  description = db.Column(db.Text, nullable=True)
+
+  camera_source_url = db.Column(db.String(), nullable=False)
+  camera_icon = db.Column(db.String(), nullable=False)
+'''
 class Sample_Site(db.Model):
   __table_name__ = "sample_site"
   id = db.Column(db.Integer, primary_key=True)

@@ -407,7 +407,7 @@ class FollyBeachCameraPage(CameraPage):
     start_time = time.time()
     current_app.logger.debug('IP: %s FollyBeachPage dispatch_request for camera: %s' % (request.remote_addr, cameraname))
 
-    return render_template("camera_page_template.html", cameraname=cameraname)
+    return render_template("follybeach_camera_page_template.html", cameraname=cameraname)
 
 def get_data_file(filename):
   current_app.logger.debug("get_data_file Started.")

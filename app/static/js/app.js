@@ -1046,6 +1046,35 @@ if(onlineStatus != 'off'){
       });
 
   };
+  function add_camera_site(i, station, bounds)
+  {
+
+      var site_location = station.Location();
+      $('#map_canvas').gmap('addMarker', {
+        'position': new google.maps.LatLng(site_location[1], site_location[0]),
+        'icon': 'static/images/shell_open.png',
+        'bounds': bounds
+      }).click(function () {
+        var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.Description() + '</strong>'];
+        //popup_content.push('<div>');
+        //var camera_page = site + '/camera/' + i;
+        popup_content.push('<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="'+camera_page+'" target="_top" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>');
+
+        $('#map_canvas').gmap('openInfoWindow',
+            {
+              'content': popup_content.join('')
+            }, this);
+        //SEnd google analytic event that reflects the station the user clicked on.
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'SampleSiteClick',
+          eventAction: 'click',
+          eventLabel: station.Station()
+        });
+
+      });
+
+  };
   //Function for populating main overview map with markers
   function populateMarkers(bounds){
 
@@ -1058,6 +1087,10 @@ if(onlineStatus != 'off'){
         else if(station.SiteType() == "Camera Site")
         {
           add_camera_site(i, station, bounds);
+        }
+        else if(station.SiteType() == "Shellfish")
+        {
+
         }
         /*
         var forecast = 'None';

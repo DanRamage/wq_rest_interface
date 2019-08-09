@@ -1046,7 +1046,7 @@ if(onlineStatus != 'off'){
       });
 
   };
-  function add_camera_site(i, station, bounds)
+  function add_shellfish_site(i, station, bounds)
   {
 
       var site_location = station.Location();
@@ -1090,7 +1090,7 @@ if(onlineStatus != 'off'){
         }
         else if(station.SiteType() == "Shellfish")
         {
-
+          add_shellfish_site(i, station, bounds);
         }
         /*
         var forecast = 'None';

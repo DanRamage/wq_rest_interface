@@ -49,7 +49,10 @@ if not PYCHARM_DEBUG:
       {
         'prediction_file': '/home/xeniaprod/feeds/follybeach/Predictions.json',
         'advisory_file': '/home/xeniaprod/feeds/follybeach/monitorstations/beach_advisories.json',
-        'stations_directory': '/home/xeniaprod/feeds/follybeach/monitorstations'
+        'stations_directory': '/home/xeniaprod/feeds/follybeach/monitorstations',
+        'camera_statistics': '',
+        'shellfish_closures': '/home/xeniaprod/feeds/follybeach/shellfish/shellfish_closures.json'
+
       },
   }
 else:
@@ -76,6 +79,9 @@ else:
       {
         'prediction_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/Predictions.json',
         'advisory_file': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/beach_advisories.json',
-        'stations_directory': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/'
+        'stations_directory': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/test_outputs/',
+        'camera_statistics': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/camera/summary_data.json',
+        'shellfish_closures': '/Users/danramage/Documents/workspace/WaterQuality/FollyBeach-WaterQuality/data/shellfish/shellfish_closures.json'
+
       }
   }

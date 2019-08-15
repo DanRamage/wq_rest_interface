@@ -234,6 +234,22 @@ class SitePage(View):
     current_app.logger.debug('get_program_info finished in %f seconds' % (time.time()-start_time))
     return program_info
 
+  def get_shellfish_data(self, site, feature):
+    if self.site_name == 'follybeach':
+      shellfish_data, ret_val = get_data_file(SITES_CONFIG[self.site_name]['shellfish_closures'])
+      #DHEC shellfish sites are coded: "Region-Site", so split the name so we can get the region.
+      region,site_name = site.site_name.split('-')
+      json_data = json.loads(shellfish_data)
+      if region in json_data:
+        closure_data = json_data[region]
+        advisory = False
+        if closure_data['Storm_Closure'].lower() == 'closed':
+          advisory = True
+        feature['properties']['station'] = site_name
+        feature['properties']['region'] = region
+        feature['properties']['has_advisory'] = advisory
+
+
   def get_data(self):
     current_app.logger.debug('get_data started')
     start_time = time.time()
@@ -288,9 +304,13 @@ class SitePage(View):
               feature = build_prediction_feature(site, datetime.now(), [])
               data['prediction_data']['contents']['stationData']['features'].append(feature)
           else:
+            feature = build_site_feature(site)
             if data['sites'] is None:
               data['sites'] = build_feature_collection([])
-            feature = build_site_feature(site)
+
+            if site.site_type is not None and site.site_type.name == 'Shellfish':
+              self.get_shellfish_data(site, feature)
+
             data['sites']['features'].append(feature)
 
         #Query the database to see if we have any temporary popup sites.
@@ -729,6 +749,27 @@ class StationDataUpdateAPI(MethodView):
 
     current_app.logger.debug("set_station_data finished in %f seconds" % (time.time()-start_time))
     return
+
+class CameraDataAPI(MethodView):
+  def get(self, sitename=None, cameraname=None):
+    start_time = time.time()
+    current_app.logger.debug('IP: %s CameraDataAPI get camera data: %s for site: %s' % (request.remote_addr, cameraname, sitename))
+    ret_code = 404
+    results = None
+
+    results = json.dumps({'status': {'http_code': ret_code},
+                          'contents': None
+                          })
+    try:
+      if sitename == 'follybeach':
+        file_results, ret_code = get_data_file(SITES_CONFIG[sitename]['camera_statistics'])
+        camera_json = json.loads(file_results)
+        results = json.dumps(camera_json[cameraname])
+
+    except Exception as e:
+      current_app.logger.exception(e)
+    current_app.logger.debug('CameraDataAPI get camera data: %s site: %s finished in %f seconds' % (cameraname, sitename, time.time() - start_time))
+    return (results, ret_code, {'Content-Type': 'Application-JSON'})
 
 # Define login and registration forms (for flask-login)
 class LoginForm(form.Form):

@@ -31,6 +31,67 @@ This object is to consolidate the prediction and sample data into one place and 
 a common interface. Want to move away from using the 2 json objects in the code and simply
 use them to construct one object.
  */
+function shellfishData()
+{
+  var self = this;
+  self.station = undefined;
+  self.site_type = undefined;
+  self.latitude = undefined;
+  self.longitude = undefined;
+  self.description = undefined;
+  self.region = undefined;
+  self.has_advisory = undefined;
+
+  self.Station = function()
+  {
+    return self.station;
+  };
+  self.SetStation = function(station)
+  {
+    self.station = station;
+  };
+  self.SiteType = function()
+  {
+    return self.site_type;
+  };
+  self.SetSiteType = function(site_type)
+  {
+    self.site_type = site_type;
+  };
+  self.Location = function()
+  {
+    return([self.longitude, self.latitude]);
+  };
+  self.SetLocation = function(latitude, longitude)
+  {
+    self.latitude = latitude;
+    self.longitude = longitude;
+  };
+  self.Description = function()
+  {
+    return(self.description);
+  };
+  self.SetDescription = function(desc)
+  {
+    self.description = desc;
+  };
+  self.Region = function()
+  {
+    return(self.region);
+  };
+  self.SetRegion = function(region)
+  {
+    self.region = region;
+  };
+  self.HasAdvisory = function()
+  {
+    return(self.has_advisory);
+  }
+  self.SetHasAdvisory = function(has_advisory)
+  {
+    self.has_advisory = has_advisory;
+  }
+};
 function stationData()
 {
   var self = this;
@@ -64,55 +125,115 @@ function stationData()
   {
     return self.station;
   };
+  self.SetStation = function(station)
+  {
+    self.station = station;
+  };
   self.SiteType = function()
   {
     return self.site_type;
+  };
+  self.SetSiteType = function(site_type)
+  {
+    self.site_type = site_type;
   };
   self.Location = function()
   {
     return([self.longitude, self.latitude]);
   };
+  self.SetLocation = function(latitude, longitude)
+  {
+    self.latitude = latitude;
+    self.longitude = longitude;
+  };
   self.Description = function()
   {
     return(self.description);
+  };
+  self.SetDescription = function(desc)
+  {
+    self.description = desc;
   };
   self.Region = function()
   {
     return(self.region);
   };
+  self.SetRegion = function(region)
+  {
+    self.region = region;
+  };
   self.ForecastDate = function()
   {
     return(self.forecast_date);
+  };
+  self.SetForecastDate = function(date)
+  {
+    self.forecast_date = date;
   };
   self.EnsembleResult = function()
   {
     return(self.ensemble_result);
   };
+  self.SetEnsembleResult = function(result)
+  {
+    self.ensemble_result = result;
+  };
   self.ForecastStationMessage = function()
   {
     return(self.station_message);
+  };
+  self.SetForecastStationMessage = function(message)
+  {
+    self.station_message = message;
   };
   self.ForecastStationMessageSeverity = function()
   {
     return(self.message_severity);
   };
+  self.SetForecastStationMessageSeverity = function(message_severity)
+  {
+    self.message_severity = message_severity;
+  };
   self.SampleDate = function()
   {
     return (self.sample_date);
+  };
+  self.SetSampleDate = function(date)
+  {
+    self.sample_date = date;
   };
   self.SampleValue = function()
   {
     return(self.sample_value);
   };
+  self.SetSampleValue = function(value)
+  {
+    self.sample_value = value;
+  };
   self.IssuesAdvisories = function()
   {
     return(self.issues_adivisories);
+  };
+  self.SetIssuesAdvisories = function(issues_advisories)
+  {
+    self.issues_adivisories = issues_advisories;
   };
   self.SampleStationMessage = function()
   {
     return(self.advisory_message);
   };
-
+  self.SetSampleStationMessage = function(message)
+  {
+    self.advisory_message = message;
+  };
+  self.HasAdvisory = function()
+  {
+    return(self.has_advisory);
+  };
+  self.SetHasAdvisory = function(has_advisory)
+  {
+    self.has_advisory = has_advisory;
+  };
 };
 
 function stationsData()
@@ -125,7 +246,7 @@ function stationsData()
   {
     var advistory_data = data_records['advisory_data'];
     var prediction_data = data_records['prediction_data'];
-    var other_sites = data_records['sites']
+    var other_sites = data_records['sites'];
 
     $.each(advistory_data.features, function(data_ndx, feature)
     {
@@ -202,13 +323,20 @@ function stationsData()
 
     $.each(other_sites.features, function(data_ndx, feature)
     {
-      var data_rec = new stationData();
+      if(feature.properties.site_type == 'Shellfish')
+      {
+        var data_rec = new shellfishData();
+        data_rec.SetHasAdvisory(feature.properties.has_advisory);
+        data_rec.SetRegion(feature.properties.region);
+      }
+      else {
+          var data_rec = new stationData();
+      }
       var station = String(feature.properties.station);
-      data_rec.station = station;
-      data_rec.site_type = feature.properties.site_type;
-      data_rec.latitude = feature.geometry.coordinates[1];
-      data_rec.longitude = feature.geometry.coordinates[0];
-      data_rec.description = feature.properties.desc;
+      data_rec.SetStation(station);
+      data_rec.SetSiteType(feature.properties.site_type);
+      data_rec.SetLocation(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+      data_rec.SetDescription(feature.properties.desc);
       self.station_data_records[station] = data_rec;
     });
 
@@ -1050,16 +1178,28 @@ if(onlineStatus != 'off'){
   {
 
       var site_location = station.Location();
+
       $('#map_canvas').gmap('addMarker', {
         'position': new google.maps.LatLng(site_location[1], site_location[0]),
-        'icon': 'static/images/shell_open.png',
+        'icon': station.HasAdvisory() ? 'static/images/shell_closed.png' : 'static/images/shell_open.png',
         'bounds': bounds
       }).click(function () {
-        var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.Description() + '</strong>'];
-        //popup_content.push('<div>');
-        //var camera_page = site + '/camera/' + i;
+        var popup_content = [];
+        var closure_state = station.HasAdvisory() ? 'Closed' : 'Open';
+        popup_content.push('<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;">' +
+            '<strong> Region: ' + station.Region() + ' Site: ' + station.Station() + '</strong></br>' +
+            '<strong>Closure Status: ' + closure_state + '</strong></br>');
         var page = '';
-        popup_content.push('<div style="float:left;padding-left:30px;"><div><a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="'+page+'" target="_top" data-role="button" data-icon="info" data-mini="true"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Details</span><span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span></span></a></div></div>');
+        popup_content.push('<div style="float:left;padding-left:30px;">' +
+            '<div>' +
+              '<a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="'+page+'" target="_top" data-role="button" data-icon="info" data-mini="true">' +
+              '<span class="ui-btn-inner ui-btn-corner-all">' +
+              '<span class="ui-btn-text">More Details</span>' +
+              '<span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span>' +
+              '</span>' +
+              '</a>' +
+            '</div>' +
+          '</div>');
 
         $('#map_canvas').gmap('openInfoWindow',
             {

@@ -25,6 +25,8 @@ var wq_site_name = "";
 var wq_site_bbox;
 var site;
 var stations_records;
+var legendContentHtml = [];
+var html_colors = {};
 
 /*
 This object is to consolidate the prediction and sample data into one place and provide
@@ -399,62 +401,136 @@ function initialize_app(site_name, data, limits) {
   advisory_limits = limits;
   stations_records = new stationsData();
   stations_records.build_records(data);
-  /*
-  if(data['prediction_data'].contents !== null ) {
-    var forecast_date = data['prediction_data'].contents.testDate;
-    $.each(data['prediction_data'].contents.stationData.features, function (i, beach) {
-      predictionData[beach.properties.station] = {
-        "station": beach.properties.station,
-        "desc": beach.properties.desc,
-        "ensemble": beach.properties.ensemble,
-        "forecast_date": forecast_date,
-        "message": beach.properties.message,
-        "region": beach.properties.region,
-        "lat": beach.geometry.coordinates[1],
-        "lng": beach.geometry.coordinates[0]
-      };
+
+  var advistory_data = data['advisory_data'];
+  var prediction_data = data['prediction_data'];
+
+  var other_sites_legends = [];
+  if('sites' in data)
+  {
+    var other_site_types = [];
+    for( site_name in stations_records.station_data_records)
+    {
+      var site = stations_records.station_data_records[site_name];
+      if(site.SiteType() !== undefined && site.SiteType().toLowerCase() == 'shellfish')
+      {
+        if(other_site_types.indexOf(site.SiteType().toLowerCase() ) == -1)
+        {
+          other_site_types.push(site.SiteType().toLowerCase())
+        }
+      }
+      else if(site.SiteType() !== undefined && site.SiteType().toLowerCase() == 'camera site')
+      {
+        if(other_site_types.indexOf(site.SiteType().toLowerCase()) == -1) {
+            other_site_types.push(site.SiteType().toLowerCase())
+        }
+      }
+    };
+    if(other_site_types.indexOf('shellfish') != -1)
+    {
+      other_sites_legends.push('<div><p><strong>Shellfish Closures</strong></p>');
+      other_sites_legends.push('<img src="static/images/shell_open.png"/>Shellfish Site Open </br>');
+      other_sites_legends.push('<img src="static/images/shell_closed.png"/>Shellfish Site Closed </br>');
+      other_sites_legends.push('</div>');
+    }
+    if(other_site_types.indexOf('camera site') != -1)
+    {
+      other_sites_legends.push('<div><p><strong>Camera Sites</strong></p>');
+      other_sites_legends.push('<img src="static/images/webcam_icon.png">Camera Site');
+      other_sites_legends.push('</div>');
+    }
+  }
+
+
+  //This is the legend for the prediction data.
+  var forecast_legend = [
+    '<div><p><strong>Today\'s nowcast conditions</strong></p>',
+    '<div style="float:left;padding-right:10px;">'];
+  forecast_legend.push('<img src="static/images/none_marker.png" /> No nowcast available<br />');
+  if("Low" in advisory_limits) {
+    forecast_legend.push('<img src="static/images/' + advisory_limits["Low"].icon + '" /> Low bacteria level');
+    forecast_legend.push('</br>')
+  }
+  //forecast_legend.push('<div style="float:left">');
+  if("High" in advisory_limits) {
+    forecast_legend.push('<img src="static/images/' + advisory_limits["High"].icon + '" /> High bacteria level');
+    forecast_legend.push('</br>')
+  }
+  //Determine if we have other sites, if so we add icons to legend.
+  if(other_sites_legends.length)
+  {
+    other_sites_legends.forEach(function(legend, ndx) {
+      forecast_legend.push(legend);
     });
   }
-  */
-  /*
-  $.each(data['advisory_data'].features, function(s,stations){
-    permanentAdvisory = stations.properties.sign;
 
-    $.each(stations.properties.test, function(i,j){
+  forecast_legend.push('<br style="clear:both">' +
+      '<a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;">' +
+      '<span class="ui-btn-inner ui-btn-corner-all">' +
+      '<span class="ui-btn-text">More Info</span><' +
+      '/span>' +
+      '</a>' +
+      '</div>');
+  legendContentHtml['forecast'] = forecast_legend.join('');
 
-      //Determine if an advisory is in place (permanent or temporary based on ETCOC of 104)
-      if(('advisory' in stations.properties) == false)
-      {
-        if (parseInt(j.value, 10) >= limits['High'].min_limit || permanentAdvisory === true) {
-          if (permanentAdvisory === true) {
-            advisoryText = 'Long Term';
-          }
-          else {
-            advisoryText = 'Yes';
-          }
-        }
-        else {
-          advisoryText = 'None';
-        }
-      }
-      else {
-        advisoryText = stations.properties.advisory;
-      }
-
-      currentEtcoc[stations.properties.station] = {
-        "desc" : stations.properties.desc,
-        "date" : j.date,
-        "lat" : stations.geometry.coordinates[1],
-        "lng" : stations.geometry.coordinates[0],
-        "value" : j.value,
-        "advisory" : advisoryText,
-        "issues_advisories": stations.properties.issues_advisories
-      };
-
+  var advisories_legend = [];
+  //This is the legend for the prediction data.
+  advisories_legend.push('<div><p><strong>Swim advisories</strong></p>');
+  if("Low" in advisory_limits) {
+    advisories_legend.push('<p><img src="static/images/' + advisory_limits["Low"].icon + '" /> None: no swimming advisory issued - safe to swim.<br />');
+  }
+  if("High" in advisory_limits) {
+    advisories_legend.push('<img src="static/images/' + advisory_limits["High"].icon + '" /> Yes: an advisory is current - swimming not recommended.</br>');
+  }
+  advisories_legend.push('<img src="static/images/none_marker.png" />No data available or data older than 7 days.<br />');
+  //Determine if we have other sites, if so we add icons to legend.
+  if(other_sites_legends.length)
+  {
+    other_sites_legends.forEach(function(legend, ndx) {
+      advisories_legend.push(legend);
     });
+  }
 
-  });
-  */
+  advisories_legend.push('<a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>')
+  legendContentHtml['advisories'] =  advisories_legend.join('');
+
+  //This is the legend for the sampling data.
+  var data_legend = [];
+  data_legend.push('<div><p><strong>Bacteria level data</strong></p>');
+  data_legend.push('<div style="float:left;padding-right:10px;">');
+  data_legend.push('<img src="static/images/none_marker.png" /> No data available<br />');
+  if("Low" in advisory_limits)
+  {
+    data_legend.push('<img src="static/images/' + advisory_limits["Low"].icon + '" /> Low bacteria level</div>');
+  }
+  if("High" in advisory_limits) {
+    data_legend.push('<img src="static/images/' + advisory_limits["High"].icon + '" /> High bacteria level</div>');
+  }
+
+  data_legend.push('<br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>')
+  legendContentHtml['data'] = data_legend.join('');
+
+  //Get the HTML color codes for low/medium/high/none
+  var dummy = $('<div class="popup_label_low" style="display: none;"></div>').appendTo('body');
+  var color = dummy.css('background-color');
+  dummy.remove();
+  html_colors['Low'] = color;
+
+  var dummy = $('<div class="popup_label_medium" style="display: none;"></div>').appendTo('body');
+  var color = dummy.css('background-color');
+  dummy.remove();
+  html_colors['Medium'] = color;
+
+  var dummy = $('<div class="popup_label_high" style="display: none;"></div>').appendTo('body');
+  var color = dummy.css('background-color');
+  dummy.remove();
+  html_colors['High'] = color;
+
+  var dummy = $('<div class="popup_label_none" style="display: none;"></div>').appendTo('body');
+  var color = dummy.css('background-color');
+  dummy.remove();
+  html_colors['None'] = color;
+
 
   $("#about_page").on("click", function() {
       var i = 0;
@@ -1015,7 +1091,7 @@ if(onlineStatus != 'off'){
     infoPopupWidth = "370";
     infoPopupHeight = "130";
   }
-
+  /*
   var legendContentHtml = [];
 
   legendContentHtml['forecast'] = '<div><p><strong>Today\'s forecasted conditions</strong></p><div style="float:left;padding-right:10px;"><img src="static/images/none_marker.png" /> No forecast available<br /><img src="static/images/low_marker.png" /> Low bacteria level</div><div style="float:left"><img src="static/images/medium_marker.png" /> Medium bacteria level<br /><img src="static/images/high_marker.png" /> High bacteria level</div><br style="clear:both"><a class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-corners="true" href="#moreInformation" data-role="button" data-mini="true" style="padding:0.4em 1em;"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">More Info</span></span></a></div>';
@@ -1024,7 +1100,7 @@ if(onlineStatus != 'off'){
 
   var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
   var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
-
+  */
 
   function resetHome(zoom, center){
     $('#map_canvas').gmap('option', 'center', center);
@@ -1176,7 +1252,6 @@ if(onlineStatus != 'off'){
   };
   function add_shellfish_site(i, station, bounds)
   {
-
       var site_location = station.Location();
 
       $('#map_canvas').gmap('addMarker', {
@@ -1326,6 +1401,7 @@ if(onlineStatus != 'off'){
       //}
       */});
     //Add legend back in with text for new marker type
+    var legendMain = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
     $('#map_canvas').gmap('addControl', legendMain.div, google.maps.ControlPosition.RIGHT_BOTTOM);
   }
 

@@ -205,11 +205,6 @@ class SitePage(View):
     start_time = time.time()
     program_info = {}
     try:
-      """
-      rec = db.session.query(Project_Info_Page)\
-        .join(Project_Area, Project_Area.id == Project_Info_Page.site_id)\
-        .filter(Project_Area.area_name == self.site_name).first()
-      """
       #Get the advisroy limits
       limit_recs = db.session.query(Advisory_Limits)\
         .join(Project_Area, Project_Area.id == Advisory_Limits.site_id)\
@@ -223,11 +218,7 @@ class SitePage(View):
           'icon': limit.icon
         }
       program_info = {
-          #'sampling_program': rec.sampling_program,
-          #'url': rec.url,
-          #'description': rec.description,
           'advisory_limits': limits,
-          #'swim_advisory_info': rec.swim_advisory_info
         }
     except Exception as e:
       current_app.logger.exception(e)

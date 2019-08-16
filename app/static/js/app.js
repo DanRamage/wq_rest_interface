@@ -411,18 +411,18 @@ function initialize_app(site_name, data, limits) {
     var other_site_types = [];
     for( site_name in stations_records.station_data_records)
     {
-      var site = stations_records.station_data_records[site_name];
-      if(site.SiteType() !== undefined && site.SiteType().toLowerCase() == 'shellfish')
+      var site_rec = stations_records.station_data_records[site_name];
+      if(site_rec.SiteType() !== undefined && site_rec.SiteType().toLowerCase() == 'shellfish')
       {
         if(other_site_types.indexOf(site.SiteType().toLowerCase() ) == -1)
         {
           other_site_types.push(site.SiteType().toLowerCase())
         }
       }
-      else if(site.SiteType() !== undefined && site.SiteType().toLowerCase() == 'camera site')
+      else if(site_rec.SiteType() !== undefined && site_rec.SiteType().toLowerCase() == 'camera site')
       {
-        if(other_site_types.indexOf(site.SiteType().toLowerCase()) == -1) {
-            other_site_types.push(site.SiteType().toLowerCase())
+        if(other_site_types.indexOf(site_rec.SiteType().toLowerCase()) == -1) {
+            other_site_types.push(site_rec.SiteType().toLowerCase())
         }
       }
     };

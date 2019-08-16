@@ -1194,7 +1194,7 @@ if(onlineStatus != 'off'){
         //var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.desc + '</strong>'];
         var popup_content = ['<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;"><strong>' + station.Description() + '</strong>'];
         popup_content.push('<div>');
-        popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Forecast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
+        popup_content.push('<div style="float:left;padding-right:20px;padding-top:15px;"><div style="text-align:right">Nowcast (' + new Date().getDate() + ' ' + month[new Date().getMonth()] + ')&nbsp;&nbsp;&nbsp;<span class="popup_label_' + forecast.toLowerCase().replace(' ', '') + '">' + capitalize(forecast) + '</span></div></div>');
         //If the station does not issue advisories, do not add the field. A station
         //may collect data but advisories not issued by the governmental agency.
         //if(station.issues_advisories) {
@@ -1552,51 +1552,52 @@ if(onlineStatus != 'off'){
     //$.each(currentEtcoc, function(i,station){
     $.each( stations_records.station_data_records, function(i, station) {
       var sample_value = 'None';
-      //if(typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST"){
-      if(station.EnsembleResult() === undefined || station.EnsembleResult() == "NO TEST"){
-        var forecast = 'None';
-      }
-      else{
-        var forecast = station.EnsembleResult();
-      }
+      if(station.SiteType() === undefined || station.SiteType() == 'Default') {
+          //if(typeof predictionData[i] === "undefined" || predictionData[i].ensemble == "NO TEST"){
+          if (station.EnsembleResult() === undefined || station.EnsembleResult() == "NO TEST") {
+              var forecast = 'None';
+          }
+          else {
+              var forecast = station.EnsembleResult();
+          }
 
-      var dateIcon = '';
+          var dateIcon = '';
 
-      //if(typeof station.date === "undefined" || station.date.length === 0){
-      if(station.SampleDate() === undefined || station.SampleDate().length === 0){
-        dateIcon = '<span>&nbsp;</span>'; //need to keep number of spans consistent which is important for column sorting and was being affected if no data available and hence no date span being displayed
-      }
-      else{
-        //var sample_date = new Date(parseDate(station.date));
-        var sample_date = new Date(parseDate(station.SampleDate()));
-        dateIcon = ' ('+sample_date.getDate()+'&nbsp;'+month[sample_date.getMonth()]+' \''+sample_date.getFullYear().toString().substr(2,2)+')';
-        //dateIcon = ' ('+new Date(parseDate(station.date)).getDate()+'&nbsp;'+month[new Date(parseDate(station.date)).getMonth()]+' \''+new Date(parseDate(station.date)).getFullYear().toString().substr(2,2)+')';
-        sample_value = station.SampleValue();
-      }
+          //if(typeof station.date === "undefined" || station.date.length === 0){
+          if (station.SampleDate() === undefined || station.SampleDate().length === 0) {
+              dateIcon = '<span>&nbsp;</span>'; //need to keep number of spans consistent which is important for column sorting and was being affected if no data available and hence no date span being displayed
+          }
+          else {
+              //var sample_date = new Date(parseDate(station.date));
+              var sample_date = new Date(parseDate(station.SampleDate()));
+              dateIcon = ' (' + sample_date.getDate() + '&nbsp;' + month[sample_date.getMonth()] + ' \'' + sample_date.getFullYear().toString().substr(2, 2) + ')';
+              //dateIcon = ' ('+new Date(parseDate(station.date)).getDate()+'&nbsp;'+month[new Date(parseDate(station.date)).getMonth()]+' \''+new Date(parseDate(station.date)).getFullYear().toString().substr(2,2)+')';
+              sample_value = station.SampleValue();
+          }
 
-      if(typeof userLat !== 'undefined'){
-        var site_location = station.Location();
-        distance = calcDistance(userLat,userLng,site_location[1],site_location[0])*0.621371;
-        if(distance <100){
-          round = 2;
-        }
-        else if(distance >=100 && distance <1000){
-          round = 1;
-        }
-        else{
-          round = 0;
-        }
-        distance = Math.roundTo(distance,round);
-        distanceUnits = ' miles';
-      }
-      else{
-        distance = '';
-        distanceUnits = '';
-      }
+          if (typeof userLat !== 'undefined') {
+              var site_location = station.Location();
+              distance = calcDistance(userLat, userLng, site_location[1], site_location[0]) * 0.621371;
+              if (distance < 100) {
+                  round = 2;
+              }
+              else if (distance >= 100 && distance < 1000) {
+                  round = 1;
+              }
+              else {
+                  round = 0;
+              }
+              distance = Math.roundTo(distance, round);
+              distanceUnits = ' miles';
+          }
+          else {
+              distance = '';
+              distanceUnits = '';
+          }
 
-      //$('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
-      $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.Region() + ' ' + station.Description() + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.Description()).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.SampleStationMessage()) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.SampleStationMessage()+'</span><span id="' + numerizeNone(sample_value) + '" class="'+calcDataRating(sample_value, station)+' rating">'+sample_value+'<br />'+dateIcon+'</span></a></li>');
-
+          //$('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.region + ' ' + station.desc + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.desc).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") +'<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="'+forecast.toLowerCase().replace(' ','')+' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.advisory) + '" class="' +calcAdvisoryRating(station)+ ' rating" style="width:23.5%">'+station.advisory+'</span><span id="' + numerizeNone(data) + '" class="'+calcDataRating(data, station)+' rating">'+data+'<br />'+dateIcon+'</span></a></li>');
+          $('#beachList').append('<li data-theme="d" style="padding:0" data-icon="false" data-filtertext="' + forecast + ' ' + i + ' ' + station.Region() + ' ' + station.Description() + '"><a style="text-decoration:none;padding:2px 2px 2px 5px;" href="#beachDetailsPage?id=' + i + '"><span class="rating-name" style="text-align:left">' + $.trim(station.Description()).replace(/\(.*?\)/g, '').replace(/^(.{23}[^\s]*).*/, "$1") + '<br /><span id="' + distance + '" style="font-weight:normal">' + distance + '</span><span style="font-weight:normal">' + distanceUnits + '</span></span><span id="' + numerizeForecast(capitalize(forecast)) + '" class="' + forecast.toLowerCase().replace(' ', '') + ' rating">' + capitalize(forecast) + '</span><span id="' + numerizeAdvisory(station.SampleStationMessage()) + '" class="' + calcAdvisoryRating(station) + ' rating" style="width:23.5%">' + station.SampleStationMessage() + '</span><span id="' + numerizeNone(sample_value) + '" class="' + calcDataRating(sample_value, station) + ' rating">' + sample_value + '<br />' + dateIcon + '</span></a></li>');
+      }
     });
 
     $('#beachList').append('<li>&nbsp;</li>');

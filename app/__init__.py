@@ -110,9 +110,11 @@ def build_url_rules(app):
     CHSAboutPage, \
     SarasotaAboutPage, \
     KDHAboutPage, \
+    FollyBeachShowIntroPage,\
     FollyBeachPage, \
     FollyBeachAboutPage, \
-    FollyBeachCameraPage
+    FollyBeachCameraPage, \
+    CameraDataAPI
 
 
     #Page rules
@@ -123,6 +125,9 @@ def build_url_rules(app):
   app.add_url_rule('/myrtlebeach/about', view_func=MBAboutPage.as_view('mb_about'))
   app.add_url_rule('/charleston', view_func=CharlestonPage.as_view('charleston'))
   app.add_url_rule('/charleston/about', view_func=CHSAboutPage.as_view('chs_about'))
+
+
+  app.add_url_rule('/follybeach_intro', view_func=FollyBeachShowIntroPage.as_view('follybeach_intro_page'))
   app.add_url_rule('/follybeach', view_func=FollyBeachPage.as_view('follybeach'))
   app.add_url_rule('/follybeach/about', view_func=FollyBeachAboutPage.as_view('follybeach_about'))
   app.add_url_rule('/follybeach/camera/<string:cameraname>', view_func=FollyBeachCameraPage.as_view('follybeach_camera', cameraname='<cameraname>'))

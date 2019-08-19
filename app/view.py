@@ -398,6 +398,12 @@ class KDHAboutPage(ShowAboutPage):
     current_app.logger.debug('IP: %s NCAboutPage __init__' % (request.remote_addr))
     ShowAboutPage.__init__(self, 'killdevilhills', 'nc_about_page.html')
 
+class FollyBeachShowIntroPage(View):
+  def dispatch_request(self):
+    current_app.logger.debug('IP: %s follybeach_intro_page rendered' % (request.remote_addr))
+    return render_template("folly_beach_intro.html")
+
+
 class FollyBeachPage(SitePage):
   def __init__(self):
     current_app.logger.debug('IP: %s FollyBeachPage __init__' % (request.remote_addr))

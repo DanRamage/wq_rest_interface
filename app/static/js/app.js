@@ -428,7 +428,7 @@ function initialize_app(site_name, data, limits) {
     };
     if(other_site_types.indexOf('shellfish') != -1)
     {
-      other_sites_legends.push('<div><p><strong>Shellfish Closures</strong></p>');
+      other_sites_legends.push('<div><p><strong>Shellfish Harvesting Area Closures</strong></p>');
       other_sites_legends.push('<img src="static/images/shell_open.png"/>Shellfish Site Open </br>');
       other_sites_legends.push('<img src="static/images/shell_closed.png"/>Shellfish Site Closed </br>');
       other_sites_legends.push('</div>');

@@ -43,6 +43,7 @@ function shellfishData()
   self.description = undefined;
   self.region = undefined;
   self.has_advisory = undefined;
+  self.last_check_timestamp = undefined;
 
   self.Station = function()
   {
@@ -88,11 +89,20 @@ function shellfishData()
   self.HasAdvisory = function()
   {
     return(self.has_advisory);
-  }
+  };
   self.SetHasAdvisory = function(has_advisory)
   {
     self.has_advisory = has_advisory;
+  };
+  self.LastCheckTimestamp = function()
+  {
+    return(self.last_check_timestamp);
+  };
+  self.SetLastCheckTimestamp = function(checked_time)
+  {
+    self.last_check_timestamp = checked_time
   }
+
 };
 function stationData()
 {
@@ -330,6 +340,7 @@ function stationsData()
         var data_rec = new shellfishData();
         data_rec.SetHasAdvisory(feature.properties.has_advisory);
         data_rec.SetRegion(feature.properties.region);
+        data_rec.SetLastCheckTimestamp(feature.properties.date_time_last_check)
       }
       else {
           var data_rec = new stationData();
@@ -1263,11 +1274,14 @@ if(onlineStatus != 'off'){
         var closure_state = station.HasAdvisory() ? 'Closed' : 'Open';
         popup_content.push('<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;">' +
             '<strong> Region: ' + station.Region() + ' Site: ' + station.Station() + '</strong></br>' +
+            '<strong> Last Status Check: ' + station.LastCheckTimestamp + '</strong></br>' +
             '<strong>Closure Status: ' + closure_state + '</strong></br>');
         var page = '';
+        /*
         popup_content.push('<div style="float:left;padding-left:30px;">' +
             '<div>' +
               '<a style="float:right;margin:10px 0;padding:6px 12px 3px 12px;" class="ui-btn ui-btn-corner-all ui-mini ui-btn-up-c" data-theme="c" data-wrapperels="span" data-history="false" data-corners="true" href="'+page+'" target="_top" data-role="button" data-icon="info" data-mini="true">' +
+
               '<span class="ui-btn-inner ui-btn-corner-all">' +
               '<span class="ui-btn-text">More Details</span>' +
               '<span class="ui-icon ui-icon-info ui-icon-shadow">&nbsp;</span>' +
@@ -1275,7 +1289,7 @@ if(onlineStatus != 'off'){
               '</a>' +
             '</div>' +
           '</div>');
-
+        */
         $('#map_canvas').gmap('openInfoWindow',
             {
               'content': popup_content.join('')

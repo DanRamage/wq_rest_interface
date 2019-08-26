@@ -239,7 +239,7 @@ class SitePage(View):
         feature['properties']['station'] = site_name
         feature['properties']['region'] = region
         feature['properties']['has_advisory'] = advisory
-        feature['properties']['date_time_last_check'] = advisory
+        feature['properties']['date_time_last_check'] = closure_data['date_time_last_check']
 
 
   def get_data(self):

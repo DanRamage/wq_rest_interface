@@ -1274,7 +1274,7 @@ if(onlineStatus != 'off'){
         var closure_state = station.HasAdvisory() ? 'Closed' : 'Open';
         popup_content.push('<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;">' +
             '<strong> Region: ' + station.Region() + ' Site: ' + station.Station() + '</strong></br>' +
-            '<strong> Last Status Check: ' + station.LastCheckTimestamp + '</strong></br>' +
+            '<strong> Last Status Check: ' + station.LastCheckTimestamp() + '</strong></br>' +
             '<strong>Closure Status: ' + closure_state + '</strong></br>');
         var page = '';
         /*

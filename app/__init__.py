@@ -118,7 +118,7 @@ def build_url_rules(app):
 
 
     #Page rules
-  app.add_url_rule('/', view_func=ShowIntroPage.as_view('intro_page'))
+  app.add_url_rule('/', view_func=ShowIntroPage.as_view('follybeach_intro'))
   app.add_url_rule('/about', view_func=ShowAboutPage.as_view('about_page'))
   #SC sites
   app.add_url_rule('/myrtlebeach', view_func=MyrtleBeachPage.as_view('myrtlebeach'))

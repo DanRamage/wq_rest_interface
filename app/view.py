@@ -155,7 +155,7 @@ class MaintenanceMode(View):
 class ShowIntroPage(View):
   def dispatch_request(self):
     current_app.logger.debug('IP: %s intro_page rendered' % (request.remote_addr))
-    return render_template("follybeach_intro.html")
+    return render_template("folly_beach_intro.html")
 
 class ShowAboutPage(View):
   def __init__(self, site_name="./", page_template='about_page.html'):

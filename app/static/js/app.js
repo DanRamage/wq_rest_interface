@@ -1657,7 +1657,7 @@ if(onlineStatus != 'off'){
 
     dateSet = 1;
 
-
+    var legendDetail = new Legend("Legend", "80px", legendContentHtml[markerType], legendWidth+'px');
     //Legend needs to be set up on pageinit or it duplicates, or is positioned further down the page
     $('#detail_map_canvas').gmap('addControl', legendDetail.div, google.maps.ControlPosition.RIGHT_BOTTOM);
 

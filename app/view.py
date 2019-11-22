@@ -250,9 +250,17 @@ class SitePage(View):
       if self.site_name in SITES_CONFIG:
         prediction_data, pred_ret_code = get_data_file(SITES_CONFIG[self.site_name]['prediction_file'])
         advisory_data, adv_ret_code = get_data_file(SITES_CONFIG[self.site_name]['advisory_file'])
+        pred_json = adv_data = None
+        try:
+          current_app.logger.debug("Creating prediction data JSON.")
+          pred_json = json.loads(prediction_data)
+          current_app.logger.debug("Creating advisory data JSON.")
+          adv_data = json.loads(advisory_data)
+        except Exception as e:
+          current_app.logger.exception(e)
         data = {
-          'prediction_data': json.loads(prediction_data),
-          'advisory_data': json.loads(advisory_data),
+          'prediction_data': pred_json,
+          'advisory_data': adv_data,
           'sites': None
         }
         #Query the Sample_Site table to get any specific settings we need for the map.
@@ -1104,3 +1112,21 @@ class sample_site_data_view(base_view):
   form_columns=['sample_site_name', 'sample_date', 'sample_value']
   column_filters = ['sample_site_name']
 
+
+
+class DefaultClickPopup(View):
+  def __init__(self, sitename=None, cameraname=None):
+    current_app.logger.debug('__init__')
+
+  def dispatch_request(self, sitename=None, cameraname=None):
+    start_time = time.time()
+    current_app.logger.debug('IP: %s dispatch_request started' % (request.remote_addr))
+    try:
+      current_app.logger.debug('Site: %s rendered.' % (self.site_name))
+      rendered_template = render_template('default_popup_test.html')
+    except Exception as e:
+      current_app.logger.exception(e)
+      rendered_template = render_template('default_popup_test.html')
+
+    current_app.logger.debug('dispatch_request finished in %f seconds' % (time.time()-start_time))
+    return rendered_template

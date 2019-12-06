@@ -104,6 +104,78 @@ function shellfishData()
   }
 
 };
+function ripcurrentData()
+{
+  var self = this;
+  self.station = undefined;
+  self.site_type = undefined;
+  self.latitude = undefined;
+  self.longitude = undefined;
+  self.description = undefined;
+  self.date = undefined;
+  self.level = undefined;
+  self.flag = undefined;
+
+  self.Station = function()
+  {
+    return self.station;
+  };
+  self.SetStation = function(station)
+  {
+    self.station = station;
+  };
+  self.SiteType = function()
+  {
+    return self.site_type;
+  };
+  self.SetSiteType = function(site_type)
+  {
+    self.site_type = site_type;
+  };
+  self.Location = function()
+  {
+    return([self.longitude, self.latitude]);
+  };
+  self.SetLocation = function(latitude, longitude)
+  {
+    self.latitude = latitude;
+    self.longitude = longitude;
+  };
+  self.Description = function()
+  {
+    return(self.description);
+  };
+  self.SetDescription = function(desc)
+  {
+    self.description = desc;
+  };
+  self.Date = function()
+  {
+    return(self.last_check_timestamp);
+  };
+  self.SetDate = function(checked_time)
+  {
+    self.last_check_timestamp = checked_time
+  };
+  self.Level = function()
+  {
+    return(self.level);
+  };
+  self.SetLevel = function(level)
+  {
+    self.level = level
+  };
+  self.Flag = function()
+  {
+    return(self.flag);
+  };
+  self.SetFlag = function(flag)
+  {
+    self.flag = flag
+  };
+
+};
+
 function stationData()
 {
   var self = this;
@@ -341,6 +413,13 @@ function stationsData()
         data_rec.SetHasAdvisory(feature.properties.has_advisory);
         data_rec.SetRegion(feature.properties.region);
         data_rec.SetLastCheckTimestamp(feature.properties.date_time_last_check)
+      }
+      else if(feature.properties.site_type == 'Rip Current')
+      {
+        var data_rec = new ripcurrentData();
+        data_rec.SetDate(feature.properties.date);
+        data_rec.SetLevel(feature.properties.level);
+        data_rec.SetFlag(feature.properties.flag);
       }
       else {
           var data_rec = new stationData();
@@ -1305,6 +1384,51 @@ if(onlineStatus != 'off'){
       });
 
   };
+  function add_ripcurrent_site(i, station, bounds)
+  {
+      var site_location = station.Location();
+      var icon = 'static/images/wave_grey.png';
+      if(station.Flag() == 'green')
+      {
+        icon = 'static/images/wave_green.png';
+      }
+      else if(station.Flag() == 'yellow')
+      {
+        icon = 'static/images/wave_yellow.png';
+      }
+      else if(station.Flag() == 'red')
+      {
+        icon = 'static/images/wave_red.png';
+      }
+
+      $('#map_canvas').gmap('addMarker', {
+        'position': new google.maps.LatLng(site_location[1], site_location[0]),
+        'icon': icon,
+        'bounds': bounds
+      }).click(function () {
+        var popup_content = [];
+        popup_content.push('<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;">' +
+            '<strong> Site: ' + station.Station() + '</strong></br>' +
+            '<strong> Prediction Date: ' + station.Date() + '</strong></br>' +
+            '<strong> Level: ' + station.Level() + '</strong></br>' +
+            '<strong> Flag: ' + station.Flag() + '</strong></br>');
+        var page = '';
+        $('#map_canvas').gmap('openInfoWindow',
+            {
+              'content': popup_content.join('')
+            }, this);
+        //SEnd google analytic event that reflects the station the user clicked on.
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'SampleSiteClick',
+          eventAction: 'click',
+          eventLabel: station.Station()
+        });
+
+      });
+
+  };
+
   //Function for populating main overview map with markers
   function populateMarkers(bounds){
 
@@ -1321,6 +1445,10 @@ if(onlineStatus != 'off'){
         else if(station.SiteType() == "Shellfish")
         {
           add_shellfish_site(i, station, bounds);
+        }
+        else if(station.SiteType() == "Rip Current")
+        {
+          add_ripcurrent_site(i, station, bounds);
         }
         /*
         var forecast = 'None';

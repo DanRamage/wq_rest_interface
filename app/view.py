@@ -190,6 +190,7 @@ class SitePage(View):
     current_app.logger.debug('__init__')
     self.site_name = site_name
     self.page_template = 'index_template.html'
+    self._data_types = {}
 
   def get_site_message(self):
     current_app.logger.debug('IP: %s get_site_message started' % (request.remote_addr))
@@ -241,7 +242,24 @@ class SitePage(View):
         feature['properties']['has_advisory'] = advisory
         feature['properties']['date_time_last_check'] = closure_data['date_time_last_check']
 
+  def get_rip_current_data(self, site, feature):
+    if self.site_name == 'follybeach':
+      #So we don't keep reloading and coverting the json file, we save the first load of it in a dictionary.
+      if 'ripcurrent' in self._data_types:
+        json_data = self._data_types['ripcurrent']
+      else:
+        ripcurrent_data, ret_val = get_data_file(SITES_CONFIG[self.site_name]['ripcurrents'])
+        json_data = json.loads(ripcurrent_data)
+        self._data_types['ripcurrent'] = json_data
 
+      feat_properties = feature['properties']
+      for station in json_data['features']:
+        if station['properties']['description'] == feat_properties['station']:
+          feat_properties['date'] = station['properties']['date']
+          feat_properties['flag'] = station['properties']['flag']
+          feat_properties['level'] = station['properties']['level']
+          break
+      return
   def get_data(self):
     current_app.logger.debug('get_data started')
     start_time = time.time()
@@ -310,7 +328,8 @@ class SitePage(View):
 
             if site.site_type is not None and site.site_type.name == 'Shellfish':
               self.get_shellfish_data(site, feature)
-
+            elif site.site_type is not None and site.site_type.name == 'Rip Current':
+              self.get_rip_current_data(site, feature)
             data['sites']['features'].append(feature)
 
         #Query the database to see if we have any temporary popup sites.

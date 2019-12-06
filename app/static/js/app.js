@@ -1407,11 +1407,13 @@ if(onlineStatus != 'off'){
         'bounds': bounds
       }).click(function () {
         var popup_content = [];
-        popup_content.push('<div id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;">' +
+        popup_content.push('<br id="infoPopup" style="width:' + infoPopupWidth + 'px;height:' + infoPopupHeight + 'px;clear:both;white-space:nowrap;line-height:normal;">' +
             '<strong> Site: ' + station.Station() + '</strong></br>' +
             '<strong> Prediction Date: ' + station.Date() + '</strong></br>' +
             '<strong> Level: ' + station.Level() + '</strong></br>' +
-            '<strong> Flag: ' + station.Flag() + '</strong></br>');
+            '<strong> Flag: ' + station.Flag() + '</strong></br>' +
+            '</br>' +
+            '<strong> Forecasts provided by <a href=' + '"https://polar.ncep.noaa.gov/nwps/para/images/rtimages/validation"' + ' target="_blank">NWS</strong></strong>');
         var page = '';
         $('#map_canvas').gmap('openInfoWindow',
             {

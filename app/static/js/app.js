@@ -1388,7 +1388,8 @@ if(onlineStatus != 'off'){
   {
       var site_location = station.Location();
       var icon = 'static/images/wave_grey.png';
-      if(station.Flag() == 'green')
+      //The all good flag is labelled gray, which of course is confusing since our grey flag usually means no data.
+      if(station.Flag() == 'gray')
       {
         icon = 'static/images/wave_green.png';
       }
